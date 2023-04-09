@@ -1,0 +1,14 @@
+Time : 13:25:23
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'employees.id' in 'field list'
+
+Time : 13:25:23
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'employees.id' in 'field list'
+Raw SQL : SELECT COUNT(employees.id) AS recordsFiltered FROM employees WHERE 1=1  
+
+Time : 13:24:37
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'employees.id' in 'field list'
+
+Time : 13:24:37
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'employees.id' in 'field list'
+Raw SQL : SELECT COUNT(employees.id) AS recordsFiltered FROM employees WHERE 1=1  
+
