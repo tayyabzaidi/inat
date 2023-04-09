@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+echo $_SESSION['userId'];
 ?>
 <div class="user-profile">
     <div class="row">
@@ -90,7 +91,7 @@
         -webkit-border-radius: 50%;
         -moz-border-radius: 50%;
         border-radius: 50%;
-        border: 2px solid rgba(255,255,255,0.5);
+        border: 2px solid rgba(255, 255, 255, 0.5);
     }
 
     .user-profile small {
@@ -98,6 +99,4 @@
         line-height: 1.428571429;
         color: #999;
     }
-
 </style>
-

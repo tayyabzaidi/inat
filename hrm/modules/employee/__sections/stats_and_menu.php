@@ -24,20 +24,28 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item disabled"><h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Applications</h5></li>
-
-                            <li class="list-group-item">
-                                <a href="<?php echo __APP_URL__ . $route->q . '/leaves'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Leaves</a>
+                            <li class="list-group-item disabled">
+                                <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Applications</h5>
                             </li>
 
                             <li class="list-group-item">
-                                <a href="<?php echo __APP_URL__ . $route->q . '/visa'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Visas</a>
+                                <a href="<?php echo __APP_URL__ . $route->q . '/leaves'; ?>"><i
+                                        class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Leaves</a>
                             </li>
 
                             <li class="list-group-item">
-                                <a href="<?php echo __APP_URL__ . $route->q . '/encashment  '; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Encashment</a>
+                                <a href="<?php echo __APP_URL__ . $route->q . '/visa'; ?>"><i
+                                        class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Visas</a>
                             </li>
 
+                            <li class="list-group-item">
+                                <a href="<?php echo __APP_URL__ . $route->q . '/encashment'; ?>"><i
+                                        class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Encashment</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="<?php echo __APP_URL__ . $route->q . '/salary'; ?>"><i
+                                        class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Salary Slips</a>
+                            </li>
 
                         </ul>
                     </div>
@@ -47,9 +55,12 @@
                     <div class="row">
                         <div class="col-sm-12 p-3">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item disabled"><h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Vacation Balances</h5></li>
+                                <li class="list-group-item disabled">
+                                    <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Vacation Balances</h5>
+                                </li>
                                 <li class="list-group-item">
-                                    <table class="table table-sm table-responsive-sm table-striped" style="width:100%; font-size: 0.8em;">
+                                    <table class="table table-sm table-responsive-sm table-striped"
+                                        style="width:100%; font-size: 0.8em;">
                                         <thead>
                                             <tr>
                                                 <th>Type</th>
@@ -66,7 +77,8 @@
                                                     <td><?php echo $rSet[$i]['defaultValue']; ?> </td>
                                                     <td><?php echo $rSet[$i]['currentValue']; ?> </td>
                                                     <td><?php echo $rSet[$i]['usedValue']; ?> </td>
-                                                    <td><?php echo ($rSet[$i]['currentValue'] - $rSet[$i]['usedValue']); ?> </td>
+                                                    <td><?php echo ($rSet[$i]['currentValue'] - $rSet[$i]['usedValue']); ?>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -74,7 +86,7 @@
 
                                 </li>
                             </ul>
-                        </div> 
+                        </div>
                     </div>
                 <?php } ?>
 
@@ -83,10 +95,13 @@
                     <div class="row">
                         <div class="col-sm-12 p-3">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item disabled"><h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Allowed Visas</h5></li>
+                                <li class="list-group-item disabled">
+                                    <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Allowed Visas</h5>
+                                </li>
 
                                 <li class="list-group-item">
-                                    <table class="table table-sm table-responsive-sm table-striped" style="width:100%; font-size: 0.8em;">
+                                    <table class="table table-sm table-responsive-sm table-striped"
+                                        style="width:100%; font-size: 0.8em;">
                                         <thead>
                                             <tr>
                                                 <th>Type</th>
@@ -103,7 +118,8 @@
                                                     <td><?php echo $rSet[$i]['defaultValue']; ?> </td>
                                                     <td><?php echo $rSet[$i]['currentValue']; ?> </td>
                                                     <td><?php echo $rSet[$i]['usedValue']; ?> </td>
-                                                    <td><?php echo ($rSet[$i]['currentValue'] - $rSet[$i]['usedValue']); ?> </td>
+                                                    <td><?php echo ($rSet[$i]['currentValue'] - $rSet[$i]['usedValue']); ?>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -111,7 +127,7 @@
 
                                 </li>
                             </ul>
-                        </div> 
+                        </div>
                     </div>
                 <?php } ?>
 
@@ -121,10 +137,13 @@
                     <div class="row">
                         <div class="col-sm-12 p-3">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item disabled"><h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Tickets</h5></li>
+                                <li class="list-group-item disabled">
+                                    <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Tickets</h5>
+                                </li>
 
                                 <li class="list-group-item">
-                                    <table class="table table-sm table-responsive-sm table-striped" style="width:100%; font-size: 0.8em;">
+                                    <table class="table table-sm table-responsive-sm table-striped"
+                                        style="width:100%; font-size: 0.8em;">
                                         <thead>
                                             <tr>
                                                 <th>Type</th>
@@ -142,7 +161,8 @@
                                                     <td><?php echo $rSet[$i]['defaultValue']; ?> </td>
                                                     <td><?php echo $rSet[$i]['currentValue']; ?> </td>
                                                     <td><?php echo $rSet[$i]['usedValue']; ?> </td>
-                                                    <td><?php echo ($rSet[$i]['currentValue'] - $rSet[$i]['usedValue']); ?> </td>
+                                                    <td><?php echo ($rSet[$i]['currentValue'] - $rSet[$i]['usedValue']); ?>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -152,7 +172,7 @@
 
 
                             </ul>
-                        </div> 
+                        </div>
 
                     </div>
                 <?php } ?>
@@ -160,4 +180,3 @@
         </div>
     </div>
 </div>
-

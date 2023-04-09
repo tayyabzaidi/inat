@@ -97,22 +97,15 @@
         }
     </style>
 </head>
-<?php echo $_auth_emp_rec['authName'] ?>
+
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
 
             <div class="card-body">
 
-                <div class="mb-2" align="<?php echo $_right; ?>">
-
-                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Claim</button>
-
-                </div>
 
                 <h3>Claim List</h3>
-
 
 
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -121,16 +114,17 @@
                             <th>I.D</th>
                             <th>Date</th>
                             <th>Name</th>
-                            <th>Status</th>
+                            <th>Form</th>
                             <th>Total Amount</th>
-                            <th></th>
+                            <th>Attachmnet</th>
+                            <th>Approve</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $pdo->bind('employeeId', 1);
                         $recEmpData = $pdo->query(
-                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
+                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date`;'
                         );
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
@@ -147,59 +141,14 @@
                                     'name'
                                 ]; ?>
                                 </td>
-                                <td class="" style="text-align: left;">
+                                <td>
                                     <?php
-                                    // $pd->bind('expenseId',$recEmpData[$i]['id']);
-                                    $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=1;'
-                                    );
-                                    $HOD = false;
-                                    $AM = false;
-                                    for ($j = 0; $j < count($getStatus); $j++) {
-                                        if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_approved'
-                                        ) {
-                                            $HOD = 'approved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'AM_approved'
-                                        ) {
-                                            $AM = 'approved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'AM_disapproved'
-                                        ) {
-                                            $AM = 'disapprove';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_disapproved'
-                                        ) {
-                                            $HOD = 'disapprove';
-                                        }
-                                    }
+                                    $pdf_data = base64_decode($recEmpData[$i]['form_data']);
+                                    echo $pdf_data;
                                     ?>
 
-                                    <div class="ant-tag " style="<?php if (
-                                        $HOD == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HOD == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
-                                        HOD</div>
-                                    <div class="ant-tag " style="<?php if (
-                                        $AM == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($AM == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
-                                        AM</div>
+
+
                                 </td>
                                 <td> <?php echo $recEmpData[$i][
                                     'total_amount'
@@ -208,7 +157,22 @@
                                 <td><button class="modal-button" href="#myModal2" style="background: none;"><i
                                             class="fa fa-folder"></i></button></td>
                                 </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" name="status" value="approve" <?php if ($status == "approve")
+                                            echo "checked"; ?>>
+                                    </label>
+                                    <!-- save the staus hod or am approve base on the user id -->
+                                    <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                        $status = $_POST['status'];
+                                        if ($status == "approve") {
+                                            $sql = "UPDATE employee_expense SET status =  WHERE id = :id";
+                                        }
+                                    } ?>
 
+
+
+                                </td>
 
                             </tr>
                         <?php } ?>
@@ -219,48 +183,6 @@
     </div>
 </div>
 
-<!-- The Modal -->
-<div id="myModal1" class="modal">
-
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="claim-comment">Comment</label>
-                        <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="claim-pdf">PDF File</label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="claim-attachments">Attachments</label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-attachments"
-                                name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Claim</button>
-            </div>
-        </div>
-    </div>
-
-</div>
 
 <!-- The Modal -->
 <div id="myModal2" class="modal">
@@ -343,34 +265,5 @@
 
 </script>
 
-
-
-
-
-<!-- 
-            <script>
-
-    function detailedExpenseInfo(expenseId, comment) {
-      // Make an AJAX request to the PHP script to get the item data
-      $.ajax({
-        url: "getExpenseAttachment.php",
-        type: "POST",
-        data: {
-          expenseId: expenseId,
-          comment: comment
-        },
-        dataType: "text",
-        success: function(data) {
-          // Your code to view the item goes here, using the returned data
-          console.log(data+'sfdasfsastassfsauhasihfdasidi');
-          console.log("Success");
-        },
-        error: function(xhr, status, error) {
-          // Handle errors
-          console.log("Error: " + error );
-        }
-      });
-    }
-  </script> -->
 
 </html>

@@ -23,59 +23,66 @@
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <meta name="generator" content="">
-        <title><?php echo $lib->_('the_title'); ?></title>
-        <?php require __DIR__ . '/../_ui/css.php'; ?>
-        <style>
 
-        </style>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="generator" content="">
+    <title><?php echo $lib->_('the_title'); ?></title>
+    <?php require __DIR__ . '/../_ui/css.php'; ?>
+    <style>
 
-    <body class="text-<?php echo $_left; ?> fade-in-top" id="page-top">
-        <?php require __DIR__ . '/../_ui/loader.php'; ?>
-        <div id="wrapper">
-            <!-- Sidebar -->
-            <?php require __DIR__ . '/../_ui/sidebar.php'; ?>
-            <!-- End of Sidebar -->
+    </style>
+</head>
 
-            <!-- Content Wrapper -->
+<body class="text-<?php echo $_left; ?> fade-in-top" id="page-top">
+    <?php require __DIR__ . '/../_ui/loader.php'; ?>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <?php require __DIR__ . '/../_ui/sidebar.php'; ?>
+        <!-- End of Sidebar -->
 
-            <div id="content-wrapper" class="d-flex flex-column">
-                <div id="content">
+        <!-- Content Wrapper -->
 
-                    <?php require __DIR__ . '/../_ui/toolbar.php'; ?>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
 
-                    <?php
-                    switch ($route->subpage) {
+                <?php require __DIR__ . '/../_ui/toolbar.php'; ?>
+
+                <?php
+                switch ($route->subpage) {
+
+                    case 'encashment':
+                        require_once('encashment/encashment.php');
+                        break;
+
+                    case 'visa':
+                        require_once('visa/visa.php');
+                        break;
+                    case 'leaves':
+                        require_once('leaves/leaves.php');
+                        break;
+
+                    case 'salary':
+                        require_once('salary/salary.php');
+                        break;
+                    default:
+                        require_once('default.php');
+                }
+                ?>
 
 
-                        case 'visa-types':
-                            require_once ('visa-types/visa-types.php');
-                            break;
-
-
-
-                        default:
-                            require_once ('default.php');
-                    }
-                    ?>
-
-
-                </div>
             </div>
-
         </div>
-        <?php require __DIR__ . '/../_ui/page-top.php'; ?>
-        <?php require_once(__SYSTEM_JAVASCRIPTS__ . 'system.caller.js.php'); ?> 
-        <?php require __DIR__ . '/../_ui/scripts.php'; ?>
+
+    </div>
+    <?php require __DIR__ . '/../_ui/page-top.php'; ?>
+    <?php require_once(__SYSTEM_JAVASCRIPTS__ . 'system.caller.js.php'); ?>
+    <?php require __DIR__ . '/../_ui/scripts.php'; ?>
 
 
-    </body>
+</body>
+
 </html>
-
-
