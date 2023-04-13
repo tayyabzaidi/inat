@@ -101,16 +101,15 @@
     </style>
 </head>
 
-<?php 
+<?php
 
 $addLeaveStatus = false;
-$addLeaveMsg = '';
+$employeeId = $_SESSION['empId'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the form data
     $no_of_days = $_POST['no-of-days'];
     $leave_type = $_POST['leave-type'];
-    $employeeId = $_POST['employeeId'];
 
     // print($_POST['no-of-days']); die();
 
@@ -124,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // $stmt = $pdo->prepare("INSERT INTO employee_leaves (emp_id, no_of_days, leave_type) VALUES (?, ?, ?)");
     // $success = $stmt->execute([$employeeId, $no_of_days, $leave_type]);
 
-    $success = $pdo->query("INSERT INTO employee_leaves (emp_id, no_of_days, leave_type) VALUES ('".$employeeId."', '".$no_of_days."', '".$leave_type."')");
+    $success = $pdo->query("INSERT INTO employee_leaves (emp_id, no_of_days, leave_type) VALUES ('" . $employeeId . "', '" . $no_of_days . "', '" . $leave_type . "')");
     // $success = $stmt->execute([$employeeId, $no_of_days, $leave_type]);
     // echo $stmt; die();
     if ($success) {
@@ -136,7 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $addLeaveStatus = false;
         $addLeaveMsg = 'Erro inserting data';
     }
-
 }
 
 ?>
@@ -147,23 +145,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="card-body">
                 <?php $recEmpData = $pdo->query(
-                    'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id'
+                    'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id where el.emp_id=' . $employeeId
                 ); ?>
-
                 <div class="mb-2" align="<?php echo $_right; ?>">
-
-                    <button type="button" class="btn btn-primary modal-button open-add-leaves-modal" href="#myModal1" data-empid="<?php echo $recEmpData?$recEmpData[0]['id']:''; ?>" data-toggle="modal" data-target="#myModal">Add Leave</button>
-
+                    <button type="button" class="btn btn-primary modal-button open-add-leaves-modal" href="#myModal1" data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>" data-toggle="modal" data-target="#myModal">Add Leave</button>
                 </div>
-
                 <h3>Leave List</h3>
-
-                <?php if( $addLeaveStatus && ($addLeaveMsg!='') ) { ?>
-
+                <?php if ($addLeaveStatus && ($addLeaveMsg != '')) { ?>
                     <div class="alert alert-sucecss">
-                    <?php echo $addLeaveMsg ?>
+                        <?php echo $addLeaveMsg ?>
                     </div>
-
                 <?php } ?>
 
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -178,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
                                 <!-- <td><?php echo $recEmpData[$i]['id']; ?>
@@ -191,9 +182,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
-                                    // $pd->bind('expenseId',$recEmpData[$i]['id']);
                                     $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId' // where es.expenseId=1;'
+                                        'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId'
                                     );
                                     $HOD = false;
                                     $AM = false;
@@ -263,8 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="modal-dialog" role="document">
         <form name="add-leave-formx" method="post">
-            <input type="hidden" name="employeeId" class="add-leave-empid">
-        <div class="modal-content">
+            <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addClaimModalLabel">Add Leave</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -272,26 +261,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- <form action="" method="POST" > -->
-                        <div class="form-group">
-                            <label for="no-of-days">Number of days:</label>
-                            <input type="number" class="form-control" id="no-of-days" name="no-of-days" min="1">
-                        </div>
+                    <div class="form-group">
+                        <label for="no-of-days">Number of days:</label>
+                        <input type="number" class="form-control" id="no-of-days" name="no-of-days" min="1">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="no-of-days">Leave Type:</label>
-                            <input type="text" class="form-control" id="leave-type" name="leave-type">
-                        </div>
+                    <div class="form-group">
+                        <label for="leave-type">Leave Type:</label>
+                        <select class="form-control" id="leave-type" name="leave-type">
+                            <?php
+                            $result = $pdo->query(
+                                'SELECT * FROM request_types where type="leave"'
+                            );
+                            foreach ($result as $row) {
+                                echo '<option value="' . $row['name'] . '">' . $row['name'] . '</option>';
+                            }
+
+                            ?>
+                        </select>
+                    </div>
 
 
-                        <div class="form-group">
-                            <label for="claim-attachments">Leave Attachment (Please add attachment)</label>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="claim-attachments" name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                                <label class="custom-file-label" for="claim-attachments">Choose file</label>
-                            </div>
+                    <div class="form-group">
+                        <label for="claim-attachments">Leave Attachment (Please add attachment)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="claim-attachments" name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
+                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
-                    <!-- </form> -->
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -318,14 +315,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="modal-body">
 
                 <?php
-                // Connect to the database
-
-                $file = "testPhp.log";
-                $message = "From leaves.php, This is a log message";
-                // Print the log message to a file
-                error_log($message . "\n", 3, $file);
-
-
                 $result = $pdo->query(
                     'SELECT el.attachment from employee_leaves el where id = 1;'
                 );
@@ -386,69 +375,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-
-
-    // document.forms['add-leave-form'].addEventListener('submit', function(event) {
-    //     event.preventDefault(); // Prevent the form from submitting normally
-
-    //     var element = document.getElementById("employee-data-btn");
-    //     var employeeId = element.getAttribute("data-id");
-
-    //     // Get the form data using FormData
-    //     var form = event.target;
-    //     var formData = new FormData(form);
-    //     formData.append('employeeId', employeeId);
-
-    //     // Send the form data using AJAX
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.open('POST', 'submitLeaves');
-    //     xhr.addEventListener('load', function() {
-    //         if (xhr.status === 404) {
-    //             // The page does not exist
-    //             console.log('Page does not exist');
-    //         } else {
-    //             // The page exists  
-    //             console.log('Page exists');
-    //         }
-    //     });
-    //     xhr.send(formData);
-    // });
-
-    $('.open-add-leaves-modal').click(function(){
-        let empId = $(this).attr('data-empid');
-        $('.add-leave-empid').val(empId);
-    });
-
 </script>
-
-
-
-
-
-<!-- 
-            <script>
-
-    function detailedExpenseInfo(expenseId, comment) {
-      // Make an AJAX request to the PHP script to get the item data
-      $.ajax({
-        url: "getExpenseAttachment.php",
-        type: "POST",
-        data: {
-          expenseId: expenseId,
-          comment: comment
-        },
-        dataType: "text",
-        success: function(data) {
-          // Your code to view the item goes here, using the returned data
-          console.log(data+'sfdasfsastassfsauhasihfdasidi');
-          console.log("Success");
-        },
-        error: function(xhr, status, error) {
-          // Handle errors
-          console.log("Error: " + error );
-        }
-      });
-    }
-  </script> -->
 
 </html>

@@ -42,6 +42,8 @@ if ($auth->checkAuth()) {
         
         define("__EMP_ID",$_auth_emp_rec['empId']);
         define("__AUTH_ID",$_auth_emp_rec['authId']);
+
+        $_SESSION['empId'] = $_auth_emp_rec['empId'];
     }
 
 
