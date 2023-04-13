@@ -104,6 +104,7 @@
 <?php
 
 $addLeaveStatus = false;
+$addLeaveMsg = '';
 $employeeId = $_SESSION['empId'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -111,21 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $no_of_days = $_POST['no-of-days'];
     $leave_type = $_POST['leave-type'];
 
-    // print($_POST['no-of-days']); die();
-
-    // echo $employeeId;
-    $file = "testPhp.log";
-    $message = "This is a log message";
-    // Print the log message to a file
-    error_log($message . "\n", 3, $file);
-
-    // // Insert the data into the database
-    // $stmt = $pdo->prepare("INSERT INTO employee_leaves (emp_id, no_of_days, leave_type) VALUES (?, ?, ?)");
-    // $success = $stmt->execute([$employeeId, $no_of_days, $leave_type]);
-
     $success = $pdo->query("INSERT INTO employee_leaves (emp_id, no_of_days, leave_type) VALUES ('" . $employeeId . "', '" . $no_of_days . "', '" . $leave_type . "')");
-    // $success = $stmt->execute([$employeeId, $no_of_days, $leave_type]);
-    // echo $stmt; die();
     if ($success) {
         error_log("Data inserted successfully" . "\n", 3, $file);
         $addLeaveStatus = true;
