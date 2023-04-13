@@ -68,6 +68,10 @@
                             <a href="<?php echo __APP_URL__ . $route->q . '/expenses'; ?>"><i
                                     class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Expenses</a>
                         </li>
+                        <li class="list-group-item">
+                            <a href="<?php echo __APP_URL__ . $route->q . '/salary'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Salaries </a>
+                        </li>
                     </ul>
                 </div>
             </div>

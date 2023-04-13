@@ -95,6 +95,17 @@
             -o-transition: all .3s cubic-bezier(.215, .61, .355, 1);
             transition: all .3s cubic-bezier(.215, .61, .355, 1);
         }
+
+        form {
+            float: right;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .form-container {
+            float: right;
+            width: 50%;
+        }
     </style>
 </head>
 
@@ -107,7 +118,21 @@
 
                 <h3>Claim List</h3>
 
+                <div class="form-container">
+                    <form action="#" method="POST">
+                        <label for="date"> Date </label>
+                        <input type="date" id="date" name="date">
+                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                            Date</button>
+                    </form>
 
+                    <form action="#" method="POST">
+                        <label for="employeeId">Employee ID</label>
+                        <input type="text" id="employeeId" name="employeeId">
+                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                            Employee ID</button>
+                    </form>
+                </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>

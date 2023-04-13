@@ -47,9 +47,9 @@
                                 <td><?php echo $recEmpData[$i]['discrepancy_reason'] ?></td>
                                 <td>
                                     <a
-                                        href="<?php echo __APP_URL__ . $route->q . '/slip_download?id=' . $recEmpData[$i]['id'] . ''; ?>"><i
-                                            class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
-                                        Salary Slips</a>
+                                        href="<?php echo __APP_URL__ . $route->q . '/slip_download?id=' . $recEmpData[$i]['id'] . ''; ?>">
+                                        <i class="fa fa-download <?php echo $_right; ?>"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php } ?>
