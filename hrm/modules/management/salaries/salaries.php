@@ -88,8 +88,7 @@
                                     'name'
                                 ]; ?></td>
                                 <td><?php
-                                header("Content-Type: application/pdf");
-
+                               
                                 // Convert the binary PDF data to a base64-encoded string
                                 $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
 

@@ -3,15 +3,10 @@
 
 // retrieve the file from the database
 $id = $_GET['id'];
-$sql = 'SELECT * FROM salary WHERE id = 4';
-$result = $conn->query($sql);
 
-echo '------------------------';
-// set the download headers
-header("Content-Disposition: attachment; filename=" . $result['date']);
-header("Content-Type: application/pdf");
-header("Content-Length: " . strlen($result['slip']));
+$result = $pdo->query('SELECT * FROM salary WHERE id = 2');
+
 
 // output the file data
-echo $result['slip'];
+echo $result[0]['slip'];
 ?>

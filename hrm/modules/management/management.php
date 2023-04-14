@@ -44,6 +44,10 @@
 
                 <?php
                 switch ($route->subpage) {
+
+                    case 'slip_download':
+                        require_once('salaries/download.php');
+                        break;
                     case 'salary':
                         require_once('salaries/salaries.php');
                         break;
@@ -79,10 +83,6 @@
 
                     case 'ticket-types':
                         require_once('ticket-types/ticket-types.php');
-                        break;
-
-                    case 'slip-download':
-                        require_once('salaries/download.php');
                         break;
 
                     default:
