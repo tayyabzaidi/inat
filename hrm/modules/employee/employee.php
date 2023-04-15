@@ -53,7 +53,6 @@
 
                 <?php
                 switch ($route->subpage) {
-
                     case 'encashment':
                         require_once('encashment/encashment.php');
                         break;
@@ -68,6 +67,9 @@
                     case 'salary':
                         require_once('salary/salary.php');
                         break;
+                    case 'expense':
+                            require_once('expense/expense.php');
+                            break;
                     default:
                         require_once('default.php');
                 }

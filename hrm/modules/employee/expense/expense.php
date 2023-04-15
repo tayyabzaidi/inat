@@ -103,6 +103,12 @@
 
             <div class="card-body">
 
+                <div class="mb-2" align="<?php echo $_right; ?>">
+
+                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
+                        data-target="#myModal">Add Claim</button>
+
+                </div>
 
                 <h3>Claim List</h3>
 
@@ -113,6 +119,7 @@
                         <tr>
                             <th>I.D</th>
                             <th>Date</th>
+                            <th>Name</th>
                             <th>Status</th>
                             <th>Total Amount</th>
                             <th></th>
@@ -120,7 +127,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', 1);
+                        $pdo->bind('employeeId', 4);
                         $recEmpData = $pdo->query(
                             'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
                         );
@@ -135,6 +142,9 @@
                                     'date'
                                 ]; ?>
                                 </td>
+                                <td><?php echo $recEmpData[$i][
+                                    'name'
+                                ]; ?>
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
@@ -200,7 +210,8 @@
 
 
                             </tr>
-                        <?php } ?>
+                        <?php }
+                         ?>
                     </tbody>
                 </table>
             </div>
@@ -208,6 +219,50 @@
     </div>
 </div>
 
+<!-- The Modal -->
+<div id="myModal1" class="modal">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
+            </div>
+            <div class="modal-body">
+                <form  action="" method="POST">
+                    <div class="form-group">
+                        <label for="claim-comment">Comment</label>
+                        <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="claim-pdf">PDF File (Please submit expense form)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
+                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="claim-attachments">Attachments</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="claim-attachments"
+                                name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
+                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="claim-amount" style="margin-right:20px">Total Amount</label>
+                        <input type="number" id="total" name="claim-amount" value="0" >
+                    </div>
+             
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Claim</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+</div>
 
 <!-- The Modal -->
 <div id="myModal2" class="modal">
@@ -286,9 +341,42 @@
 
 </script>
 
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get form data
+    $unique_id = '123';
+    $date = date('Y-m-d');
+    $employee_id = $_SESSION['empId'];
+    $total_amount = $_POST['claim-amount'];
+    $comment = $_POST['claim-comment'];
+    $pdf_data = base64_encode($_POST['claim-pdf']);
+echo $pdf_data;
+    // Insert form data into database
+    $sql = "INSERT INTO employee_expenses (unique_id, date, employee_id, total_amount, form_data, comment)
+            VALUES ('123', '$date', '$employee_id', '$total_amount', '$pdf_data', '$comment')";
 
+   $result=$pdo->query($sql);
 
+   // Step 3: Verify if there is any row and extract status name
+   if (!empty($result)) 
+{
+    $id=$pdo->query("SELECT id from employee_expenses where unique_id = '$unique_id';");
+        // Save attachments
+        // if (!empty($_FILES['claim-attachments']['name'][0])) {
+        //     foreach ($_FILES['claim-attachments']['tmp_name'] as $key => $tmp_name) {
+        //         $attachment_data = base64_encode(file_get_contents($tmp_name));
+        //         $sql = "INSERT INTO attachment (expenseId, attachment) VALUES ('$expense_id', '$attachment_data')";
+        //         mysqli_query($conn, $sql);
+        //     }
+        // }
 
+        // Redirect to success page
+        exit();
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    }
+}
+?>
 
 <!-- 
             <script>
