@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Load jQuery UI library -->
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
+
+
 
 <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Load jQuery UI library -->
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
-
     <style>
         /* Add this to your CSS code */
         .modal {
@@ -104,26 +105,7 @@
 </head>
 
 <body>
-    <?php
-    $employeeId = $_SESSION['empId'];
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Get the form data
-        $no_of_days = $_POST['no-of-days'];
-        $leave_type = $_POST['leave-type'];
-        $start_date = $_POST['start-date'];
-
-        $success = $pdo->query("INSERT INTO employee_leaves (emp_id,start_date, no_of_days, leave_type) VALUES ('" . $employeeId . "', '" . $start_date . "', '" . $no_of_days . "', '" . $leave_type . "')");
-        $addLeaveStatus = true;
-
-        if ($success) {
-            echo 'Leave request submitted';
-        } else {
-            echo 'Error inserting data';
-        }
-    }
-
-    ?>
 
     <div class="row" style="width: 98%;margin-left: 1%;">
         <div class="col-lg-12 mb-4">
@@ -131,22 +113,20 @@
 
                 <div class="card-body">
                     <?php $recEmpData = $pdo->query(
-                        'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id where el.emp_id=' . $employeeId
+                        'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id order by id desc limit 5'
                     ); ?>
-                    <div class="mb-2" align="<?php echo $_right; ?>">
-                        <button type="button" class="btn btn-primary modal-button open-add-leaves-modal" href="#myModal1" data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>" data-toggle="modal" data-target="#myModal">Add Leave</button>
-                    </div>
                     <h3>Leave List</h3>
+
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <!-- <th>I.D</th>
-                            <th>Name</th> -->
-                                <th>Start date</th>
+                                <!-- <th>I.D</th>-->
+                                <th>Name</th>
                                 <th>No of days</th>
                                 <th>Leave type</th>
                                 <th>Status</th>
                                 <th>PDF</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -154,10 +134,8 @@
                             <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                                 <tr>
                                     <!-- <td><?php echo $recEmpData[$i]['id']; ?>
-                                </td>
-                                <td><?php echo $recEmpData[$i]['name']; ?>
-                                </td> -->
-                                    <td><?php echo $recEmpData[$i]['start_date']; ?>
+                                    </td>-->
+                                    <td><?php echo $recEmpData[$i]['name']; ?>
                                     </td>
                                     <td><?php echo $recEmpData[$i]['no_of_days']; ?>
                                     </td>
@@ -166,7 +144,7 @@
                                     <td class="" style="text-align: left;">
                                         <?php
                                         $getStatus = $pdo->query(
-                                            'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId'
+                                            'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId where es.leaveId=' . $recEmpData[$i]['id']
                                         );
                                         $HOD = false;
                                         $AM = false;
@@ -198,9 +176,9 @@
                                         <div class="ant-tag " style="<?php if (
                                                                             $HOD == 'approved'
                                                                         ) {
-                                                                            echo 'background-color: rgb(135, 208, 104)';
+                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
                                                                         } elseif ($HOD == 'disapprove') {
-                                                                            echo 'background-color: red;';
+                                                                            echo 'background-color: red; color:white';
                                                                         } else {
                                                                             echo 'background-color: white';
                                                                         } ?>">
@@ -208,9 +186,9 @@
                                         <div class="ant-tag " style="<?php if (
                                                                             $AM == 'approved'
                                                                         ) {
-                                                                            echo 'background-color: rgb(135, 208, 104)';
+                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
                                                                         } elseif ($AM == 'disapprove') {
-                                                                            echo 'background-color: red;';
+                                                                            echo 'background-color: red; color:white';
                                                                         } else {
                                                                             echo 'background-color: white';
                                                                         } ?>">
@@ -220,7 +198,9 @@
                                     <td>
                                         <button class="modal-button" id="employee-data-btn" href="#myModal2" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>"><i class="fa fa-folder"></i></button>
                                     </td>
-
+                                    <td>
+                                        <button class="modal-button approve-disapprove-btn" id="<?php echo $recEmpData[$i]['id']; ?>" href="#myModal1" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>">Approve/Disapprove</button>
+                                    </td>
 
                                 </tr>
                             <?php } ?>
@@ -229,65 +209,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- The Modal -->
-    <div id="myModal1" class="modal">
-
-        <div class="modal-dialog" role="document">
-            <form name="add-leave-formx" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addClaimModalLabel">Add Leave</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            <label for="start-date">Start Date:</label>
-                            <input type="text" class="form-control" id="start-date" name="start-date">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="no-of-days">Number of days:</label>
-                            <input type="number" class="form-control" id="no-of-days" name="no-of-days" min="1">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="leave-type">Leave Type:</label>
-                            <select class="form-control" id="leave-type" name="leave-type">
-                                <?php
-                                $result = $pdo->query(
-                                    'SELECT * FROM request_types where type="leave"'
-                                );
-                                foreach ($result as $row) {
-                                    echo '<option value="' . $row['name'] . '">' . $row['name'] . '</option>';
-                                }
-
-                                ?>
-                            </select>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="claim-attachments">Leave Attachment (Please add attachment)</label>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="claim-attachments" name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                                <label class="custom-file-label" for="claim-attachments">Choose file</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="add-leave-submit" type="submit" class="btn btn-primary">Add Leave</button>
-                    </div>
-
-                </div>
-            </form>
-        </div>
-
     </div>
 
     <!-- The Modal -->
@@ -328,8 +249,43 @@
     </div>
 
 
+    <!-- The Modal -->
+    <div id="myModal1" class="modal">
+
+        <div class="modal-dialog" role="document">
+            <form name="approve-dispprove-leave" method="post" action="approve-disapprove-leave">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addClaimModalLabel">Approve/Dispprove Leave</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <input style="display: none" type="text" name="leaveStatusId" id="leaveStatusId">
+
+                        <div class=" form-group">
+                            <label for="comments">Comments:</label>
+                            <input type="text" class="form-control" name="comments" id="comments">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" name="approve" id="approve">Approve</button>
+                        <button type="submit" class="btn btn-danger" id="disapprove">Disapprove</button>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
 
     <script>
+        // JavaScript code here
         var btn = document.querySelectorAll("button.modal-button");
 
         // All page modals
@@ -365,24 +321,10 @@
             }
         }
 
-        $.widget.bridge('uitooltip', $.ui.tooltip);
-
-        (function($) {
-            $(document).ready(function() {
-                $('#no-of-days').change(function() {
-                    var days = $(this).val();
-                    var startDate = new Date();
-                    startDate.setDate(startDate.getDate() + parseInt(days));
-                    $('#start-date').val(startDate.toISOString().substr(0, 10));
-                });
-
-                $.widget.bridge('uitooltip', $.ui.tooltip);
-                $('#start-date').datepicker({
-                    dateFormat: 'yy-mm-dd',
-                    minDate: 0
-                });
-            });
-        })(jQuery);
+        $('.approve-disapprove-btn').click(function() {
+            var leaveStatusId = $(this).data('id');
+            $('#leaveStatusId').val(leaveStatusId);
+        });
     </script>
 </body>
 
