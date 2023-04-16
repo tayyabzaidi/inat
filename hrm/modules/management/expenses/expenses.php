@@ -129,17 +129,11 @@
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i][
-                                    'unique_id'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['unique_id']; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i][
-                                    'date'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i][
-                                    'name'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['name']; ?>
                                 </td>
                                 <td>
                                     <?php
@@ -150,17 +144,18 @@
 
 
                                 </td>
-                                <td> <?php echo $recEmpData[$i][
-                                    'total_amount'
-                                ]; ?>
+                                <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i
-                                            class="fa fa-folder"></i></button></td>
+                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button></td>
                                 </td>
                                 <td>
+                                    <?php $status = "";
+                                    if (isset($_POST['status'])) {
+                                        $status = $_POST['status'];
+                                    } ?>
                                     <label>
                                         <input type="checkbox" name="status" value="approve" <?php if ($status == "approve")
-                                            echo "checked"; ?>>
+                                                                                                    echo "checked"; ?>>
                                     </label>
                                     <!-- save the staus hod or am approve base on the user id -->
                                     <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -198,7 +193,7 @@
             <div class="modal-body">
                 <?php
                 // Connect to the database
-                
+
                 $result = $pdo->query(
                     'SELECT attachment FROM attachment where expenseId=1;'
                 );
@@ -210,7 +205,6 @@
                     echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
                         base64_encode($blob['attachment']) .
                         "'  height='200px' width='200px' role='presentation'>";
-
                 }
                 echo "</div>";
 
@@ -238,7 +232,7 @@
 
     // When the user clicks the button, open the modal
     for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function (e) {
+        btn[i].onclick = function(e) {
             e.preventDefault();
             modal = document.querySelector(e.target.getAttribute("href"));
             modal.style.display = "block";
@@ -247,7 +241,7 @@
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function () {
+        spans[i].onclick = function() {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
@@ -255,14 +249,13 @@
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
+    window.onclick = function(event) {
         if (event.target.classList.contains('modal')) {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
         }
     }
-
 </script>
 
 
