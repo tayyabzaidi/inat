@@ -105,7 +105,8 @@
 
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
-                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal" data-target="#myModal">Add Claim</button>
+                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
+                        data-target="#myModal">Add Claim</button>
 
                 </div>
 
@@ -126,7 +127,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', 4);
+                        $pdo->bind('employeeId', $_SESSION['empId']);
                         $recEmpData = $pdo->query(
                             'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
                         );
@@ -173,29 +174,30 @@
                                     ?>
 
                                     <div class="ant-tag " style="<?php if (
-                                                                        $HOD == 'approved'
-                                                                    ) {
-                                                                        echo 'background-color: rgb(135, 208, 104)';
-                                                                    } elseif ($HOD == 'disapprove') {
-                                                                        echo 'background-color: red;';
-                                                                    } else {
-                                                                        echo 'background-color: white';
-                                                                    } ?>">
+                                        $HOD == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($HOD == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
                                         HOD</div>
                                     <div class="ant-tag " style="<?php if (
-                                                                        $AM == 'approved'
-                                                                    ) {
-                                                                        echo 'background-color: rgb(135, 208, 104)';
-                                                                    } elseif ($AM == 'disapprove') {
-                                                                        echo 'background-color: red;';
-                                                                    } else {
-                                                                        echo 'background-color: white';
-                                                                    } ?>">
+                                        $AM == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($AM == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
                                         AM</div>
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button></td>
+                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i
+                                            class="fa fa-folder"></i></button></td>
                                 </td>
 
 
@@ -218,7 +220,7 @@
                 <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
             </div>
             <div class="modal-body">
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="claim-comment">Comment</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
@@ -233,7 +235,8 @@
                     <div class="form-group">
                         <label for="claim-attachments">Attachments</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-attachments" name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
+                            <input type="file" class="custom-file-input" id="claim-attachments"
+                                name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
                             <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
                     </div>
@@ -264,7 +267,7 @@
             <div class="modal-body">
                 <?php
                 // Connect to the database
-
+                
                 $result = $pdo->query(
                     'SELECT attachment FROM attachment where expenseId=1;'
                 );
@@ -302,7 +305,7 @@
     var spans = document.getElementsByClassName("btn btn-secondary");
     // When the user clicks the button, open the modal
     for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function(e) {
+        btn[i].onclick = function (e) {
             e.preventDefault();
             modal = document.querySelector(e.target.getAttribute("href"));
             modal.style.display = "block";
@@ -311,7 +314,7 @@
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function() {
+        spans[i].onclick = function () {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
@@ -319,7 +322,7 @@
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target.classList.contains('modal')) {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
@@ -330,49 +333,45 @@
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // $pdf_data = file_get_contents($_FILES['claim-pdf']['tmp_name']);
-    if (isset($_FILES['claim-pdf']) && $_FILES['claim-pdf']['error'] == UPLOAD_ERR_OK) {
-        $pdf = file_get_contents($_FILES['claim-pdf']['tmp_name']);
-        echo $pdf;
-        // save $pdf to database as blob
-        //   move_uploaded_file($_FILES['claim-pdf']['tmp_name'], '/path/to/destination/filename.pdf');
-    } else {
-        // handle error
-        echo "Error uploading PDF file";
+
+    //    Get form data
+    $unique_id = '123456';
+    $date = date('Y-m-d');
+    $employee_id = $_SESSION['empId'];
+    $total_amount = $_POST['claim-amount'];
+    $comment = $_POST['claim-comment'];
+    $pdf = file_get_contents($_FILES['claim-pdf']['tmp_name']);
+    $pdf_hex = bin2hex($pdf);
+    $pdf_hex = '0x' . $pdf_hex;
+    // Insert form data into database
+    $sql = "INSERT INTO employee_expenses (unique_id, date, employee_id, total_amount, form_data, comment)
+                VALUES ('123456', '$date', '$employee_id', '$total_amount',$pdf_hex, '$comment')";
+
+    $result = $pdo->query($sql);
+
+    // Step 3: Verify if there is any row and extract status name
+    if (!empty($result)) {
+        $expenseId = $pdo->query("SELECT id from employee_expenses where unique_id = '$unique_id';");
+        $attachments = $_FILES['claim-attachments'];
+        echo $expenseId[0]['id'];
+        echo '-';
+        // Loop through all the uploaded files
+        for ($i = 0; $i < count($attachments['name']); $i++) {
+            $attachment_name = $attachments['name'][$i];
+            $attachment_tmp_name = $attachments['tmp_name'][$i];
+            $attachment_size = $attachments['size'][$i];
+            $attachment_type = $attachments['type'][$i];
+
+            // Read the file contents into a variable
+            $attachment_data = file_get_contents($attachment_tmp_name);
+
+            $pdf_hex = bin2hex($attachment_data);
+            $pdf_hex = '0x' . $pdf_hex;
+            echo $pdf_hex;
+            $attachment = $pdo->query("INSERT INTO attachment( attachment, expenseId) VALUES ('$pdf_hex','$expenseId[0]['id']')");
+        }
+
     }
-    // Get form data
-    //     $unique_id = '123';
-    //     $date = date('Y-m-d');
-    //     $employee_id = $_SESSION['empId'];
-    //     $total_amount = $_POST['claim-amount'];
-    //     $comment = $_POST['claim-comment'];
-    //     $pdf_data = base64_encode($_POST['claim-pdf']);
-    // echo $pdf_data;
-    //     // Insert form data into database
-    //     $sql = "INSERT INTO employee_expenses (unique_id, date, employee_id, total_amount, form_data, comment)
-    //             VALUES ('123', '$date', '$employee_id', '$total_amount', '$pdf_data', '$comment')";
-
-    //    $result=$pdo->query($sql);
-
-    //    // Step 3: Verify if there is any row and extract status name
-    //    if (!empty($result)) 
-    {
-        //     $id = $pdo->query("SELECT id from employee_expenses where unique_id = '$unique_id';");
-        // Save attachments
-        // if (!empty($_FILES['claim-attachments']['name'][0])) {
-        //     foreach ($_FILES['claim-attachments']['tmp_name'] as $key => $tmp_name) {
-        //         $attachment_data = base64_encode(file_get_contents($tmp_name));
-        //         $sql = "INSERT INTO attachment (expenseId, attachment) VALUES ('$expense_id', '$attachment_data')";
-        //         mysqli_query($conn, $sql);
-        //     }
-        // }
-
-        // Redirect to success page
-        exit();
-    }
-    // else {
-    //  echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    // }
 }
 ?>
 

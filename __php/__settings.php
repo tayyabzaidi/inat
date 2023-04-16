@@ -75,7 +75,7 @@ define('__EML_SERVER_Port__', 465);
  */
 
 define('__PROTOCOL__', 'http://');
-define('__DOMAIN__', 'localhost:80');
+define('__DOMAIN__', 'localhost:8080');
 define('__FOLDER__', '/inat/');
 define('__SYSTEM_ROOT__', __PROTOCOL__ . __DOMAIN__ . __FOLDER__);
 

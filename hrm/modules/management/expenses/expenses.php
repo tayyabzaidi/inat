@@ -122,9 +122,8 @@
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', 1);
                         $recEmpData = $pdo->query(
-                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date`;'
+                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id  ORDER BY `date`;'
                         );
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
@@ -136,17 +135,16 @@
                                 <td><?php echo $recEmpData[$i]['name']; ?>
                                 </td>
                                 <td>
-                                    <?php
-                                    $pdf_data = base64_decode($recEmpData[$i]['form_data']);
-                                    echo $pdf_data;
-                                    ?>
 
-
+                                    <iframe
+                                        src="data:application/pdf;base64,<?php echo base64_encode($recEmpData[$i]['form_data']); ?>"
+                                        width="80%" height="250"></iframe>
 
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button></td>
+                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i
+                                            class="fa fa-folder"></i></button></td>
                                 </td>
                                 <td>
                                     <?php $status = "";
@@ -155,7 +153,7 @@
                                     } ?>
                                     <label>
                                         <input type="checkbox" name="status" value="approve" <?php if ($status == "approve")
-                                                                                                    echo "checked"; ?>>
+                                            echo "checked"; ?>>
                                     </label>
                                     <!-- save the staus hod or am approve base on the user id -->
                                     <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -164,9 +162,6 @@
                                             $sql = "UPDATE employee_expense SET status =  WHERE id = :id";
                                         }
                                     } ?>
-
-
-
                                 </td>
 
                             </tr>
@@ -193,7 +188,7 @@
             <div class="modal-body">
                 <?php
                 // Connect to the database
-
+                
                 $result = $pdo->query(
                     'SELECT attachment FROM attachment where expenseId=1;'
                 );
@@ -232,7 +227,7 @@
 
     // When the user clicks the button, open the modal
     for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function(e) {
+        btn[i].onclick = function (e) {
             e.preventDefault();
             modal = document.querySelector(e.target.getAttribute("href"));
             modal.style.display = "block";
@@ -241,7 +236,7 @@
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function() {
+        spans[i].onclick = function () {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
@@ -249,7 +244,7 @@
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target.classList.contains('modal')) {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
