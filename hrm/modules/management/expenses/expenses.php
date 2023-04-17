@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
+<html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>
+            use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Maximum;">
 
 <head>
     <style>
@@ -188,11 +189,49 @@
                                             echo "checked"; ?>>
                                     </label>
                                     <!-- save the staus hod or am approve base on the user id -->
-                                    <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                    <?php
+
+
+                                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         $status = $_POST['status'];
+                                        $pdo->bind('employeeId', $_SESSION['empId']);
+                                        $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
+                                        if (empty($getDesignation))
+                                            echo 'invalid user';
                                         if ($status == "approve") {
-                                            $sql = "UPDATE employee_expense SET status =  WHERE id = :id";
+                                            $setStatus = 0;
+                                            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                                                $getStatus = $pdo->query("select id from status where name like ('HOD_a%');");
+                                                $setStatus = $getStatus[0]['id'];
+                                            }
+                                            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                                                $getStatus = $pdo->query("select id from status where name like ('AM_a%');");
+                                                $setStatus = $getStatus[0]['id'];
+                                            }
+                                            if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                                                $getStatus = $pdo->query("select id from status where name like ('HR_a%');");
+                                                $setStatus = $getStatus[0]['id'];
+                                            }
                                         }
+                                        if ($status == "disapprove") {
+                                            $setStatus = 0;
+                                            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                                                $getStatus = $pdo->query("select id from status where name like ('HOD_d%');");
+                                                $setStatus = $getStatus[0]['id'];
+                                            }
+                                            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                                                $getStatus = $pdo->query("select id from status where name like ('AM_d%');");
+                                                $setStatus = $getStatus[0]['id'];
+                                            }
+                                            if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                                                $getStatus = $pdo->query("select id from status where name like ('HR_d%');");
+                                                $setStatus = $getStatus[0]['id'];
+                                            }
+                                        }
+
+                                        $pdo->bind("id", $setStatus);
+                                        $result = $pdo->query("UPDATE employee_expense_status SET statusId =:id where expenseId=$recEmpData[$i]['id']");
+
                                     } ?>
 
 
