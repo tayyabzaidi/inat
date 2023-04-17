@@ -1,3 +1,50 @@
+<!DOCTYPE html>
+<html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
+
+<head>
+    <style>
+        /* Add this to your CSS code */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .modal-image-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow images to wrap to a new line if they exceed the container width */
+        }
+
+        .modal-image {
+            width: 10%;
+            padding: 5px;
+            margin-right: 10px;
+            /* Add some spacing between the images */
+        }
+
+        .modal-dialog {
+            height: 180%;
+            max-width: 100%;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            margin-top: 5%;
+            margin-bottom: 10%;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%;
+            height: 40%;
+        }
+    </style>
+</head>
 <div class="row" style="width: 80%;margin-left: 10%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
@@ -16,15 +63,16 @@
                             <th>Date</th>
                             <th>Slip</th>
                             <th>Discrepancy Reason</th>
-                            <th>Download</th>
+                            <th>View</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', $_SESSION['authId']);
+                        echo $_SESSION['empId'];
+                        //   $pdo->bind('employeeId', 4);
                         $recEmpData = $pdo->query(
-                            'SELECT * FROM salary  WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
+                            'SELECT * FROM salary  WHERE employee_id= $_SESSION["empId"] ORDER BY `date` LIMIT 5;'
                         );
                         for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
@@ -46,9 +94,8 @@
                                 </td>
                                 <td><?php echo $recEmpData[$i]['discrepancy_reason'] ?></td>
                                 <td>
-                                    <a
-                                        href="<?php echo __APP_URL__ . $route->q . '/slip_download?id=' . $recEmpData[$i]['id'] . ''; ?>">
-                                        <i class="fa fa-download <?php echo $_right; ?>"></i>
+                                    <button class="modal-button" href="#myModal2" style="background: none;">
+                                        <i class="fa fa-eye <?php echo $_right; ?>"></i></button>
                                     </a>
                                 </td>
                             </tr>
@@ -59,3 +106,63 @@
         </div>
     </div>
 </div>
+
+
+<div id="myModal2" class="modal">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewAttachmentsModalLabel">Salary Slip</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?php
+
+                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="80%" height="250px"></object>';
+
+                ?>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var btn = document.querySelectorAll("button.modal-button");
+
+        // All page modals
+        var modals = document.querySelectorAll('.modal');
+
+        // Get the <span> element that closes the modal
+        var spans = document.getElementsByClassName("close");
+
+        // When the user clicks the button, open the modal
+        for (var i = 0; i < btn.length; i++) {
+            btn[i].onclick = function (e) {
+                e.preventDefault();
+                modal = document.querySelector(e.target.getAttribute("href"));
+                modal.style.display = "block";
+            }
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        for (var i = 0; i < spans.length; i++) {
+            spans[i].onclick = function () {
+                for (var index in modals) {
+                    if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+                }
+            }
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                for (var index in modals) {
+                    if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+                }
+            }
+        }
+
+    </script>
