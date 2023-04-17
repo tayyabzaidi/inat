@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
-
+<!-- 
 <head>
     <style>
         /* Add this to your CSS code */
@@ -69,10 +69,9 @@
                     </thead>
                     <tbody>
                         <?php
-                        echo $_SESSION['empId'];
-                        //   $pdo->bind('employeeId', 4);
+                        $pdo->bind('employeeId', $_SESSION['empId']);
                         $recEmpData = $pdo->query(
-                            'SELECT * FROM salary  WHERE employee_id= $_SESSION["empId"] ORDER BY `date` LIMIT 5;'
+                            'SELECT * FROM salary  WHERE employee_id= :employeeId ORDER BY `date` LIMIT 5;'
                         );
                         for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
@@ -109,7 +108,6 @@
 
 
 <div id="myModal2" class="modal">
-
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -120,49 +118,110 @@
             </div>
             <div class="modal-body">
                 <?php
-
                 echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="80%" height="250px"></object>';
-
                 ?>
             </div>
         </div>
     </div>
+</div>
 
 
-    <script>
-        var btn = document.querySelectorAll("button.modal-button");
+<script>
+    var btn = document.querySelectorAll("button.modal-button");
 
-        // All page modals
-        var modals = document.querySelectorAll('.modal');
+    // All page modals
+    var modals = document.querySelectorAll('.modal');
 
-        // Get the <span> element that closes the modal
-        var spans = document.getElementsByClassName("close");
+    // Get the <span> element that closes the modal
+    var spans = document.getElementsByClassName("close");
 
-        // When the user clicks the button, open the modal
-        for (var i = 0; i < btn.length; i++) {
-            btn[i].onclick = function (e) {
-                e.preventDefault();
-                modal = document.querySelector(e.target.getAttribute("href"));
-                modal.style.display = "block";
+    // When the user clicks the button, open the modal
+    for (var i = 0; i < btn.length; i++) {
+        btn[i].onclick = function (e) {
+            e.preventDefault();
+            modal = document.querySelector(e.target.getAttribute("href"));
+            modal.style.display = "block";
+        }
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    for (var i = 0; i < spans.length; i++) {
+        spans[i].onclick = function () {
+            for (var index in modals) {
+                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
         }
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target.classList.contains('modal')) {
+            for (var index in modals) {
+                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+            }
+        }
+    }
+
+</script>
+
+</html> -->
+
+
+<head>
+    <title>Example Modal with ID</title>
+    <script>
+        function openModal(id) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        document.getElementById('modal-title').innerHTML = response.title;
+                        document.getElementById('modal-body').innerHTML = response.body;
+                        document.getElementById('myModal').style.display = "block";
+                    } else {
+                        console.log('There was a problem with the request.');
+                    }
+                }
+            };
+            xhr.open('GET', 'get-data.php?id=' + id, true);
+            xhr.send();
+        }
+    </script>
+</head>
+
+<body>
+    <button onclick="openModal(123)">Open Modal with ID 123</button>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-body"></p>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
         // When the user clicks on <span> (x), close the modal
-        for (var i = 0; i < spans.length; i++) {
-            spans[i].onclick = function () {
-                for (var index in modals) {
-                    if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-                }
-            }
+        span.onclick = function () {
+            modal.style.display = "none";
         }
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
-            if (event.target.classList.contains('modal')) {
-                for (var index in modals) {
-                    if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-                }
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
         }
-
     </script>
+</body>
+
+</html>
