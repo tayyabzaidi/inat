@@ -68,6 +68,17 @@
             cursor: pointer;
         }
 
+        form {
+            float: right;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .form-container {
+            float: right;
+            width: 50%;
+        }
+
         .ant-tag {
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
@@ -96,17 +107,6 @@
             -o-transition: all .3s cubic-bezier(.215, .61, .355, 1);
             transition: all .3s cubic-bezier(.215, .61, .355, 1);
         }
-
-        form {
-            float: right;
-            margin-right: 20px;
-            margin-bottom: 10px;
-        }
-
-        .form-container {
-            float: right;
-            width: 50%;
-        }
     </style>
 </head>
 
@@ -121,14 +121,16 @@
 
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="date"> Date </label>
-                        <input type="date" id="date" name="date">
+                        <label for="dateFrom">Date From:</label>
+                        <input type="date" id="dateFrom" name="dateFrom">
+                        <label for="dateTo">Date To:</label>
+                        <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
                             Date</button>
                     </form>
 
                     <form action="#" method="POST">
-                        <label for="employeeId">Employee ID</label>
+                        <label for="employeeId">Employee ID:</label>
                         <input type="text" id="employeeId" name="employeeId">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
                             Employee ID</button>
@@ -148,7 +150,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', 1);
+                        $pdo->bind('employeeId', 2);
                         $recEmpData = $pdo->query(
                             'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date`;'
                         );
@@ -170,7 +172,7 @@
                                 <td>
                                     <?php
                                     $pdf_data = base64_decode($recEmpData[$i]['form_data']);
-                                    echo $pdf_data;
+                                    //  echo $pdf_data;
                                     ?>
 
 
@@ -184,55 +186,75 @@
                                             class="fa fa-folder"></i></button></td>
                                 </td>
                                 <td>
+                                    <form action="#" method="POST">
+                                        <!-- other form inputs -->
+                                <td>
                                     <label>
-                                        <input type="checkbox" name="status" value="approve" <?php if ($status == "approve")
-                                            echo "checked"; ?>>
+                                        <input type="checkbox" name="status" value="approve" onchange="this.form.submit();"
+                                            <?php if ($status == "approve")
+                                                echo "checked"; ?>>
                                     </label>
-                                    <!-- save the staus hod or am approve base on the user id -->
-                                    <?php
+                                    <label>
+                                        <input type="checkbox" name="status" value="disapprove"
+                                            onchange="this.form.submit();" <?php if ($status == "disapprove")
+                                                echo "checked"; ?>>
+                                    </label>
+                                    <button type="submit" style="display:none;"></button>
+                                </td>
+                                </form>
+                                <!-- save the staus hod or am approve base on the user id -->
+                                <?php
 
 
-                                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                                        $status = $_POST['status'];
-                                        $pdo->bind('employeeId', $_SESSION['empId']);
-                                        $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
-                                        if (empty($getDesignation))
-                                            echo 'invalid user';
-                                        if ($status == "approve") {
-                                            $setStatus = 0;
-                                            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-                                                $getStatus = $pdo->query("select id from status where name like ('HOD_a%');");
-                                                $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                                                $getStatus = $pdo->query("select id from status where name like ('AM_a%');");
-                                                $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                                                $getStatus = $pdo->query("select id from status where name like ('HR_a%');");
+                                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                    $status = $_POST['status'];
+                                    $pdo->bind('employeeId', $_SESSION['empId']);
+                                    $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
+                                    if (empty($getDesignation))
+                                        echo 'invalid user';
+
+                                    if ($status == "approve") {
+                                        $setStatus = 0;
+                                        if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                                            $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
+                                            $setStatus = $getStatus[0]['id'];
+                                        }
+                                        if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                                            $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
+                                            $setStatus = $getStatus[0]['id'];
+                                        }
+                                        if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                                            $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
+                                            if (!empty($getStatus)) {
                                                 $setStatus = $getStatus[0]['id'];
                                             }
                                         }
-                                        if ($status == "disapprove") {
-                                            $setStatus = 0;
-                                            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-                                                $getStatus = $pdo->query("select id from status where name like ('HOD_d%');");
+                                    }
+                                    if ($status == "disapprove") {
+                                        $setStatus = 0;
+                                        if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                                            $getStatus = $pdo->query("select id from status where status_name like ('HOD_d%');");
+                                            if (!empty($getStatus))
                                                 $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                                                $getStatus = $pdo->query("select id from status where name like ('AM_d%');");
-                                                $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                                                $getStatus = $pdo->query("select id from status where name like ('HR_d%');");
-                                                $setStatus = $getStatus[0]['id'];
-                                            }
                                         }
-
-                                        $pdo->bind("id", $setStatus);
-                                        $result = $pdo->query("UPDATE employee_expense_status SET statusId =:id where expenseId=$recEmpData[$i]['id']");
-
-                                    } ?>
+                                        if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                                            $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
+                                            if (!empty($getStatus))
+                                                $setStatus = $getStatus[0]['id'];
+                                        }
+                                        if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                                            $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
+                                            if (!empty($getStatus))
+                                                $setStatus = $getStatus[0]['id'];
+                                        }
+                                    }
+                                    if ($setStatus != 0) {
+                                        //  $pdo->bind("id", $setStatus);
+                                        echo $setStatus;
+                                        //issue---------------------------------------------------------------------------------------------------------------
+                                        $result = $pdo->query("UPDATE employee_expense_status SET statusId =2s where expenseId=$recEmpData[$i]['id']");
+                                    }
+                                } ?>
 
 
 

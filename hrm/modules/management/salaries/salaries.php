@@ -21,7 +21,7 @@
 
             <div class="card-body">
                 <h3>Salary Slips</h3>
-                <hr>
+
 
                 <!-- <div class="mb-2" align="<?php echo $_right; ?>">
                     <a href="#" class="btn btn-md btn-primary"> <i class="fas fa-filter"></i> Filter </a>
@@ -88,7 +88,7 @@
                                     'name'
                                 ]; ?></td>
                                 <td><?php
-                               
+
                                 // Convert the binary PDF data to a base64-encoded string
                                 $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
 
