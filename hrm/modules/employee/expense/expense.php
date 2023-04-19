@@ -112,7 +112,14 @@
 
                 <h3>Claim List</h3>
 
-
+                <form action="#" method="POST">
+                    <label for="dateFrom">Date From:</label>
+                    <input type="date" id="dateFrom" name="dateFrom">
+                    <label for="dateTo">Date To:</label>
+                    <input type="date" id="dateTo" name="dateTo">
+                    <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                        Date</button>
+                </form>
 
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
@@ -128,9 +135,22 @@
                     <tbody>
                         <?php
                         $pdo->bind('employeeId', $_SESSION['empId']);
+                        $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
+                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
+
+                        // Build the SQL query based on the provided filter values
+                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE ee.`employee_id`=:employeeId ';
+
+                        if (!empty($dateFrom) && !empty($dateTo)) {
+                            // User has provided both date filters
+                            $sql .= "AND ee.date BETWEEN '$dateFrom' AND '$dateTo' ORDER BY ee.`date`;";
+                        } else
+                            $sql .= "ORDER BY ee.`date`;";
+
                         $recEmpData = $pdo->query(
-                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
+                            $sql
                         );
+
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
@@ -304,6 +324,7 @@
     // Get the <span> element that closes the modal
     var spans = document.getElementsByClassName("btn btn-secondary");
     // When the user clicks the button, open the modal
+
     for (var i = 0; i < btn.length; i++) {
         btn[i].onclick = function (e) {
             e.preventDefault();

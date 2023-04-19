@@ -37,7 +37,7 @@
         }
 
         .modal-dialog {
-            height: 120%;
+            height: 90%;
             max-width: 80%;
             margin: 1.75rem auto;
         }
@@ -45,7 +45,7 @@
         .modal-content {
             background-color: #fefefe;
             margin: auto;
-            margin-top: 10%;
+            margin-top: 6%;
             margin-bottom: 10%;
             padding: 20px;
             border: 1px solid #888;
@@ -95,6 +95,16 @@
             -o-transition: all .3s cubic-bezier(.215, .61, .355, 1);
             transition: all .3s cubic-bezier(.215, .61, .355, 1);
         }
+
+
+
+        .form-container {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 10px;
+            float: right;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -107,8 +117,26 @@
 
                 <h3>Claim List</h3>
 
+                <div class="form-container">
 
-                <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
+
+                    <form action="#" method="POST" style="margin-bottom: 10px">
+                        <label for="employee">Employee :</label>
+                        <input type="text" id="employee" name="employee">
+                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                            Employee</button>
+                    </form>
+                    <form action="#" method="POST">
+                        <label for="dateFrom">Date From:</label>
+                        <input type="date" id="dateFrom" name="dateFrom">
+                        <label for="dateTo">Date To:</label>
+                        <input type="date" id="dateTo" name="dateTo">
+                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                            Date</button>
+                    </form>
+                </div>
+                <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%"
+                    id="tab">
                     <thead>
                         <tr>
                             <th>I.D</th>
@@ -122,12 +150,39 @@
                     </thead>
                     <tbody>
                         <?php
+
+
+
+                        $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
+                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
+                        $employee = isset($_POST['employee']) ? $_POST['employee'] : null;
+
+                        // Build the SQL query based on the provided filter values
+                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id ';
+
+                        if (!empty($dateFrom) && !empty($dateTo)) {
+                            // User has provided both date filters
+                            $sql .= " WHERE ee.date BETWEEN '$dateFrom' AND '$dateTo' ORDER BY ee.date LIMIT 5;";
+                        }
+                        if (!empty($employee)) {
+
+                            $sql .= " WHERE e.info_fullname_en like  '$employee'  ORDER BY ee.date LIMIT 5;";
+
+                        }
+                        if (empty($employee) && empty($dateFrom) && empty($dateTo))
+                            $sql .= " ORDER BY ee.date LIMIT 5;";
+
                         $recEmpData = $pdo->query(
-                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id  ORDER BY `date`;'
+                            $sql
                         );
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
+                            <!-- <tr onClick="alert($(this).find('td:first').text())">
+                                 $('input[name="shipmentID"]').val($(this).text()); -->
+                            <!-- <tr onClick="document.getElementById('userId').value=$(this).find('td:first').text()"> -->
                             <tr>
+
+
                                 <td><?php echo $recEmpData[$i]['unique_id']; ?>
                                 </td>
                                 <td><?php echo $recEmpData[$i]['date']; ?>
@@ -143,8 +198,24 @@
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i
-                                            class="fa fa-folder"></i></button></td>
+                                <td>
+                                    <button id="myButton" data-expenseId="<?php echo $recEmpData[$i]['unique_id']; ?>"
+                                        class="modal-button" href="#myModal2" style="background: none;">
+                                        <i class="fa fa-folder"></i>
+                                    </button>
+
+                                    <form id="myForm" method="post" action="">
+                                        <input type="hidden" id="expenseId" name="expenseId" value="">
+                                    </form>
+
+
+                                    <!-- <button data-expenseId="<?php echo $recEmpData[$i]['unique_id']; ?>"
+                                        class="modal-button" href="#myModal2" style="background: none;"><i
+                                            class="fa fa-folder"></i></button> -->
+                                </td>
+
+
+
                                 </td>
                                 <td>
                                     <?php $status = "";
@@ -176,7 +247,6 @@
 
 <!-- The Modal -->
 <div id="myModal2" class="modal">
-
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -185,12 +255,81 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <script>
+                // $(document).ready(function () {
+
+                //     //use this if you have jquery version 1.7+
+                //     $('table#tab tr').click(function () {
+                //         //  alert($(this).find('td:first').text());
+                //         alert(1);
+                //   });
+
+                var btn = document.querySelectorAll("button.modal-button");
+
+                // All page modals
+                var modals = document.querySelectorAll('.modal');
+
+
+                // Get the <span> element that closes the modal
+                var spans = document.getElementsByClassName("close");
+
+                // When the user clicks the button, open the modal
+                for (var i = 0; i < btn.length; i++) {
+
+                    btn[i].onclick = function (e) {
+                        e.preventDefault();
+                        modal = document.querySelector(e.target.getAttribute("href"));
+                        modal.style.display = "block";
+                    }
+                }
+
+                modals[0].addEventListener('shown.bs.modal', function () {
+                    // Get the expense ID value from your JavaScript code
+                    const expenseIdInput = document.getElementById('expenseId');
+                    const expenseId = expenseIdInput.value;
+
+                    // Fetch the image data from your PHP script
+                    fetch('fetch_images.php?expenseId=' + expenseId)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            console.log(blob);
+                            console.log('----------------------------------')
+                            // Create a URL for the image data
+                            const url = URL.createObjectURL(blob);
+
+                            // Set the src attribute of the <img> tag
+                            const modalImage = document.getElementById('modal-image');
+                            modalImage.src = url;
+                        });
+                });
+                // When the user clicks on <span> (x), close the modal
+                for (var i = 0; i < spans.length; i++) {
+                    spans[i].onclick = function () {
+                        for (var index in modals) {
+                            if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+                        }
+                    }
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target.classList.contains('modal')) {
+                        for (var index in modals) {
+                            if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+                        }
+                    }
+                }
+            </script>
             <div class="modal-body">
-                <?php
+                <!-- <?php
                 // Connect to the database
-                
+                $expenseId = $_POST['expenseId'];
+
+                echo $expenseId;
+                echo '----php-----------';
+                //$sql = "SELECT attachment FROM attachment WHERE expenseId=$expenseId";
                 $result = $pdo->query(
-                    'SELECT attachment FROM attachment where expenseId=1;'
+                    'SELECT attachment FROM attachment where expenseId=2 ;'
                 );
                 echo "<div class='modal-image-container'>";
                 foreach ($result as $blob) {
@@ -204,7 +343,8 @@
                 echo "</div>";
 
 
-                ?>
+                ?> -->
+                <img id="modal-image" src="" alt="Image" height='200px' width='200px' role='presentation'>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -216,42 +356,7 @@
 
 
 
-<script>
-    var btn = document.querySelectorAll("button.modal-button");
 
-    // All page modals
-    var modals = document.querySelectorAll('.modal');
-
-    // Get the <span> element that closes the modal
-    var spans = document.getElementsByClassName("close");
-
-    // When the user clicks the button, open the modal
-    for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function (e) {
-            e.preventDefault();
-            modal = document.querySelector(e.target.getAttribute("href"));
-            modal.style.display = "block";
-        }
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function () {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-            }
-        }
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target.classList.contains('modal')) {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-            }
-        }
-    }
-</script>
 
 
 </html>
