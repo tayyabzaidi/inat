@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>
-            use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Maximum;">
+<html lang="<?php echo $lang_code; ?>">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <head>
     <style>
@@ -150,9 +150,8 @@
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', 2);
                         $recEmpData = $pdo->query(
-                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date`;'
+                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id ORDER BY `date`;'
                         );
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
@@ -174,170 +173,197 @@
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button></td>
+                                <!-- <td><button data-expenseId=<?php echo $recEmpData[$i]["id"] ?> class="modal-button"
+                                        href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button>
+                                </td> -->
+                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>">View
+                                        Attachment</button></td>
+
                                 </td>
+                                <!-- <td><input type=" hidden" name="expenseId"
+                                        value="<?php echo $recEmpData[$i]['id']; ?>"><?php echo $recEmpData[$i]['id']; ?>
+                                </td> -->
+
                                 <td>
                                     <form action="#" method="POST">
                                         <!-- other form inputs -->
 
                                         <label>
-                                            <input type="checkbox" name="status" value="approve" onchange="this.form.submit();" <?php $status = '';
-                                                                                                                                if ($status == "approve")
-                                                                                                                                    echo "checked"; ?>>
+                                            <input type="checkbox" name="status" value="approve"
+                                                onchange="this.form.submit();" <?php $status = '';
+                                                if ($status == "approve")
+                                                    echo "checked"; ?>>
                                         </label>
                                         <label>
-                                            <input type="checkbox" name="status" value="disapprove" onchange="this.form.submit();" <?php $status = '';
-                                                                                                                                    if ($status == "disapprove")
-                                                                                                                                        echo "checked"; ?>>
+                                            <input type="checkbox" name="status" value="disapprove"
+                                                onchange="this.form.submit();" <?php $status = '';
+                                                if ($status == "disapprove")
+                                                    echo "checked"; ?>>
                                         </label>
+                                        <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
                                         <button type="submit" style="display:none;"></button>
 
                                     </form>
                                     <!-- save the staus hod or am approve base on the user id -->
                                     <?php
+                        }
 
+                        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                            $status = $_POST['status'];
+                            $expenseID = $_POST['expenseId'];
+                            $pdo->bind('employeeId', $_SESSION['empId']);
+                            $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
+                            if (empty($getDesignation))
+                                echo 'invalid user';
 
-                                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                                        $status = $_POST['status'];
-                                        $pdo->bind('employeeId', $_SESSION['empId']);
-                                        $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
-                                        if (empty($getDesignation))
-                                            echo 'invalid user';
+                            if ($status == "approve") {
+                                $setStatus = 0;
+                                if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                                    $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
+                                    $setStatus = $getStatus[0]['id'];
+                                }
+                                if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                                    $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
+                                    $setStatus = $getStatus[0]['id'];
+                                }
+                                if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                                    $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
+                                    if (!empty($getStatus)) {
+                                        $setStatus = $getStatus[0]['id'];
+                                    }
+                                }
+                            }
+                            if ($status == "disapprove") {
+                                $setStatus = 0;
+                                if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                                    $getStatus = $pdo->query("select id from status where status_name like ('HOD_d%');");
+                                    if (!empty($getStatus))
+                                        $setStatus = $getStatus[0]['id'];
+                                }
+                                if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                                    $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
+                                    if (!empty($getStatus))
+                                        $setStatus = $getStatus[0]['id'];
+                                }
+                                if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                                    $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
+                                    if (!empty($getStatus))
+                                        $setStatus = $getStatus[0]['id'];
+                                }
+                            }
 
-                                        if ($status == "approve") {
-                                            $setStatus = 0;
-                                            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-                                                $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
-                                                $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                                                $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
-                                                $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                                                $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
-                                                if (!empty($getStatus)) {
-                                                    $setStatus = $getStatus[0]['id'];
-                                                }
-                                            }
-                                        }
-                                        if ($status == "disapprove") {
-                                            $setStatus = 0;
-                                            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-                                                $getStatus = $pdo->query("select id from status where status_name like ('HOD_d%');");
-                                                if (!empty($getStatus))
-                                                    $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                                                $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
-                                                if (!empty($getStatus))
-                                                    $setStatus = $getStatus[0]['id'];
-                                            }
-                                            if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                                                $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
-                                                if (!empty($getStatus))
-                                                    $setStatus = $getStatus[0]['id'];
-                                            }
-                                        }
-                                        if ($setStatus != 0) {
-                                            $pdo->bind("id", $setStatus);
-                                            //issue---------------------------------------------------------------------------------------------------------------
-                                            $result = $pdo->query("UPDATE employee_expense_status SET statusId =:id where expenseId=2");
-                                        }
-                                    } ?>
-
-
-
+                            if ($setStatus != 0) {
+                                $pdo->bind("id", $setStatus);
+                                $pdo->bind("expenseId", $expenseID);
+                                //issue---------------------------------------------------------------------------------------------------------------
+                                $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
+                            }
+                            ?>
                                 </td>
 
                             </tr>
                         <?php } ?>
                     </tbody>
+
                 </table>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to the attachment buttons
+        $(".attachment-btn").on("click", function () {
+            // Get the expense ID from the data-id attribute of the button
+            var expenseId = $(this).data("id");
+            var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
+            $.ajax({
+                url: __table_url,
+                "data": {
+                    "expenseId": expenseId
+                },
+                type: 'POST',
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                    // Retrieve the attachment data from the response
+                    // var attachmentBase64 = data.attachment;
 
+                    // // Decode the base64-encoded attachment data to binary string
+                    // var attachment = atob(attachmentBase64);
+
+                    // // Create a blob object from the attachment binary data
+                    // var attachmentBlob = new Blob([attachment]);
+
+                    // // Create a URL for the attachment blob object
+                    // var attachmentUrl = URL.createObjectURL(attachmentBlob);
+
+                    // // Set the attachment URL as the source of the attachment image
+                    // $("#attachment-img").attr("src", attachmentUrl);
+
+                    // Show the modal
+                    $("#myModal").show();
+
+                }
+            });
+        });
+
+        // Attach a click event handler to the modal close button
+        $(".close").on("click", function () {
+            // Hide the modal
+            $("#myModal").hide();
+        });
+    });
+
+</script>
 
 <!-- The Modal -->
-<div id="myModal2" class="modal">
+<!-- 
+ <div id="myModal2" class="modal">
 
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <?php
-                // Connect to the database
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>
+                                </div>
+                                <form>
+                                    <label>ID:</label>
 
-                $result = $pdo->query(
-                    'SELECT attachment FROM attachment where expenseId=1;'
-                );
-                echo "<div class='modal-image-container'>";
-                foreach ($result as $blob) {
-                    // Convert the binary data to a base64-encoded string
-                    $base64Data = base64_encode($blob['attachment']);
-                    // Create an img tag with the src set to a data URI that includes the base64-encoded data
-                    echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
-                        base64_encode($blob['attachment']) .
-                        "'  height='200px' width='200px' role='presentation'>";
-                }
-                echo "</div>";
+                                    <input type="text" id="idField" name="idField" readonly>
+                                </form>
+                                <div class="modal-body">
+                       <?php
+                       // Connect to the database
+                       //    echo "<script>expenseId</script>";
+                       $result = $pdo->query(
+                           'SELECT attachment FROM attachment where expenseId=1;'
+                       );
+                       echo "<div class='modal-image-container'>";
+                       foreach ($result as $blob) {
+                           // Convert the binary data to a base64-encoded string
+                           $base64Data = base64_encode($blob['attachment']);
+                           // Create an img tag with the src set to a data URI that includes the base64-encoded data
+                           echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
+                               base64_encode($blob['attachment']) .
+                               "'  height='200px' width='200px' role='presentation'>";
+                       }
+                       echo "</div>";
 
 
-                ?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                       ?>
             </div>
         </div>
     </div>
 
+</div> -->
+
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modal-title">Attachment</h2>
+        <img id="attachment-img" src="" alt="">
+    </div>
 </div>
-
-
-
-<script>
-    var btn = document.querySelectorAll("button.modal-button");
-
-    // All page modals
-    var modals = document.querySelectorAll('.modal');
-
-    // Get the <span> element that closes the modal
-    var spans = document.getElementsByClassName("close");
-
-    // When the user clicks the button, open the modal
-    for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function(e) {
-            e.preventDefault();
-            modal = document.querySelector(e.target.getAttribute("href"));
-            modal.style.display = "block";
-        }
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function() {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-            }
-        }
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-            }
-        }
-    }
-</script>
-
 
 </html>

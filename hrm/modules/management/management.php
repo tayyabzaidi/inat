@@ -44,9 +44,6 @@
 
                 <?php
                 switch ($route->subpage) {
-                    case 'fetch_images':
-                        require_once("expenses/fetch_images.php");
-                        break;
                     case 'expenses':
                         require_once('expenses/expenses.php');
                         break;

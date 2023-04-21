@@ -162,12 +162,14 @@
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
-                                    // $pd->bind('expenseId',$recEmpData[$i]['id']);
+                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
                                     $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=1;'
+                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=:expenseId;'
                                     );
-                                    $HOD = false;
-                                    $AM = false;
+                                    $HOD = '';
+                                    $AM = '';
+                                    $HR = '';
+
                                     for ($j = 0; $j < count($getStatus); $j++) {
                                         if (
                                             $getStatus[$j]['status_name'] ==
@@ -189,6 +191,16 @@
                                             'HOD_disapproved'
                                         ) {
                                             $HOD = 'disapprove';
+                                        } else if (
+                                            $getStatus[$j]['status_name'] ==
+                                            'HR_approved'
+                                        ) {
+                                            $HR = 'approved';
+                                        } else if (
+                                            $getStatus[$j]['status_name'] ==
+                                            'HR_disapproved'
+                                        ) {
+                                            $HR = 'disapprove';
                                         }
                                     }
                                     ?>
@@ -213,6 +225,16 @@
                                         echo 'background-color: white';
                                     } ?>">
                                         AM</div>
+                                    <div class="ant-tag " style="<?php if (
+                                        $HR == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($HR == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
+                                        HR</div>
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
