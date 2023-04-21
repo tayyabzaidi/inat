@@ -8,7 +8,7 @@ $result = $pdo->query(
 for ($i = 0; $i < count($result); $i++) {
 
     // Convert the binary data to a base64-encoded string
-    $rows[$i] = base64_encode($result[$i]["attachment"]);
+    $rows[$i] = '0x' . bin2hex($result[$i]["attachment"]);
 }
 $json_array = array('result' => $rows);
 $json = json_encode($json_array);
