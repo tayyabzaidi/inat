@@ -164,7 +164,8 @@
                                 </td>
                                 <td>
                                     <?php
-                                    $pdf_data = base64_decode($recEmpData[$i]['form_data']);
+                                    echo '<iframe src="data:application/pdf;base64,' . base64_encode($recEmpData[$i]['form_data']) . '" height="250" width="200"></iframe>';
+
                                     //  echo $pdf_data;
                                     ?>
 
@@ -176,13 +177,10 @@
                                 <!-- <td><button data-expenseId=<?php echo $recEmpData[$i]["id"] ?> class="modal-button"
                                         href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button>
                                 </td> -->
-                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>">View
-                                        Attachment</button></td>
+                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
+                                        style="background: none;"><i class="fa fa-folder"></i></button></td>
 
                                 </td>
-                                <!-- <td><input type=" hidden" name="expenseId"
-                                        value="<?php echo $recEmpData[$i]['id']; ?>"><?php echo $recEmpData[$i]['id']; ?>
-                                </td> -->
 
                                 <td>
                                     <form action="#" method="POST">
@@ -193,8 +191,7 @@
                                                 onchange="this.form.submit();" <?php $status = '';
                                                 if ($status == "approve")
                                                     echo "checked"; ?>>
-                                        </label>
-                                        <label>
+                                        </label><label>
                                             <input type="checkbox" name="status" value="disapprove"
                                                 onchange="this.form.submit();" <?php $status = '';
                                                 if ($status == "disapprove")
@@ -204,6 +201,7 @@
                                         <button type="submit" style="display:none;"></button>
 
                                     </form>
+
                                     <!-- save the staus hod or am approve base on the user id -->
                                     <?php
                         }
@@ -285,33 +283,76 @@
                 type: 'POST',
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
-                    // Retrieve the attachment data from the response
-                    // var attachmentBase64 = data.attachment;
+                    var images = [];
+                    if (data.result === null) {
+                        // Display an alert message if there are no attachments
+                        alert("There are no attachments.");
+                        return;
+                    }
+                    // Loop through the binary data and convert it to base64-encoded strings
+                    for (var i = 0; i < data.result.length; i++) {
+                        images.push("data:image/jpeg;base64," + (data.result[i]));
+                        console.log(images[i]);
+                    }
+                    // Create a modal to display the images
+                    var modal = $('<div id="myModal2" class="modal"></div>');
 
-                    // // Decode the base64-encoded attachment data to binary string
-                    // var attachment = atob(attachmentBase64);
+                    // Create a modal dialog
+                    var dialog = $('<div class="modal-dialog" role="document"></div>');
 
-                    // // Create a blob object from the attachment binary data
-                    // var attachmentBlob = new Blob([attachment]);
+                    // Create a modal content container
+                    var content = $('<div class="modal-content"></div>');
 
-                    // // Create a URL for the attachment blob object
-                    // var attachmentUrl = URL.createObjectURL(attachmentBlob);
+                    // Create a modal header
+                    var header = $('<div class="modal-header"></div>');
 
-                    // // Set the attachment URL as the source of the attachment image
-                    // $("#attachment-img").attr("src", attachmentUrl);
+                    // Create a modal title
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
 
-                    // Show the modal
-                    $("#myModal").show();
+                    // Add the title to the header
+                    header.append(title);
 
+                    // Add the header to the content
+                    content.append(header);
+                    var body = $('<div class="modal-body"></div>');
+
+                    // Create a container for the images
+                    var imageContainer = $('<div class="modal-image-container"></div>');
+
+                    // Loop through the images and create image tags
+                    for (var i = 0; i < images.length; i++) {
+                        var img = $('<img>').attr('src', images[i]).attr('height', 200).attr('width', 200);
+                        imageContainer.append(img);
+                    }
+
+                    // Add the image container to the body
+                    body.append(imageContainer);
+
+                    // Add the body to the content
+                    content.append(body);
+
+                    // Add the content to the dialog
+                    dialog.append(content);
+
+                    // Add the dialog to the modal
+                    modal.append(dialog);
+
+                    // Add the modal to the page and show it
+                    $('body').append(modal);
+                    modal.show();
+
+                    // Attach a mouseup event handler to the modal
+                    modal.on('mouseup', function (e) {
+                        // If the clicked element is not inside the modal content, close the modal
+                        if (!$(e.target).closest('.modal-content').length) {
+                            modal.hide();
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
                 }
             });
-        });
-
-        // Attach a click event handler to the modal close button
-        $(".close").on("click", function () {
-            // Hide the modal
-            $("#myModal").hide();
         });
     });
 
@@ -355,15 +396,15 @@
         </div>
     </div>
 
-</div> -->
+</div> 
 
 <div id="myModal" class="modal">
-    <!-- Modal content -->
+   
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2 id="modal-title">Attachment</h2>
         <img id="attachment-img" src="" alt="">
     </div>
-</div>
+</div>-->
 
 </html>
