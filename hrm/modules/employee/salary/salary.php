@@ -41,7 +41,7 @@
             padding: 20px;
             border: 1px solid #888;
             width: 60%;
-            height: 40%;
+            height: 80%;
         }
     </style>
 </head>
@@ -62,8 +62,9 @@
                             <th>ID</th>
                             <th>Date</th>
                             <th>Slip</th>
-                            <th>Discrepancy Reason</th>
                             <th>View</th>
+                            <th>Issue with Salary</th>
+
 
                         </tr>
                     </thead>
@@ -87,16 +88,26 @@
                                 $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
 
                                 // Embed the base64-encoded PDF data into an HTML object tag
-                                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="30%" height="150px"></object>';
+                                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="40%" height="200px"></object>';
 
                                 ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i]['discrepancy_reason'] ?></td>
                                 <td>
-                                    <button class="modal-button" href="#myModal2" style="background: none;">
-                                        <i class="fa fa-eye <?php echo $_right; ?>"></i></button>
-                                    </a>
+
+                                    <button class="attachment-btn" data-id="<?php echo $pdf_base64 ?>"
+                                        data-slip-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
+                                        onclick="showPdfModal(this)">
+                                        <i class="fa fa-eye <?php echo $_right; ?>"></i>
+                                    </button>
                                 </td>
+                                <td onclick="openModal('<?php echo $recEmpData[$i]['id']; ?>')">
+
+                                    <!-- <?php echo $recEmpData[$i]['discrepancy_reason'] ?> -->
+                                    <button class="comment-button" style="background: none;">
+                                        <i class="fa fa-comment"></i> </button>
+                                </td>
+
+
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -107,41 +118,113 @@
 </div>
 
 
-<div id="myModal2" class="modal">
+
+
+
+<!-- // modal for adding comment -->
+<div id="myModal1" class="modal">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="height: 25%;width:40%">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewAttachmentsModalLabel">Salary Slip</h5>
+                <h5 class="modal-title" id="viewAttachmentsModalLabel">Discrepancy Reason</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <?php
-                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="80%" height="250px"></object>';
-                ?>
+                <form action="#" method="POST">
+                    <label for="comment">Discrepancy Reason:</label>
+                    <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+                    <br>
+                    <input type="hidden" id="idField" name="idField" readonly>
+
+                    <button type="submit">Submit</button>
+
+                </form>
             </div>
         </div>
     </div>
 
 </div>
-<script>
-    var btn = document.querySelectorAll("button.modal-button");
+<?php
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the value of the comment field
+    $comment = $_POST['comment'];
+
+    // Get the value of the idField field
+    $idField = $_POST['idField'];
+    $pdo->bind('reason', $comment);
+    $pdo->bind('id', $idField);
+    $result = $pdo->query("UPDATE salary set discrepancy_reason=:reason where id=:id");
+    ; // Do something with the form data
+    // ...
+    echo $result;
+}
+
+?>
+<!-- script to view salary slip -->
+<script>
+
+
+    function showPdfModal(button) {
+        console.log
+        const pdfBase64 = button.dataset.id;
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+        const closeButton = document.createElement('span');
+        closeButton.className = 'close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = function () {
+            modal.style.display = 'none';
+        };
+        const embedElement = document.createElement('embed');
+        embedElement.type = 'application/pdf';
+        embedElement.width = '100%';
+        embedElement.height = '100%';
+        embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+        const slipIdInput = document.createElement('input');
+        slipIdInput.type = 'hidden';
+        slipIdInput.name = 'slip_id';
+        slipIdInput.id = 'slip_id';
+        slipIdInput.value = button.dataset.slipId;
+        modalContent.appendChild(slipIdInput);
+
+        modalContent.appendChild(closeButton);
+        modalContent.appendChild(embedElement);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        modal.style.display = 'block';
+    }
+
+
+    function openModal(id) {
+        // Get the modal
+        var modal = document.getElementById("myModal1");
+
+        // Get the text field in the modal
+        var textField = document.getElementById("idField");
+
+        // Set the value of the text field to the clicked ID
+        textField.value = id;
+
+        // Open the modal
+        modal.style.display = "block";
+    }
+
+
+    // var btn = document.querySelectorAll("button.modal-button");
+    // var btn = document.querySelectorAll("button.comment-button");
     // All page modals
     var modals = document.querySelectorAll('.modal');
 
     // Get the <span> element that closes the modal
     var spans = document.getElementsByClassName("close");
 
-    // When the user clicks the button, open the modal
-    for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function (e) {
-            e.preventDefault();
-            modal = document.querySelector(e.target.getAttribute("href"));
-            modal.style.display = "block";
-        }
-    }
+
+
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < spans.length; i++) {
