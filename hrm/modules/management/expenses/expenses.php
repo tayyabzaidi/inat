@@ -164,7 +164,7 @@
                                 </td>
                                 <td>
                                     <?php
-                                    echo '<iframe src="data:application/pdf;base64,' . base64_encode($recEmpData[$i]['form_data']) . '" height="250" width="200"></iframe>';
+                                    echo '<iframe src="data:application/pdf;base64,' . base64_encode($recEmpData[$i]['form_data']) . '" width="50%" height="300px"></iframe>';
 
                                     //  echo $pdf_data;
                                     ?>
