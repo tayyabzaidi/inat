@@ -97,7 +97,6 @@
         }
     </style>
 </head>
-<?php echo $_auth_emp_rec['authName'] ?>
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
@@ -106,8 +105,7 @@
 
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
-                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Claim</button>
+                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal" data-target="#myModal">Add Claim</button>
 
                 </div>
 
@@ -135,17 +133,11 @@
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i][
-                                    'unique_id'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['unique_id']; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i][
-                                    'date'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i][
-                                    'name'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['name']; ?>
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
@@ -181,32 +173,29 @@
                                     ?>
 
                                     <div class="ant-tag " style="<?php if (
-                                        $HOD == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HOD == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
+                                                                        $HOD == 'approved'
+                                                                    ) {
+                                                                        echo 'background-color: rgb(135, 208, 104)';
+                                                                    } elseif ($HOD == 'disapprove') {
+                                                                        echo 'background-color: red;';
+                                                                    } else {
+                                                                        echo 'background-color: white';
+                                                                    } ?>">
                                         HOD</div>
                                     <div class="ant-tag " style="<?php if (
-                                        $AM == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($AM == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
+                                                                        $AM == 'approved'
+                                                                    ) {
+                                                                        echo 'background-color: rgb(135, 208, 104)';
+                                                                    } elseif ($AM == 'disapprove') {
+                                                                        echo 'background-color: red;';
+                                                                    } else {
+                                                                        echo 'background-color: white';
+                                                                    } ?>">
                                         AM</div>
                                 </td>
-                                <td> <?php echo $recEmpData[$i][
-                                    'total_amount'
-                                ]; ?>
+                                <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i
-                                            class="fa fa-folder"></i></button></td>
+                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button></td>
                                 </td>
 
 
@@ -246,8 +235,7 @@
                     <div class="form-group">
                         <label for="claim-attachments">Attachments</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-attachments"
-                                name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
+                            <input type="file" class="custom-file-input" id="claim-attachments" name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
                             <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
                     </div>
@@ -276,7 +264,7 @@
             <div class="modal-body">
                 <?php
                 // Connect to the database
-                
+
                 $result = $pdo->query(
                     'SELECT attachment FROM attachment where expenseId=1;'
                 );
@@ -288,7 +276,6 @@
                     echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
                         base64_encode($blob['attachment']) .
                         "'  height='200px' width='200px' role='presentation'>";
-
                 }
                 echo "</div>";
 
@@ -316,7 +303,7 @@
 
     // When the user clicks the button, open the modal
     for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function (e) {
+        btn[i].onclick = function(e) {
             e.preventDefault();
             modal = document.querySelector(e.target.getAttribute("href"));
             modal.style.display = "block";
@@ -325,7 +312,7 @@
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function () {
+        spans[i].onclick = function() {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
@@ -333,14 +320,13 @@
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
+    window.onclick = function(event) {
         if (event.target.classList.contains('modal')) {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
         }
     }
-
 </script>
 
 

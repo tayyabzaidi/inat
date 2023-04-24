@@ -217,8 +217,8 @@
                                             AM</div>
                                     </td>
 
-                                    <td>
-                                        <button class="modal-button" id="employee-data-btn" href="#myModal2" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>"><i class="fa fa-folder"></i></button>
+                                    <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i class="fa fa-folder"></i></button></td>
+
                                     </td>
 
 
@@ -290,7 +290,7 @@
 
     </div>
 
-    <!-- The Modal -->
+    <!-- The Modal 
     <div id="myModal2" class="modal">
 
         <div class="modal-dialog" role="document">
@@ -323,9 +323,10 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
+
         </div>
 
-    </div>
+    </div>-->
 
 
 
@@ -383,6 +384,94 @@
                 });
             });
         })(jQuery);
+
+
+
+        $(document).ready(function() {
+            // Attach a click event handler to the attachment buttons
+            $(".attachment-btn").on("click", function() {
+                // Get the expense ID from the data-id attribute of the button
+                var id = $(this).data("id");
+                var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/get_attachment/get_leave_attachment';
+                $.ajax({
+                    url: __table_url,
+                    "data": {
+                        "id": id
+                    },
+                    type: 'POST',
+                    dataType: "json",
+                    success: function(data) {
+
+                        console.log(data);
+
+                        var images = [];
+                        // Loop through the binary data and convert it to base64-encoded strings
+                        for (var i = 0; i < data.result.length; i++) {
+                            images.push("data:application/pdf;base64," + (data.result[i]));
+                        }
+
+                        // Loop through the PDFs and create a modal for each one
+                        for (var i = 0; i < images.length; i++) {
+                            // Create a modal to display the PDF
+                            var modal = $('<div id="myModal' + i + '" class="modal"></div>');
+
+                            // Create a modal dialog
+                            var dialog = $('<div class="modal-dialog" role="document"></div>');
+
+                            // Create a modal content container
+                            var content = $('<div class="modal-content"></div>');
+
+                            // Create a modal header
+                            var header = $('<div class="modal-header"></div>');
+
+                            // Create a modal title
+                            var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachment ' + i + '</h5>');
+
+                            // Add the title to the header
+                            header.append(title);
+
+                            // Add the header to the content
+                            content.append(header);
+
+                            // Create an object tag for the PDF
+                            var pdf = $('<object>').attr('data', images[i]).attr('height', '100%').attr('width', '100%').attr('type', 'application/pdf');
+
+                            // Create an embed tag for the PDF (for older browsers)
+                            var embed = $('<embed>').attr('src', images[i]).attr('height', '100%').attr('width', '100%').attr('type', 'application/pdf');
+
+                            // Create a wrapper for the object and embed tags
+                            var pdfWrapper = $('<div>').addClass('pdf-wrapper').append(pdf).append(embed);
+
+                            // Add the PDF wrapper to the content
+                            content.append(pdfWrapper);
+
+                            // Add the content to the dialog
+                            dialog.append(content);
+
+                            // Add the dialog to the modal
+                            modal.append(dialog);
+
+                            // Add the modal to the page and show it
+                            $('body').append(modal);
+                            modal.show();
+
+                            // Attach a mouseup event handler to the modal
+                            modal.on('mouseup', function(e) {
+                                // If the clicked element is not inside the modal content, close the modal
+                                if (!$(e.target).closest('.modal-content').length) {
+                                    modal.hide();
+                                }
+                            });
+                        }
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 

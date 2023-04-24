@@ -114,7 +114,8 @@
                 <div class="card-body">
                     <?php $recEmpData = $pdo->query(
                         'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id order by id desc limit 5'
-                    ); ?>
+                    );
+                    ?>
                     <h3>Leave List</h3>
 
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -147,7 +148,8 @@
                                             'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId where es.leaveId=' . $recEmpData[$i]['id']
                                         );
                                         $HOD = false;
-                                        $AM = false;
+                                        $HR = false;
+                                        $OM = false;
                                         for ($j = 0; $j < count($getStatus); $j++) {
                                             if (
                                                 $getStatus[$j]['status_name'] ==
@@ -156,19 +158,29 @@
                                                 $HOD = 'approved';
                                             } elseif (
                                                 $getStatus[$j]['status_name'] ==
-                                                'AM_approved'
-                                            ) {
-                                                $AM = 'approved';
-                                            } elseif (
-                                                $getStatus[$j]['status_name'] ==
-                                                'AM_disapproved'
-                                            ) {
-                                                $AM = 'disapprove';
-                                            } elseif (
-                                                $getStatus[$j]['status_name'] ==
                                                 'HOD_disapproved'
                                             ) {
                                                 $HOD = 'disapprove';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HR_approved'
+                                            ) {
+                                                $HR = 'approved';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HR_disapproved'
+                                            ) {
+                                                $HR = 'disapprove';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'OM_approved'
+                                            ) {
+                                                $OM = 'approved';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'OM_disapproved'
+                                            ) {
+                                                $OM = 'disapprove';
                                             }
                                         }
                                         ?>
@@ -183,16 +195,27 @@
                                                                             echo 'background-color: white';
                                                                         } ?>">
                                             HOD</div>
+
                                         <div class="ant-tag " style="<?php if (
-                                                                            $AM == 'approved'
+                                                                            $HR == 'approved'
                                                                         ) {
                                                                             echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($AM == 'disapprove') {
+                                                                        } elseif ($HR == 'disapprove') {
                                                                             echo 'background-color: red; color:white';
                                                                         } else {
                                                                             echo 'background-color: white';
                                                                         } ?>">
-                                            AM</div>
+                                            HR</div>
+                                        <div class="ant-tag " style="<?php if (
+                                                                            $OM == 'approved'
+                                                                        ) {
+                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                                                        } elseif ($OM == 'disapprove') {
+                                                                            echo 'background-color: red; color:white';
+                                                                        } else {
+                                                                            echo 'background-color: white';
+                                                                        } ?>">
+                                            OM</div>
                                     </td>
 
                                     <td>
