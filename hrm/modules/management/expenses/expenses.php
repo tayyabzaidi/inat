@@ -146,6 +146,7 @@
                             <th>Total Amount</th>
                             <th>Attachmnet</th>
                             <th>Approve</th>
+                            <th>Disapprove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -185,13 +186,21 @@
                                 <td>
                                     <form action="#" method="POST">
                                         <!-- other form inputs -->
-
                                         <label>
-                                            <input type="checkbox" name="status" value="approve"
-                                                onchange="this.form.submit();" <?php $status = '';
+                                            <input type="checkbox" onchange="this.form.submit();" name="status"
+                                                onsubmit="document.getElementById('myCheckbox').checked = true;"
+                                                value="approve" id="myCheckbox" <?php $status = '';
                                                 if ($status == "approve")
                                                     echo "checked"; ?>>
-                                        </label><label>
+                                        </label>
+                                        <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
+                                        <button type="submit" style="display:none;"></button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="#" method="POST">
+                                        <!-- other form inputs -->
+                                        <label>
                                             <input type="checkbox" name="status" value="disapprove"
                                                 onchange="this.form.submit();" <?php $status = '';
                                                 if ($status == "disapprove")
