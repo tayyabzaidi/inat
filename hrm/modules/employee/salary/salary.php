@@ -15,6 +15,31 @@
             overflow: auto;
         }
 
+        #comment {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            resize: none;
+        }
+
+        /* Button styles */
+        button[type="submit"] {
+            background-color: #020041;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
         .modal-image-container {
             display: flex;
             flex-wrap: wrap;
@@ -63,7 +88,7 @@
                             <th>Date</th>
                             <th>Slip</th>
                             <th>View</th>
-                            <th>Issue with Salary</th>
+                            <th>Any Issue?</th>
 
 
                         </tr>
@@ -94,7 +119,7 @@
                                 </td>
                                 <td>
 
-                                    <button class="attachment-btn" data-id="<?php echo $pdf_base64 ?>"
+                                    <button class="attachment-btn" data-pdf="<?php echo $pdf_base64 ?>"
                                         data-slip-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
                                         onclick="showPdfModal(this)">
                                         <i class="fa fa-eye <?php echo $_right; ?>"></i>
@@ -123,53 +148,24 @@
 
 <!-- // modal for adding comment -->
 <div id="myModal1" class="modal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="height: 25%;width:40%">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewAttachmentsModalLabel">Discrepancy Reason</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="#" method="POST">
-                    <label for="comment">Discrepancy Reason:</label>
-                    <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
-                    <br>
-                    <input type="hidden" id="idField" name="idField" readonly>
-
-                    <button type="submit">Submit</button>
-
-                </form>
-            </div>
-        </div>
+    <div class="modal-content" style=" width: 40%;
+            height: 40%;">
+        <form id="commentForm" method="post">
+            <label for="comment">Discrepancy Reason:</label>
+            <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+            <br>
+            <input type="hidden" id="idField" name="idField">
+            <button type="submit" style="float: right;">Save</button>
+        </form>
     </div>
-
 </div>
-<?php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the value of the comment field
-    $comment = $_POST['comment'];
-
-    // Get the value of the idField field
-    $idField = $_POST['idField'];
-    $pdo->bind('reason', $comment);
-    $pdo->bind('id', $idField);
-    $result = $pdo->query("UPDATE salary set discrepancy_reason=:reason where id=:id");
-    ; // Do something with the form data
-    // ...
-    echo $result;
-}
-
-?>
 <!-- script to view salary slip -->
 <script>
 
 
     function showPdfModal(button) {
-        console.log
-        const pdfBase64 = button.dataset.id;
+        const pdfBase64 = button.dataset.pdf;
         const modal = document.createElement('div');
         modal.className = 'modal';
         const modalContent = document.createElement('div');
@@ -200,19 +196,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
+
+    var modal = document.getElementById("myModal1");
+    var form = document.getElementById("commentForm");
+
+    // Open the modal and populate the hidden ID field with the record ID
     function openModal(id) {
-        // Get the modal
-        var modal = document.getElementById("myModal1");
-
-        // Get the text field in the modal
-        var textField = document.getElementById("idField");
-
-        // Set the value of the text field to the clicked ID
-        textField.value = id;
-
-        // Open the modal
+        document.getElementById("idField").value = id;
         modal.style.display = "block";
     }
+
+    // Close the modal and reset the form
+    function closeModal() {
+        modal.style.display = "none";
+        form.reset();
+    }
+
+    // Add an event listener to the form submit button
+    form.addEventListener("submit", function (e) {
+        // Prevent the form from submitting normally
+        e.preventDefault();
+
+        // Get the form data
+        var formData = new FormData(form);
+
+        // Send an AJAX request to the PHP script to save the comment data
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/salary/save_comment/save_comment', true);
+        xhr.onload = function (data) {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // If the save was successful, close the modal and reload the page
+                // alert('saved successfully');
+                closeModal();
+                setTimeout(function () {
+                    alert('Comment saved successfully');
+                }, 100);
+                //   location.reload();
+            }
+        };
+        xhr.send(formData);
+    });
 
 
     // var btn = document.querySelectorAll("button.modal-button");

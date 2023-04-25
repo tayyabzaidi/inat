@@ -13,6 +13,46 @@
             float: right;
             width: 50%;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .modal-image-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow images to wrap to a new line if they exceed the container width */
+        }
+
+        .modal-image {
+            width: 10%;
+            padding: 5px;
+            margin-right: 10px;
+            /* Add some spacing between the images */
+        }
+
+        .modal-dialog {
+            height: 180%;
+            max-width: 100%;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            margin-top: 5%;
+            margin-bottom: 10%;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%;
+            height: 80%;
+        }
     </style>
 </head>
 <div class="row" style="width: 98%;margin-left: 1%;">
@@ -50,7 +90,7 @@
                             <th>Employee</th>
                             <th>Slip</th>
                             <th>Discrepancy Reason</th>
-                            <th>Download</th>
+                            <th></th>
 
                         </tr>
                     </thead>
@@ -99,10 +139,14 @@
                                 </td>
                                 <td><?php echo $recEmpData[$i]['discrepancy_reason'] ?></td>
                                 <td>
-                                    <a
-                                        href="<?php echo __APP_URL__ . $route->q . '/slip_download?id=' . $recEmpData[$i]['id'] . ''; ?>">
-                                        <i class="fa fa-download <?php echo $_right; ?>"></i>
-                                    </a>
+
+
+                                    <button class="attachment-btn" data-pdf="<?php echo $pdf_base64 ?>"
+                                        data-slip-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
+                                        onclick="showPdfModal(this)">
+                                        <i class="fa fa-eye <?php echo $_right; ?>"></i>
+                                    </button>
+
                                 </td>
                             </tr>
                         <?php } ?>
@@ -112,3 +156,64 @@
         </div>
     </div>
 </div>
+<script>  function showPdfModal(button) {
+        const pdfBase64 = button.dataset.pdf;
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+        const closeButton = document.createElement('span');
+        closeButton.className = 'close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = function () {
+            modal.style.display = 'none';
+        };
+        const embedElement = document.createElement('embed');
+        embedElement.type = 'application/pdf';
+        embedElement.width = '100%';
+        embedElement.height = '100%';
+        embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+        const slipIdInput = document.createElement('input');
+        slipIdInput.type = 'hidden';
+        slipIdInput.name = 'slip_id';
+        slipIdInput.id = 'slip_id';
+        slipIdInput.value = button.dataset.slipId;
+        modalContent.appendChild(slipIdInput);
+
+        modalContent.appendChild(closeButton);
+        modalContent.appendChild(embedElement);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        modal.style.display = 'block';
+    }
+
+
+
+    // All page modals
+    var modals = document.querySelectorAll('.modal');
+
+    // Get the <span> element that closes the modal
+    var spans = document.getElementsByClassName("close");
+
+
+
+
+    // When the user clicks on <span> (x), close the modal
+    for (var i = 0; i < spans.length; i++) {
+        spans[i].onclick = function () {
+            for (var index in modals) {
+                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+            }
+        }
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target.classList.contains('modal')) {
+            for (var index in modals) {
+                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+            }
+        }
+    }
+
+</script>
