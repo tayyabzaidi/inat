@@ -68,6 +68,17 @@
             width: 60%;
             height: 80%;
         }
+
+        form {
+            float: right;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .form-container {
+            float: right;
+            width: 50%;
+        }
     </style>
 </head>
 <div class="row" style="width: 80%;margin-left: 10%;">
@@ -77,8 +88,15 @@
             <div class="card-body">
                 <h3>Salary Slips</h3>
                 <hr>
-                <div class="mb-2" align="<?php echo $_right; ?>">
-                    <a href="" class="btn btn-md btn-primary"> <i class="fas fa-filter"></i>Filter</a>
+                <div class="form-container">
+                    <form action="#" method="POST">
+                        <label for="dateFrom">Date From:</label>
+                        <input type="date" id="dateFrom" name="dateFrom">
+                        <label for="dateTo">Date To:</label>
+                        <input type="date" id="dateTo" name="dateTo">
+                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                            Date</button>
+                    </form>
                 </div>
 
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -95,9 +113,17 @@
                     </thead>
                     <tbody>
                         <?php
+
+                        $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
+                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
+                        $sql = "SELECT * FROM salary  WHERE employee_id= :employeeId";
+                        if (!empty($dateFrom) && !empty($dateTo)) {
+                            $sql .= " AND `date` BETWEEN '$dateFrom' AND '$dateTo'";
+                        }
+                        $sql .= " ORDER BY `date` LIMIT 5";
                         $pdo->bind('employeeId', $_SESSION['empId']);
                         $recEmpData = $pdo->query(
-                            'SELECT * FROM salary  WHERE employee_id= :employeeId ORDER BY `date` LIMIT 5;'
+                            $sql
                         );
                         for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
