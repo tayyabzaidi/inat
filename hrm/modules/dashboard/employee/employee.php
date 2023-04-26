@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <head>
     <style>
@@ -11,22 +12,21 @@
             left: 0;
             top: 0;
             width: 100%;
-            height: 100%;
+            height: 125%;
             overflow: auto;
         }
 
-        .modal-image-container {
-            display: flex;
-            flex-wrap: wrap;
-            /* Allow images to wrap to a new line if they exceed the container width */
+        .img {
+            margin-right: 30px
         }
 
-        .modal-image {
-            width: 10%;
-            padding: 5px;
-            margin-right: 10px;
-            /* Add some spacing between the images */
+        .modal-dialog {
+            height: 120%;
+            max-width: 80%;
+            margin: 1.75rem auto;
         }
+
+
 
         .claim-view-images {
             border: 1px solid #f0f2f5;
@@ -118,7 +118,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', 1);
+                        $pdo->bind('employeeId', $_SESSION['empId']);
                         $recEmpData = $pdo->query(
                             'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
                         );
@@ -132,9 +132,9 @@
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
-                                    // $pd->bind('expenseId',$recEmpData[$i]['id']);
+                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
                                     $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=1;'
+                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=:expenseId;'
                                     );
                                     $HOD = false;
                                     $AM = false;
@@ -186,9 +186,9 @@
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i
-                                            class="fa fa-folder"></i></button></td>
-                                </td>
+                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
+                                        style="background: none;"><i class="fa fa-folder"></i></button></td>
+
 
 
                             </tr>
@@ -201,79 +201,99 @@
 </div>
 
 
-<!-- The Modal -->
-<div id="myModal2" class="modal">
 
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>
-            </div>
-            <div class="modal-body">
-                <?php
-                // Connect to the database
-                
-                $result = $pdo->query(
-                    'SELECT attachment FROM attachment where expenseId=1;'
-                );
-                echo "<div class='modal-image-container'>";
-                foreach ($result as $blob) {
-                    // Convert the binary data to a base64-encoded string
-                    $base64Data = base64_encode($blob['attachment']);
-                    // Create an img tag with the src set to a data URI that includes the base64-encoded data
-                    echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
-                        base64_encode($blob['attachment']) .
-                        "'  height='200px' width='200px' role='presentation'>";
-                }
-                echo "</div>";
-
-
-                ?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-
-</div>
 
 
 
 <script>
-    var btn = document.querySelectorAll("button.modal-button");
 
-    // All page modals
-    var modals = document.querySelectorAll('.modal');
 
-    // Get the <span> element that closes the modal
-    var spans = document.getElementsByClassName("btn btn-secondary");
-    // When the user clicks the button, open the modal
-    for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function (e) {
-            e.preventDefault();
-            modal = document.querySelector(e.target.getAttribute("href"));
-            modal.style.display = "block";
-        }
-    }
+    $(document).ready(function () {
+        // Attach a click event handler to the attachment buttons
+        $(".attachment-btn").on("click", function () {
+            // Get the expense ID from the data-id attribute of the button
+            var expenseId = $(this).data("id");
+            var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
+            $.ajax({
+                url: __table_url,
+                "data": {
+                    "expenseId": expenseId
+                },
+                type: 'POST',
+                dataType: "json",
+                success: function (data) {
+                    var images = [];
+                    if (data.result === null) {
+                        // Display an alert message if there are no attachments
+                        alert("There are no attachments.");
+                        return;
+                    }
+                    // Loop through the binary data and convert it to base64-encoded strings
+                    for (var i = 0; i < data.result.length; i++) {
+                        images.push("data:image/jpeg;base64," + (data.result[i]));
+                        console.log(images[i]);
+                    }
+                    // Create a modal to display the images
+                    var modal = $('<div id="myModal2" class="modal"></div>');
 
-    // When the user clicks on <span> (x), close the modal
-    for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function () {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-            }
-        }
-    }
+                    // Create a modal dialog
+                    var dialog = $('<div class="modal-dialog" role="document"></div>');
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target.classList.contains('modal')) {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-            }
-        }
-    }
+                    // Create a modal content container
+                    var content = $('<div class="modal-content"></div>');
+
+                    // Create a modal header
+                    var header = $('<div class="modal-header"></div>');
+
+                    // Create a modal title
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
+
+                    // Add the title to the header
+                    header.append(title);
+
+                    // Add the header to the content
+                    content.append(header);
+                    var body = $('<div class="modal-body"></div>');
+
+                    // Create a container for the images
+                    var imageContainer = $('<div class="modal-image-container"></div>');
+
+                    // Loop through the images and create image tags
+                    for (var i = 0; i < images.length; i++) {
+                        var img = $('<img>').attr('class', 'img').attr('src', images[i]).attr('height', 350).attr('width', 250)
+                        imageContainer.append(img);
+                    }
+
+                    // Add the image container to the body
+                    body.append(imageContainer);
+
+                    // Add the body to the content
+                    content.append(body);
+
+                    // Add the content to the dialog
+                    dialog.append(content);
+
+                    // Add the dialog to the modal
+                    modal.append(dialog);
+
+                    // Add the modal to the page and show it
+                    $('body').append(modal);
+                    modal.show();
+
+                    // Attach a mouseup event handler to the modal
+                    modal.on('mouseup', function (e) {
+                        // If the clicked element is not inside the modal content, close the modal
+                        if (!$(e.target).closest('.modal-content').length) {
+                            modal.hide();
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
+                }
+            });
+        });
+    });
 </script>
 
 
