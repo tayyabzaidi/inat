@@ -3,7 +3,17 @@
 
 <head>
     <style>
-        /* Add this to your CSS code */
+        form {
+            float: right;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .form-container {
+            float: right;
+            width: 50%;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -13,31 +23,6 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-        }
-
-        #comment {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            resize: none;
-        }
-
-        /* Button styles */
-        button[type="submit"] {
-            background-color: #020041;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
         }
 
         .modal-image-container {
@@ -68,26 +53,25 @@
             width: 60%;
             height: 80%;
         }
-
-        form {
-            float: right;
-            margin-right: 20px;
-            margin-bottom: 10px;
-        }
-
-        .form-container {
-            float: right;
-            width: 50%;
-        }
     </style>
 </head>
-<div class="row" style="width: 80%;margin-left: 10%;">
+<div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
 
             <div class="card-body">
                 <h3>Salary Slips</h3>
+                <div class="mb-2" align="<?php echo $_right; ?>">
+
+                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
+                        data-target="#myModal">Add Salary</button>
+
+                </div>
                 <hr>
+
+                <!-- <div class="mb-2" align="<?php echo $_right; ?>">
+                    <a href="#" class="btn btn-md btn-primary"> <i class="fas fa-filter"></i> Filter </a>
+                </div> -->
                 <div class="form-container">
                     <form action="#" method="POST">
                         <label for="dateFrom">Date From:</label>
@@ -97,68 +81,79 @@
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
                             Date</button>
                     </form>
-                </div>
 
+                    <form action="#" method="POST">
+                        <label for="employeeId">Employee ID:</label>
+                        <input type="text" id="employeeId" name="employeeId">
+                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                            Employee ID</button>
+                    </form>
+                </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Date</th>
+                            <th>Employee</th>
                             <th>Slip</th>
-                            <th>View</th>
-                            <th>Any Issue?</th>
-
+                            <th>Discrepancy Reason</th>
+                            <th></th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
-                        $sql = "SELECT * FROM salary  WHERE employee_id= :employeeId";
+                        $employeeId = isset($_POST['employeeId']) ? $_POST['employeeId'] : null;
+
+                        // Build the SQL query based on the provided filter values
+                        $sql = 'SELECT s.id as id, e.info_fullname_en AS `name`, (date) AS latest_month_salary, slip,discrepancy_reason  FROM salary s join employees e on e.empId=s.employee_id  where date=(Select Max(date) from salary where s.employee_id=employee_id) ';
+
                         if (!empty($dateFrom) && !empty($dateTo)) {
-                            $sql .= " AND `date` BETWEEN '$dateFrom' AND '$dateTo'";
-                        }
-                        $sql .= " ORDER BY `date` LIMIT 5";
-                        $pdo->bind('employeeId', $_SESSION['empId']);
+                            // User has provided both date filters
+                            $sql .= " AND s.date BETWEEN '$dateFrom' AND '$dateTo' GROUP BY employee_id ORDER BY e.info_fullname_en;";
+                        } else if (!empty($employeeId)) {
+                            // User has provided the employeeId filter
+                            $sql = str_replace("MAX(date)", "date", $sql);
+
+                            $sql .= " AND employee_id = $employeeId  ORDER BY s.date;";
+
+                        } else
+                            $sql .= "GROUP BY employee_id ORDER BY e.info_fullname_en;";
+
                         $recEmpData = $pdo->query(
                             $sql
                         );
                         for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i]['id'] ?></td>
                                 <td><?php echo $recEmpData[$i][
-                                    'date'
+                                    'latest_month_salary'
                                 ]; ?>
                                 </td>
+                                <td><?php echo $recEmpData[$i][
+                                    'name'
+                                ]; ?></td>
                                 <td><?php
-                                header("Content-Type: application/pdf");
 
                                 // Convert the binary PDF data to a base64-encoded string
                                 $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
 
                                 // Embed the base64-encoded PDF data into an HTML object tag
-                                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="40%" height="200px"></object>';
+                                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="30%" height="150px"></object>';
 
                                 ?>
                                 </td>
+                                <td><?php echo $recEmpData[$i]['discrepancy_reason'] ?></td>
                                 <td>
+
 
                                     <button class="attachment-btn" data-pdf="<?php echo $pdf_base64 ?>"
                                         data-slip-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
                                         onclick="showPdfModal(this)">
                                         <i class="fa fa-eye <?php echo $_right; ?>"></i>
                                     </button>
+
                                 </td>
-                                <td onclick="openModal('<?php echo $recEmpData[$i]['id']; ?>')">
-
-                                    <!-- <?php echo $recEmpData[$i]['discrepancy_reason'] ?> -->
-                                    <button class="comment-button" style="background: none;">
-                                        <i class="fa fa-comment"></i> </button>
-                                </td>
-
-
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -167,30 +162,7 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-<!-- // modal for adding comment -->
-<div id="myModal1" class="modal">
-    <div class="modal-content" style=" width: 40%;
-            height: 40%;">
-        <form id="commentForm" method="post">
-            <label for="comment">Discrepancy Reason:</label>
-            <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
-            <br>
-            <input type="hidden" id="idField" name="idField">
-            <button type="submit" style="float: right;">Save</button>
-        </form>
-    </div>
-</div>
-
-<!-- script to view salary slip -->
-<script>
-
-
-    function showPdfModal(button) {
+<script>  function showPdfModal(button) {
         const pdfBase64 = button.dataset.pdf;
         const modal = document.createElement('div');
         modal.className = 'modal';
@@ -221,58 +193,22 @@
         modal.style.display = 'block';
     }
 
+    var btn = document.querySelectorAll("button.modal-button");
 
 
-    var modal = document.getElementById("myModal1");
-    var form = document.getElementById("commentForm");
-
-    // Open the modal and populate the hidden ID field with the record ID
-    function openModal(id) {
-        document.getElementById("idField").value = id;
-        modal.style.display = "block";
-    }
-
-    // Close the modal and reset the form
-    function closeModal() {
-        modal.style.display = "none";
-        form.reset();
-    }
-
-    // Add an event listener to the form submit button
-    form.addEventListener("submit", function (e) {
-        // Prevent the form from submitting normally
-        e.preventDefault();
-
-        // Get the form data
-        var formData = new FormData(form);
-
-        // Send an AJAX request to the PHP script to save the comment data
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/salary/save_comment/save_comment', true);
-        xhr.onload = function (data) {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // If the save was successful, close the modal and reload the page
-                // alert('saved successfully');
-                closeModal();
-                setTimeout(function () {
-                    alert('Comment saved successfully');
-                }, 100);
-                //   location.reload();
-            }
-        };
-        xhr.send(formData);
-    });
-
-
-    // var btn = document.querySelectorAll("button.modal-button");
-    // var btn = document.querySelectorAll("button.comment-button");
     // All page modals
     var modals = document.querySelectorAll('.modal');
 
     // Get the <span> element that closes the modal
     var spans = document.getElementsByClassName("close");
 
-
+    for (var i = 0; i < btn.length; i++) {
+        btn[i].onclick = function (e) {
+            e.preventDefault();
+            modal = document.querySelector(e.target.getAttribute("href"));
+            modal.style.display = "block";
+        }
+    }
 
 
     // When the user clicks on <span> (x), close the modal
@@ -296,5 +232,64 @@
 </script>
 
 
+<div id="myModal1" class="modal">
 
-</html>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="height: 30%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addClaimModalLabel">Salary Slip</h5>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data" style="float: none;">
+
+                    <div class="form-group">
+                        <label for="claim-pdf">PDF File (Salary Slip)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
+                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employees">Choose an Employee:</label>
+                        <select id="employees" name="employee_id">
+                            <?php
+                            $result = $pdo->query('SELECT e.empId, e.info_fullname_en AS name FROM employees e JOIN employee_designations ed ON ed.desigId=e.desigId WHERE ed.name="LABOUR";');
+
+                            for ($i = 0; $i < count($result); $i++) {
+                                $employee_id = $result[$i]['empId'];
+                                $employee_name = $result[$i]['name'];
+                                echo "<option value='$employee_id'>$employee_name</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        //    Get form data
+    
+        $date = date('Y-m-d');
+        $employee_id = $_POST['employee_id'];
+        $pdf = file_get_contents($_FILES['claim-pdf']['tmp_name']);
+        $pdf_hex = bin2hex($pdf);
+        $pdf_hex = '0x' . $pdf_hex;
+        echo $pdf_hex;
+        // Insert form data into database
+        $sql = "INSERT INTO salary ( employee_id, slip,discrepancy_reason)
+                VALUES ('$employee_id', $pdf_hex,'123')";
+
+        $result = $pdo->query($sql);
+
+    }
+    ?>
+</div>

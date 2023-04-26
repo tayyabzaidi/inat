@@ -38,11 +38,10 @@ if ($auth->checkAuth()) {
         $_auth_emp_rec = $pdo->row("SELECT * FROM employees WHERE authId=:authId ");
         $_auth_emp_name = $_auth_emp_rec['info_fullname_en'];
         $_auth_group = $_auth_emp_rec['groId'];
-   
-        $_SESSION['empId']=$_auth_emp_rec['empId'];
-        
-        define("__EMP_ID",$_auth_emp_rec['empId']);
-        define("__AUTH_ID",$_auth_emp_rec['authId']);
+        $_SESSION['empId'] = $_auth_emp_rec['empId'];
+
+        define("__EMP_ID", $_auth_emp_rec['empId']);
+        define("__AUTH_ID", $_auth_emp_rec['authId']);
     }
 
 
@@ -51,33 +50,31 @@ if ($auth->checkAuth()) {
     switch ($route->q) {
 
 
-        case 'management' :
+        case 'management':
             if ($_auth_is_root || $_auth_group < 3) {
-                require_once ('./modules/management/management.php');
+                require_once('./modules/management/management.php');
             } else {
                 die('Access denied.');
             }
             break;
 
 
-        case 'employee' :
+        case 'employee':
             if ($_auth_is_root) {
                 $route->q = 'management';
-                require_once ('./modules/management/management.php');
+                require_once('./modules/management/management.php');
             } else {
-                require_once ('./modules/employee/employee.php');
+                require_once('./modules/employee/employee.php');
             }
             break;
 
 
-        default :
-            require_once ('./modules/dashboard/dashboard.php');
+        default:
+            require_once('./modules/dashboard/dashboard.php');
     }
 } else {
     switch ($route->q) {
-        default :
-            require_once ('./modules/login/login.php');
+        default:
+            require_once('./modules/login/login.php');
     }
 }
-
-
