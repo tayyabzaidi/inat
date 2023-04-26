@@ -22,7 +22,7 @@
         <div class="col-sm-7 p-3">
             <?php require '__sections/profile.php'; ?>
         </div>
-        
+
         <div class="col-sm-5">
             <?php require '__sections/stats_and_menu.php'; ?>
         </div>
@@ -33,4 +33,3 @@
 
     </div>
 </div>
-

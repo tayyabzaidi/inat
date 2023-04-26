@@ -25,15 +25,20 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item disabled"><h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> System Administration</h5></li>
-                        <li class="list-group-item">
-                            <a href="<?php echo __APP_URL__ . $route->q . '/leave-types'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Leave Types</a>
+                        <li class="list-group-item disabled">
+                            <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> System Administration</h5>
                         </li>
                         <li class="list-group-item">
-                            <a href="<?php echo __APP_URL__ . $route->q . '/visa-types'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Visa Types</a>
+                            <a href="<?php echo __APP_URL__ . $route->q . '/leave-types'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Leave Types</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="<?php echo __APP_URL__ . $route->q . '/ticket-types'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Ticket Types</a>
+                            <a href="<?php echo __APP_URL__ . $route->q . '/visa-types'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Visa Types</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="<?php echo __APP_URL__ . $route->q . '/ticket-types'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Ticket Types</a>
                         </li>
                     </ul>
                 </div>
@@ -44,18 +49,27 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item disabled"><h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Employee Management</h5></li>
-                        <li class="list-group-item">
-                            <a href="<?php echo __APP_URL__ . $route->q . '/departments'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Departments</a>
+                        <li class="list-group-item disabled">
+                            <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Employee Management</h5>
                         </li>
                         <li class="list-group-item">
-                            <a href="<?php echo __APP_URL__ . $route->q . '/designations'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Designations</a>
+                            <a href="<?php echo __APP_URL__ . $route->q . '/departments'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Departments</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="<?php echo __APP_URL__ . $route->q . '/employees'; ?>"><i class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Employees</a>
+                            <a href="<?php echo __APP_URL__ . $route->q . '/designations'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Designations</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="<?php echo __APP_URL__ . $route->q . '/employees'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Employees</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="<?php echo __APP_URL__ . $route->q . '/expenses'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Expenses</a>
                         </li>
                     </ul>
-                </div> 
+                </div>
             </div>
         </div>
 

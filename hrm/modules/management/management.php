@@ -19,81 +19,83 @@
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <meta name="generator" content="">
-        <title><?php echo $lib->_('the_title'); ?></title>
-        <?php require __DIR__ . '/../_ui/css.php'; ?>
-        <style>
 
-        </style>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="generator" content="">
+    <title><?php echo $lib->_('the_title'); ?></title>
+    <?php require __DIR__ . '/../_ui/css.php'; ?>
+    <style>
 
-    <body class="text-<?php echo $_left; ?> fade-in-top" id="page-top">
-        <?php require __DIR__ . '/../_ui/loader.php'; ?>
-        <div id="wrapper">
-            <?php require __DIR__ . '/../_ui/sidebar.php'; ?>
+    </style>
+</head>
 
-            <div id="content-wrapper" class="d-flex flex-column">
-                <div id="content">
-                    <?php require __DIR__ . '/../_ui/toolbar.php'; ?>
+<body class="text-<?php echo $_left; ?> fade-in-top" id="page-top">
+    <?php require __DIR__ . '/../_ui/loader.php'; ?>
+    <div id="wrapper">
+        <?php require __DIR__ . '/../_ui/sidebar.php'; ?>
 
-                    <?php
-                    switch ($route->subpage) {
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <?php require __DIR__ . '/../_ui/toolbar.php'; ?>
 
+                <?php
+                switch ($route->subpage) {
+                    case 'expenses':
+                        require_once('expenses/expenses.php');
+                        break;
 
-                        case 'employees':
-                            require_once ('employees/employees.php');
-                            break;
-
-
-                        case 'designations':
-                            require_once ('designations/designations.php');
-                            break;
-
-                        case 'departments':
-                            require_once ('departments/departments.php');
-                            break;
+                    case 'employees':
+                        require_once('employees/employees.php');
+                        break;
 
 
-                        case 'leave-types':
-                            require_once ('leave-types/leave-types.php');
-                            break;
+                    case 'designations':
+                        require_once('designations/designations.php');
+                        break;
+
+                    case 'departments':
+                        require_once('departments/departments.php');
+                        break;
 
 
-                        case 'visa-types':
-                            require_once ('visa-types/visa-types.php');
-                            break;
+                    case 'leave-types':
+                        require_once('leave-types/leave-types.php');
+                        break;
 
 
-                        case 'ticket-types':
-                            require_once ('ticket-types/ticket-types.php');
-                            break;
+                    case 'visa-types':
+                        require_once('visa-types/visa-types.php');
+                        break;
+
+
+                    case 'ticket-types':
+                        require_once('ticket-types/ticket-types.php');
+                        break;
 
 
 
-                        default:
-                            require_once ('options.php');
-                    }
-                    ?>
+                    default:
+                        require_once('options.php');
+                }
+                ?>
 
-                </div>
             </div>
         </div>
+    </div>
 
-        <?php require __DIR__ . '/../_ui/page-top.php'; ?>
-        <?php require_once(__SYSTEM_JAVASCRIPTS__ . 'system.caller.js.php'); ?> 
-        <?php require __DIR__ . '/../_ui/scripts.php'; ?>
-        <?php
-        if (defined('__SECTION_JS_PATH_')) {
-            require __SECTION_JS_PATH_;
-        }
-        ?>
+    <?php require __DIR__ . '/../_ui/page-top.php'; ?>
+    <?php require_once(__SYSTEM_JAVASCRIPTS__ . 'system.caller.js.php'); ?>
+    <?php require __DIR__ . '/../_ui/scripts.php'; ?>
+    <?php
+    if (defined('__SECTION_JS_PATH_')) {
+        require __SECTION_JS_PATH_;
+    }
+    ?>
 
-    </body>
+</body>
+
 </html>
-
-

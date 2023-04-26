@@ -38,7 +38,8 @@ if ($auth->checkAuth()) {
         $_auth_emp_rec = $pdo->row("SELECT * FROM employees WHERE authId=:authId ");
         $_auth_emp_name = $_auth_emp_rec['info_fullname_en'];
         $_auth_group = $_auth_emp_rec['groId'];
-        
+   
+        $_SESSION['empId']=$_auth_emp_rec['empId'];
         
         define("__EMP_ID",$_auth_emp_rec['empId']);
         define("__AUTH_ID",$_auth_emp_rec['authId']);

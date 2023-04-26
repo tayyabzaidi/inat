@@ -90,7 +90,7 @@
         -webkit-border-radius: 50%;
         -moz-border-radius: 50%;
         border-radius: 50%;
-        border: 2px solid rgba(255,255,255,0.5);
+        border: 2px solid rgba(255, 255, 255, 0.5);
     }
 
     .user-profile small {
@@ -98,6 +98,4 @@
         line-height: 1.428571429;
         color: #999;
     }
-
 </style>
-
