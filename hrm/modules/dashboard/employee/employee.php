@@ -102,13 +102,6 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-
-                <div class="mb-2" align="<?php echo $_right; ?>">
-
-                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal" data-target="#myModal">Add Claim</button>
-
-                </div>
-
                 <h3>Claim List</h3>
 
 
@@ -118,7 +111,6 @@
                         <tr>
                             <th>I.D</th>
                             <th>Date</th>
-                            <th>Name</th>
                             <th>Status</th>
                             <th>Total Amount</th>
                             <th></th>
@@ -137,7 +129,6 @@
                                 </td>
                                 <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i]['name']; ?>
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
@@ -173,29 +164,30 @@
                                     ?>
 
                                     <div class="ant-tag " style="<?php if (
-                                                                        $HOD == 'approved'
-                                                                    ) {
-                                                                        echo 'background-color: rgb(135, 208, 104)';
-                                                                    } elseif ($HOD == 'disapprove') {
-                                                                        echo 'background-color: red;';
-                                                                    } else {
-                                                                        echo 'background-color: white';
-                                                                    } ?>">
+                                        $HOD == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($HOD == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
                                         HOD</div>
                                     <div class="ant-tag " style="<?php if (
-                                                                        $AM == 'approved'
-                                                                    ) {
-                                                                        echo 'background-color: rgb(135, 208, 104)';
-                                                                    } elseif ($AM == 'disapprove') {
-                                                                        echo 'background-color: red;';
-                                                                    } else {
-                                                                        echo 'background-color: white';
-                                                                    } ?>">
+                                        $AM == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($AM == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
                                         AM</div>
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button></td>
+                                <td><button class="modal-button" href="#myModal2" style="background: none;"><i
+                                            class="fa fa-folder"></i></button></td>
                                 </td>
 
 
@@ -208,47 +200,6 @@
     </div>
 </div>
 
-<!-- The Modal -->
-<div id="myModal1" class="modal">
-
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="claim-comment">Comment</label>
-                        <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="claim-pdf">PDF File</label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="claim-attachments">Attachments</label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-attachments" name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Claim</button>
-            </div>
-        </div>
-    </div>
-
-</div>
 
 <!-- The Modal -->
 <div id="myModal2" class="modal">
@@ -257,14 +208,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <?php
                 // Connect to the database
-
+                
                 $result = $pdo->query(
                     'SELECT attachment FROM attachment where expenseId=1;'
                 );
@@ -299,11 +247,10 @@
     var modals = document.querySelectorAll('.modal');
 
     // Get the <span> element that closes the modal
-    var spans = document.getElementsByClassName("close");
-
+    var spans = document.getElementsByClassName("btn btn-secondary");
     // When the user clicks the button, open the modal
     for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function(e) {
+        btn[i].onclick = function (e) {
             e.preventDefault();
             modal = document.querySelector(e.target.getAttribute("href"));
             modal.style.display = "block";
@@ -312,7 +259,7 @@
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function() {
+        spans[i].onclick = function () {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
@@ -320,7 +267,7 @@
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target.classList.contains('modal')) {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
