@@ -187,89 +187,47 @@
                                     <form action="#" method="POST">
                                         <!-- other form inputs -->
                                         <label>
-                                            <input type="checkbox" onchange="this.form.submit();" name="status"
-                                                onsubmit="document.getElementById('myCheckbox').checked = true;"
-                                                value="approve" id="myCheckbox" <?php $status = '';
-                                                if ($status == "approve")
+                                            <input type="checkbox" name="status" value="approve"
+                                                onchange="this.form.submit();" <?php
+                                                $pdo->bind('employeeId', $_SESSION['empId']);
+                                                $pdo->bind('expenseId', $recEmpData[$i]['id']);
+                                                $s = $pdo->query('select "approve" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId
+                                                and s.status_name not like "%disapproved";');
+                                                if ($s[0]['status'] == 'approve')
                                                     echo "checked"; ?>>
                                         </label>
                                         <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
+                                        <input type="hidden" name="action" value="update">
                                         <button type="submit" style="display:none;"></button>
                                     </form>
                                 </td>
                                 <td>
+                                    <?php
+                                    // retrieve the status of the checkbox from the server
+                                    $pdo->bind('employeeId', $_SESSION['empId']);
+                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
+                                    $s = $pdo->query('select "disapprove" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId and s.status_name like "%disapproved";');
+                                    $isChecked = $s[0]['status'] == "disapprove";
+
+                                    echo $isChecked; ?>
                                     <form action="#" method="POST">
                                         <!-- other form inputs -->
                                         <label>
                                             <input type="checkbox" name="status" value="disapprove"
-                                                onchange="this.form.submit();" <?php $status = '';
-                                                if ($status == "disapprove")
-                                                    echo "checked"; ?>>
+                                                onchange="this.form.submit();" <?php if ($isChecked) {
+                                                    echo "checked";
+                                                } ?>>
                                         </label>
                                         <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
                                         <button type="submit" style="display:none;"></button>
-
                                     </form>
 
                                     <!-- save the staus hod or am approve base on the user id -->
                                     <?php
-                        }
+                        } ?>
+                            </td>
+                        </tr>
 
-                        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                            $status = $_POST['status'];
-                            $expenseID = $_POST['expenseId'];
-                            $pdo->bind('employeeId', $_SESSION['empId']);
-                            $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
-                            if (empty($getDesignation))
-                                echo 'invalid user';
-
-                            if ($status == "approve") {
-                                $setStatus = 0;
-                                if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-                                    $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
-                                    $setStatus = $getStatus[0]['id'];
-                                }
-                                if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                                    $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
-                                    $setStatus = $getStatus[0]['id'];
-                                }
-                                if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                                    $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
-                                    if (!empty($getStatus)) {
-                                        $setStatus = $getStatus[0]['id'];
-                                    }
-                                }
-                            }
-                            if ($status == "disapprove") {
-                                $setStatus = 0;
-                                if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-                                    $getStatus = $pdo->query("select id from status where status_name like ('HOD_d%');");
-                                    if (!empty($getStatus))
-                                        $setStatus = $getStatus[0]['id'];
-                                }
-                                if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                                    $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
-                                    if (!empty($getStatus))
-                                        $setStatus = $getStatus[0]['id'];
-                                }
-                                if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                                    $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
-                                    if (!empty($getStatus))
-                                        $setStatus = $getStatus[0]['id'];
-                                }
-                            }
-
-                            if ($setStatus != 0) {
-                                $pdo->bind("id", $setStatus);
-                                $pdo->bind("expenseId", $expenseID);
-                                //issue---------------------------------------------------------------------------------------------------------------
-                                $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
-                            }
-                            ?>
-                                </td>
-
-                            </tr>
-                        <?php } ?>
                     </tbody>
 
                 </table>
@@ -277,7 +235,67 @@
         </div>
     </div>
 </div>
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $status = $_POST['status'];
+    $expenseID = $_POST['expenseId'];
+    $pdo->bind('employeeId', $_SESSION['empId']);
+    $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
+    if (empty($getDesignation))
+        echo 'invalid user';
+
+    if ($status == "approve") {
+        $setStatus = 0;
+        if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+            $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
+            $setStatus = $getStatus[0]['id'];
+        }
+        if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+            $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
+            $setStatus = $getStatus[0]['id'];
+        }
+        if ($getDesignation[0]['name'] == 'HR MANAGER') {
+            $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
+            if (!empty($getStatus)) {
+                $setStatus = $getStatus[0]['id'];
+            }
+        }
+    }
+    if ($status == "disapprove") {
+        $setStatus = 0;
+        if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+            $getStatus = $pdo->query("select id from status where status_name like ('HOD_d%');");
+            if (!empty($getStatus))
+                $setStatus = $getStatus[0]['id'];
+        }
+        if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+            $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
+            if (!empty($getStatus))
+                $setStatus = $getStatus[0]['id'];
+        }
+        if ($getDesignation[0]['name'] == 'HR MANAGER') {
+            $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
+            if (!empty($getStatus))
+                $setStatus = $getStatus[0]['id'];
+        }
+    }
+
+    if ($setStatus != 0) {
+        $pdo->bind("id", $setStatus);
+        $pdo->bind("expenseId", $expenseID);
+        //issue---------------------------------------------------------------------------------------------------------------
+        $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
+    }
+}
+?>
 <script>
+    document.getElementById('myForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var checkbox = document.getElementsByName('status')[0];
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+        event.target.submit();
+    });
     $(document).ready(function () {
         // Attach a click event handler to the attachment buttons
         $(".attachment-btn").on("click", function () {
