@@ -68,6 +68,12 @@
             cursor: pointer;
         }
 
+        .form-container {
+            float: right;
+            margin-bottom: 10px;
+
+        }
+
         .ant-tag {
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
@@ -112,16 +118,16 @@
                 </div>
 
                 <h3>Claim List</h3>
-
-                <form action="#" method="POST">
-                    <label for="dateFrom">Date From:</label>
-                    <input type="date" id="dateFrom" name="dateFrom">
-                    <label for="dateTo">Date To:</label>
-                    <input type="date" id="dateTo" name="dateTo">
-                    <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                        Date</button>
-                </form>
-
+                <div class="form-container">
+                    <form action="#" method="POST">
+                        <label for="dateFrom">Date From:</label>
+                        <input type="date" id="dateFrom" name="dateFrom">
+                        <label for="dateTo">Date To:</label>
+                        <input type="date" id="dateTo" name="dateTo">
+                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
+                            Date</button>
+                    </form>
+                </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
@@ -433,7 +439,7 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //    Get form data
-    $unique_id = '123456';
+    $unique_id = substr(uniqid(), 0, 5);
     $date = date('Y-m-d');
     $employee_id = $_SESSION['empId'];
     $total_amount = $_POST['claim-amount'];
@@ -443,7 +449,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdf_hex = '0x' . $pdf_hex;
     // Insert form data into database
     $sql = "INSERT INTO employee_expenses (unique_id, date, employee_id, total_amount, form_data, comment)
-                VALUES ('123456', '$date', '$employee_id', '$total_amount',$pdf_hex, '$comment')";
+                VALUES ('$unique_id', '$date', '$employee_id', '$total_amount',$pdf_hex, '$comment')";
 
     $result = $pdo->query($sql);
 
@@ -451,8 +457,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($result)) {
         $expenseId = $pdo->query("SELECT id from employee_expenses where unique_id = '$unique_id';");
         $attachments = $_FILES['claim-attachments'];
-        echo $expenseId[0]['id'];
-        echo '-';
         // Loop through all the uploaded files
         for ($i = 0; $i < count($attachments['name']); $i++) {
             $attachment_name = $attachments['name'][$i];
@@ -465,7 +469,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdf_hex = bin2hex($attachment_data);
             $pdf_hex = '0x' . $pdf_hex;
-            echo $pdf_hex;
             $attachment = $pdo->query("INSERT INTO attachment( attachment, expenseId) VALUES ('$pdf_hex','$expenseId[0]['id']')");
         }
 
