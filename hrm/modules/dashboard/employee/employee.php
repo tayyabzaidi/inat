@@ -102,8 +102,6 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-
-
                 <h3>Claim List</h3>
 
 
@@ -127,13 +125,9 @@
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i][
-                                    'unique_id'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['unique_id']; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i][
-                                    'date'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
                                 </td>
                                 <td class="" style="text-align: left;">
@@ -190,9 +184,7 @@
                                     } ?>">
                                         AM</div>
                                 </td>
-                                <td> <?php echo $recEmpData[$i][
-                                    'total_amount'
-                                ]; ?>
+                                <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
                                 <td><button class="modal-button" href="#myModal2" style="background: none;"><i
                                             class="fa fa-folder"></i></button></td>
@@ -232,7 +224,6 @@
                     echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
                         base64_encode($blob['attachment']) .
                         "'  height='200px' width='200px' role='presentation'>";
-
                 }
                 echo "</div>";
 
@@ -283,7 +274,6 @@
             }
         }
     }
-
 </script>
 
 

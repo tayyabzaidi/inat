@@ -56,14 +56,15 @@
                     case 'encashment':
                         require_once('encashment/encashment.php');
                         break;
-
                     case 'visa':
                         require_once('visa/visa.php');
                         break;
+                    // case 'submitLeaves':
+                    //     require_once('leaves/submitLeaves.php');
+                    //     break;
                     case 'leaves':
                         require_once('leaves/leaves.php');
                         break;
-
                     case 'salary':
                         require_once('salary/salary.php');
                         break;
@@ -74,7 +75,6 @@
                         require_once('default.php');
                 }
                 ?>
-
 
             </div>
         </div>

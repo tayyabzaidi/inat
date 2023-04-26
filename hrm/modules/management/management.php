@@ -44,6 +44,11 @@
 
                 <?php
                 switch ($route->subpage) {
+
+                    case 'approve-disapprove-leave':
+                        require_once('leave-management/approve-disapprove-leave.php');
+                        break;
+
                     case 'expenses':
                         require_once('expenses/expenses.php');
                         break;
@@ -76,6 +81,9 @@
                         require_once('ticket-types/ticket-types.php');
                         break;
 
+                    case 'leave-management':
+                        require_once('leave-management/leave-management.php');
+                        break;
 
 
                     default:
