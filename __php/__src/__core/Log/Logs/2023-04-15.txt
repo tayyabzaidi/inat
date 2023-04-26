@@ -1,0 +1,35 @@
+Time : 16:54:56
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+
+Time : 16:54:56
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+Raw SQL : SELECT id from employee_expenses where unique_id = $unique_id;
+
+Time : 16:54:34
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+
+Time : 16:54:34
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+Raw SQL : SELECT id from employee_expenses where unique_id = $unique_id;
+
+Time : 16:54:14
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+
+Time : 16:54:14
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+Raw SQL : SELECT id from employee_expenses where unique_id = $unique_id;
+
+Time : 16:53:44
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+
+Time : 16:53:44
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$unique_id' in 'where clause'
+Raw SQL : SELECT id from employee_expenses where unique_id = $unique_id;
+
+Time : 16:53:09
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$s' in 'where clause'
+
+Time : 16:53:09
+SQLSTATE[42S22]: Column not found: 1054 Unknown column '$s' in 'where clause'
+Raw SQL : SELECT id from employee_expenses where unique_id = $s;
+

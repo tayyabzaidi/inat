@@ -97,19 +97,12 @@
         }
     </style>
 </head>
-<?php echo $_auth_emp_rec['authName'] ?>
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
 
             <div class="card-body">
 
-                <div class="mb-2" align="<?php echo $_right; ?>">
-
-                    <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Claim</button>
-
-                </div>
 
                 <h3>Claim List</h3>
 
@@ -120,7 +113,6 @@
                         <tr>
                             <th>I.D</th>
                             <th>Date</th>
-                            <th>Name</th>
                             <th>Status</th>
                             <th>Total Amount</th>
                             <th></th>
@@ -143,9 +135,6 @@
                                     'date'
                                 ]; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i][
-                                    'name'
-                                ]; ?>
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
@@ -219,48 +208,6 @@
     </div>
 </div>
 
-<!-- The Modal -->
-<div id="myModal1" class="modal">
-
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="claim-comment">Comment</label>
-                        <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="claim-pdf">PDF File</label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="claim-attachments">Attachments</label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-attachments"
-                                name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Claim</button>
-            </div>
-        </div>
-    </div>
-
-</div>
 
 <!-- The Modal -->
 <div id="myModal2" class="modal">
@@ -269,9 +216,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <?php
@@ -312,8 +256,7 @@
     var modals = document.querySelectorAll('.modal');
 
     // Get the <span> element that closes the modal
-    var spans = document.getElementsByClassName("close");
-
+    var spans = document.getElementsByClassName("btn btn-secondary");
     // When the user clicks the button, open the modal
     for (var i = 0; i < btn.length; i++) {
         btn[i].onclick = function (e) {
