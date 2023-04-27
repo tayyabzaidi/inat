@@ -341,3 +341,4 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
             </div>
         </div>
     </div>
+</div>

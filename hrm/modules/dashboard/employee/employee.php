@@ -164,30 +164,29 @@
                                     ?>
 
                                     <div class="ant-tag " style="<?php if (
-                                        $HOD == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HOD == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
+                                                                        $HOD == 'approved'
+                                                                    ) {
+                                                                        echo 'background-color: rgb(135, 208, 104)';
+                                                                    } elseif ($HOD == 'disapprove') {
+                                                                        echo 'background-color: red;';
+                                                                    } else {
+                                                                        echo 'background-color: white';
+                                                                    } ?>">
                                         HOD</div>
                                     <div class="ant-tag " style="<?php if (
-                                        $AM == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($AM == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
+                                                                        $AM == 'approved'
+                                                                    ) {
+                                                                        echo 'background-color: rgb(135, 208, 104)';
+                                                                    } elseif ($AM == 'disapprove') {
+                                                                        echo 'background-color: red;';
+                                                                    } else {
+                                                                        echo 'background-color: white';
+                                                                    } ?>">
                                         AM</div>
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
-                                        style="background: none;"><i class="fa fa-folder"></i></button></td>
+                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i class="fa fa-folder"></i></button></td>
 
 
 
@@ -200,17 +199,147 @@
     </div>
 </div>
 
+<div class="row" style="width: 98%;margin-left: 1%;">
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow mb-4">
 
+            <div class="card-body">
+
+
+                <div class="card-body">
+                    <?php
+
+                    $pdo->bind('employeeId', $_SESSION['empId']);
+                    $recEmpData = $pdo->query(
+                        'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id WHERE el.emp_id=:employeeId order by id desc limit 5'
+                    );
+                    ?>
+                    <h3>Leave List</h3>
+                    <hr>
+                    <div class="mb-2" align="<?php echo $_right; ?>">
+                        <a href="<?php echo __APP_URL__ . 'employee/leaves'; ?>" class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> All Leave Requests</a>
+                    </div>
+
+
+                    <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <!-- <th>I.D</th>
+                                <th>Name</th>-->
+                                <th>No of days</th>
+                                <th>Leave type</th>
+                                <th>Status</th>
+                                <th>PDF</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
+                                <tr>
+                                    <!-- <td><?php echo $recEmpData[$i]['id']; ?>
+                                    </td>
+                                    <td><?php echo $recEmpData[$i]['name']; ?>
+                                    </td>-->
+                                    <td><?php echo $recEmpData[$i]['no_of_days']; ?>
+                                    </td>
+                                    <td><?php echo $recEmpData[$i]['leave_type']; ?>
+                                    </td>
+                                    <td class="" style="text-align: left;">
+                                        <?php
+                                        $getStatus = $pdo->query(
+                                            'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId where es.leaveId=' . $recEmpData[$i]['id']
+                                        );
+                                        $HOD = false;
+                                        $HR = false;
+                                        $OM = false;
+                                        for ($j = 0; $j < count($getStatus); $j++) {
+                                            if (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HOD_approved'
+                                            ) {
+                                                $HOD = 'approved';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HOD_disapproved'
+                                            ) {
+                                                $HOD = 'disapprove';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HR_approved'
+                                            ) {
+                                                $HR = 'approved';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HR_disapproved'
+                                            ) {
+                                                $HR = 'disapprove';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'OM_approved'
+                                            ) {
+                                                $OM = 'approved';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'OM_disapproved'
+                                            ) {
+                                                $OM = 'disapprove';
+                                            }
+                                        }
+                                        ?>
+
+                                        <div class="ant-tag " style="<?php if (
+                                                                            $HOD == 'approved'
+                                                                        ) {
+                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                                                        } elseif ($HOD == 'disapprove') {
+                                                                            echo 'background-color: red; color:white';
+                                                                        } else {
+                                                                            echo 'background-color: white';
+                                                                        } ?>">
+                                            HOD</div>
+
+                                        <div class="ant-tag " style="<?php if (
+                                                                            $HR == 'approved'
+                                                                        ) {
+                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                                                        } elseif ($HR == 'disapprove') {
+                                                                            echo 'background-color: red; color:white';
+                                                                        } else {
+                                                                            echo 'background-color: white';
+                                                                        } ?>">
+                                            HR</div>
+                                        <div class="ant-tag " style="<?php if (
+                                                                            $OM == 'approved'
+                                                                        ) {
+                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                                                        } elseif ($OM == 'disapprove') {
+                                                                            echo 'background-color: red; color:white';
+                                                                        } else {
+                                                                            echo 'background-color: white';
+                                                                        } ?>">
+                                            OM</div>
+                                    </td>
+
+                                    <td>
+                                        <button class="modal-button" id="employee-data-btn" href="#myModal2" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>"><i class="fa fa-folder"></i></button>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 
 <script>
-
-
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Attach a click event handler to the attachment buttons
-        $(".attachment-btn").on("click", function () {
+        $(".attachment-btn").on("click", function() {
             // Get the expense ID from the data-id attribute of the button
             var expenseId = $(this).data("id");
             var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
@@ -221,7 +350,7 @@
                 },
                 type: 'POST',
                 dataType: "json",
-                success: function (data) {
+                success: function(data) {
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
@@ -281,14 +410,14 @@
                     modal.show();
 
                     // Attach a mouseup event handler to the modal
-                    modal.on('mouseup', function (e) {
+                    modal.on('mouseup', function(e) {
                         // If the clicked element is not inside the modal content, close the modal
                         if (!$(e.target).closest('.modal-content').length) {
                             modal.hide();
                         }
                     });
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.log("Error: " + error);
                 }
             });
