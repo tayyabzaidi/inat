@@ -289,7 +289,9 @@
                 VALUES ('$employee_id', $pdf_hex,'123')";
 
         $result = $pdo->query($sql);
+        echo "<meta http-equiv='refresh' content='0'>";
 
     }
+
     ?>
 </div>
