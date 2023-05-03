@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo $lang_code; ?>">
+<html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <head>
@@ -145,8 +145,7 @@
                             <th>Form</th>
                             <th>Total Amount</th>
                             <th>Attachmnet</th>
-                            <th>Approve</th>
-                            <th>Disapprove</th>
+                            <th>Approve/Disapprove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -184,40 +183,36 @@
                                 </td>
 
                                 <td>
-                                    <form action="#" method="POST">
-                                        <!-- other form inputs -->
-                                        <label>
-                                            <input type="checkbox" name="status" value="approve"
-                                                onchange="this.form.submit();" <?php
-                                                $pdo->bind('employeeId', $_SESSION['empId']);
-                                                $pdo->bind('expenseId', $recEmpData[$i]['id']);
-                                                $s = $pdo->query('select "approve" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId
-                                                and s.status_name not like "%disapproved";');
-                                                if ($s[0]['status'] == 'approve')
-                                                    echo "checked"; ?>>
-                                        </label>
+                                    <form action="#" method="POST" id="myForm">
+                                        <input type="checkbox" name="status" value="approve" onchange="this.form.submit();"
+                                            <?php
+                                            $pdo->bind('employeeId', $_SESSION['empId']);
+                                            $pdo->bind('expenseId', $recEmpData[$i]['id']);
+                                            $s = $pdo->query('select "approve" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId
+            and s.status_name not like "%disapproved";');
+                                            if ($s[0]['status'] == 'approve') {
+                                                echo "checked disabled";
+                                            } else {
+                                                echo "";
+                                            }
+                                            ?>>
                                         <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
                                         <input type="hidden" name="action" value="update">
                                         <button type="submit" style="display:none;"></button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <?php
-                                    // retrieve the status of the checkbox from the server
-                                    $pdo->bind('employeeId', $_SESSION['empId']);
-                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
-                                    $s = $pdo->query('select "disapprove" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId and s.status_name like "%disapproved";');
-                                    $isChecked = $s[0]['status'] == "disapprove";
 
-                                    echo $isChecked; ?>
-                                    <form action="#" method="POST">
+                                        <?php
+                                        // retrieve the status of the checkbox from the server
+                                        $pdo->bind('employeeId', $_SESSION['empId']);
+                                        $pdo->bind('expenseId', $recEmpData[$i]['id']);
+                                        $s = $pdo->query('select "disapprove" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId and s.status_name like "%disapproved";');
+                                        $isChecked = $s[0]['status'] == "disapprove";
+                                        ?>
+
                                         <!-- other form inputs -->
-                                        <label>
-                                            <input type="checkbox" name="status" value="disapprove"
-                                                onchange="this.form.submit();" <?php if ($isChecked) {
-                                                    echo "checked";
-                                                } ?>>
-                                        </label>
+                                        <input type="checkbox" name="status" value="disapprove"
+                                            onchange="this.form.submit();" <?php if ($isChecked) {
+                                                echo "checked disabled";
+                                            } ?>>
                                         <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
                                         <button type="submit" style="display:none;"></button>
                                     </form>
@@ -248,11 +243,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $setStatus = 0;
         if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
             $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
-            $setStatus = $getStatus[0]['id'];
+            if (!empty($getStatus)) {
+                $setStatus = $getStatus[0]['id'];
+            }
         }
         if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
             $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
-            $setStatus = $getStatus[0]['id'];
+            if (!empty($getStatus)) {
+                $setStatus = $getStatus[0]['id'];
+            }
         }
         if ($getDesignation[0]['name'] == 'HR MANAGER') {
             $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
@@ -286,6 +285,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //issue---------------------------------------------------------------------------------------------------------------
         $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
     }
+    echo "<meta http-equiv='refresh' content='0'>";
+
 }
 ?>
 <script>
@@ -295,6 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         checkbox.checked = !checkbox.checked;
         checkbox.dispatchEvent(new Event('change'));
         event.target.submit();
+
     });
     $(document).ready(function () {
         // Attach a click event handler to the attachment buttons
@@ -319,7 +321,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Loop through the binary data and convert it to base64-encoded strings
                     for (var i = 0; i < data.result.length; i++) {
                         images.push("data:image/jpeg;base64," + (data.result[i]));
-                        console.log(images[i]);
                     }
                     // Create a modal to display the images
                     var modal = $('<div id="myModal2" class="modal"></div>');
