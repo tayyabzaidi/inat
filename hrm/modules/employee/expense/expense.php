@@ -23,8 +23,6 @@
         }
 
         .modal-image {
-            width: 10%;
-            padding: 5px;
             margin-right: 10px;
             /* Add some spacing between the images */
         }
@@ -369,7 +367,6 @@
                     // Loop through the binary data and convert it to base64-encoded strings
                     for (var i = 0; i < data.result.length; i++) {
                         images.push("data:image/jpeg;base64," + (data.result[i]));
-                        console.log(images[i]);
                     }
                     // Create a modal to display the images
                     var modal = $('<div id="myModal2" class="modal"></div>');
@@ -398,7 +395,7 @@
 
                     // Loop through the images and create image tags
                     for (var i = 0; i < images.length; i++) {
-                        var img = $('<img>').attr('src', images[i]).attr('height', 200).attr('width', 200);
+                        var img = $('<img>').addClass('modal-image').attr('src', images[i]).attr('height', 200).attr('width', 200);
                         imageContainer.append(img);
                     }
 
@@ -450,7 +447,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Insert form data into database
     $sql = "INSERT INTO employee_expenses (unique_id, date, employee_id, total_amount, form_data, comment)
                 VALUES ('$unique_id', '$date', '$employee_id', '$total_amount',$pdf_hex, '$comment')";
-
     $result = $pdo->query($sql);
 
     // Step 3: Verify if there is any row and extract status name
@@ -469,7 +465,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdf_hex = bin2hex($attachment_data);
             $pdf_hex = '0x' . $pdf_hex;
-            $attachment = $pdo->query("INSERT INTO attachment( attachment, expenseId) VALUES ('$pdf_hex','$expenseId[0]['id']')");
+            echo $pdf_hex;
+            $pdo->bind("expenseId", $expenseId[0]['id']);
+            // $pdo->bind("pdf", $pdf_hex);
+            $attachment = $pdo->query("INSERT INTO attachment( attachment, expenseId) VALUES (" . $pdf_hex . ",:expenseId)");
         }
 
     }

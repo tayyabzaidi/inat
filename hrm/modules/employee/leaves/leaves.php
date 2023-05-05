@@ -134,7 +134,9 @@
                         'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id where el.emp_id=' . $employeeId
                     ); ?>
                     <div class="mb-2" align="<?php echo $_right; ?>">
-                        <button type="button" class="btn btn-primary modal-button open-add-leaves-modal" href="#myModal1" data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>" data-toggle="modal" data-target="#myModal">Add Leave</button>
+                        <button type="button" class="btn btn-primary modal-button open-add-leaves-modal"
+                            href="#myModal1" data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>"
+                            data-toggle="modal" data-target="#myModal">Add Leave</button>
                     </div>
                     <h3>Leave List</h3>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -196,28 +198,29 @@
                                         ?>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HOD == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104)';
-                                                                        } elseif ($HOD == 'disapprove') {
-                                                                            echo 'background-color: red;';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HOD == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104)';
+                                        } elseif ($HOD == 'disapprove') {
+                                            echo 'background-color: red;';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HOD</div>
                                         <div class="ant-tag " style="<?php if (
-                                                                            $AM == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104)';
-                                                                        } elseif ($AM == 'disapprove') {
-                                                                            echo 'background-color: red;';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $AM == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104)';
+                                        } elseif ($AM == 'disapprove') {
+                                            echo 'background-color: red;';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             AM</div>
                                     </td>
 
-                                    <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i class="fa fa-folder"></i></button></td>
+                                    <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
+                                            style="background: none;"><i class="fa fa-folder"></i></button></td>
 
                                     </td>
 
@@ -274,7 +277,9 @@
                         <div class="form-group">
                             <label for="claim-attachments">Leave Attachment (Please add attachment)</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="claim-attachments" name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
+                                <input type="file" class="custom-file-input" id="claim-attachments"
+                                    name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html,.pdf"
+                                    multiple>
                                 <label class="custom-file-label" for="claim-attachments">Choose file</label>
                             </div>
                         </div>
@@ -341,7 +346,7 @@
 
         // When the user clicks the button, open the modal
         for (var i = 0; i < btn.length; i++) {
-            btn[i].onclick = function(e) {
+            btn[i].onclick = function (e) {
                 e.preventDefault();
                 modal = document.querySelector(e.target.getAttribute("href"));
                 modal.style.display = "block";
@@ -350,7 +355,7 @@
 
         // When the user clicks on <span> (x), close the modal
         for (var i = 0; i < spans.length; i++) {
-            spans[i].onclick = function() {
+            spans[i].onclick = function () {
                 for (var index in modals) {
                     if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
                 }
@@ -358,7 +363,7 @@
         }
 
         // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 for (var index in modals) {
                     if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
@@ -368,9 +373,9 @@
 
         $.widget.bridge('uitooltip', $.ui.tooltip);
 
-        (function($) {
-            $(document).ready(function() {
-                $('#no-of-days').change(function() {
+        (function ($) {
+            $(document).ready(function () {
+                $('#no-of-days').change(function () {
                     var days = $(this).val();
                     var startDate = new Date();
                     startDate.setDate(startDate.getDate() + parseInt(days));
@@ -387,9 +392,9 @@
 
 
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Attach a click event handler to the attachment buttons
-            $(".attachment-btn").on("click", function() {
+            $(".attachment-btn").on("click", function () {
                 // Get the expense ID from the data-id attribute of the button
                 var id = $(this).data("id");
                 var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/get_attachment/get_leave_attachment';
@@ -400,7 +405,7 @@
                     },
                     type: 'POST',
                     dataType: "json",
-                    success: function(data) {
+                    success: function (data) {
 
                         console.log(data);
 
@@ -456,7 +461,7 @@
                             modal.show();
 
                             // Attach a mouseup event handler to the modal
-                            modal.on('mouseup', function(e) {
+                            modal.on('mouseup', function (e) {
                                 // If the clicked element is not inside the modal content, close the modal
                                 if (!$(e.target).closest('.modal-content').length) {
                                     modal.hide();
@@ -466,7 +471,7 @@
 
 
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.log("Error: " + error);
                     }
                 });
