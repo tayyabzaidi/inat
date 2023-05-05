@@ -4,7 +4,7 @@ $id = $_POST["id"];
 $pdo->bind('id', $id);
 
 $result = $pdo->query(
-    "SELECT el.clearance from employee_leaves el where id = :id"
+    "SELECT el.clearance_attachment from employee_leaves el where id = :id"
 );
 for ($i = 0; $i < count($result); $i++) {
 

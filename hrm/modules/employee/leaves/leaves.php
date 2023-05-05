@@ -177,7 +177,8 @@
                                             'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId where leaveId = ' . $recEmpData[$i]['id']  . ';'
                                         );
                                         $HOD = false;
-                                        $AM = false;
+                                        $OM = false;
+                                        $HR = false;
                                         for ($j = 0; $j < count($getStatus); $j++) {
                                             if (
                                                 $getStatus[$j]['status_name'] ==
@@ -186,12 +187,12 @@
                                                 $HOD = 'approved';
                                             } elseif (
                                                 $getStatus[$j]['status_name'] ==
-                                                'AM_approved'
+                                                'OM_approved'
                                             ) {
                                                 $AM = 'approved';
                                             } elseif (
                                                 $getStatus[$j]['status_name'] ==
-                                                'AM_disapproved'
+                                                'OM_disapproved'
                                             ) {
                                                 $AM = 'disapprove';
                                             } elseif (
@@ -199,6 +200,16 @@
                                                 'HOD_disapproved'
                                             ) {
                                                 $HOD = 'disapprove';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HR_disapproved'
+                                            ) {
+                                                $HR = 'disapprove';
+                                            } elseif (
+                                                $getStatus[$j]['status_name'] ==
+                                                'HR_disapproved'
+                                            ) {
+                                                $HR = 'disapprove';
                                             }
                                         }
                                         ?>
@@ -214,15 +225,25 @@
                                                                         } ?>">
                                             HOD</div>
                                         <div class="ant-tag " style="<?php if (
-                                                                            $AM == 'approved'
+                                                                            $OM == 'approved'
                                                                         ) {
                                                                             echo 'background-color: rgb(135, 208, 104)';
-                                                                        } elseif ($AM == 'disapprove') {
+                                                                        } elseif ($OM == 'disapprove') {
                                                                             echo 'background-color: red;';
                                                                         } else {
                                                                             echo 'background-color: white';
                                                                         } ?>">
-                                            AM</div>
+                                            OM</div>
+                                        <div class="ant-tag " style="<?php if (
+                                                                            $HR == 'approved'
+                                                                        ) {
+                                                                            echo 'background-color: rgb(135, 208, 104)';
+                                                                        } elseif ($HR == 'disapprove') {
+                                                                            echo 'background-color: red;';
+                                                                        } else {
+                                                                            echo 'background-color: white';
+                                                                        } ?>">
+                                            HR</div>
                                     </td>
                                     <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i class="fa fa-folder"></i></button></td>
 
@@ -541,7 +562,7 @@
             });
 
 
-            $(".attachment-btn").on("click", function() {
+            $(".clearance-attachment-btn").on("click", function() {
                 // Get the expense ID from the data-id attribute of the button
                 var id = $(this).data("id");
                 var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/get_attachment/get_clearance_leave_attachment';
