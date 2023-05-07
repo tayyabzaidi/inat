@@ -50,12 +50,12 @@
         .modal-content {
             background-color: #fefefe;
             margin: auto;
-            margin-top: 10%;
+            margin-top: 5%;
             margin-bottom: 10%;
             padding: 20px;
             border: 1px solid #888;
             width: 60%;
-            height: 40%;
+            height: 80%;
         }
 
         .close {
@@ -106,20 +106,24 @@
 <body>
     <?php
     $employeeId = $_SESSION['empId'];
+    error_reporting(E_ALL);
+    ini_set('display_errors', '1');
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (isset($_POST['add_clearance_form_submit'])) {
             $clearance_attachment = $_POST['clearance-attachments'];
-            $success = $pdo->query("update employee_leaves set clearance_attachment = '" . $clearance_attachment . "' where emp_id = " . $employeeId);
+            $success = $pdo->query("update employee_leaves set clearance_attachment = " . $clearance_attachment . " where emp_id = " . $employeeId);
         } else if (isset($_POST['add_leave_submit'])) {
             // Get the form data
             $no_of_days = $_POST['no-of-days'];
             $leave_type = $_POST['leave-type'];
             $start_date = $_POST['start-date'];
-            $leave_attachments = $_POST['leave-attachments'];
-
-            $success = $pdo->query("INSERT INTO employee_leaves (emp_id,start_date, no_of_days, leave_type, attachment) VALUES ('" . $employeeId . "', '" . $start_date . "', '" . $no_of_days . "', '" . $leave_type . "', '" . $leave_attachments . "')");
+            echo $start_date;
+            $pdf = file_get_contents($_FILES['leave-attachments']['tmp_name']);
+            $pdf_hex = bin2hex($pdf);
+            $pdf_hex = '0x' . $pdf_hex;
+            $success = $pdo->query("INSERT INTO employee_leaves (emp_id,start_date, no_of_days, leave_type, attachment) VALUES ('" . $employeeId . "', '" . $start_date . "', '" . $no_of_days . "', '" . $leave_type . "', " . $pdf_hex . ")");
             $addLeaveStatus = true;
 
             if ($success) {
@@ -141,7 +145,9 @@
                         'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id where el.emp_id=' . $employeeId
                     ); ?>
                     <div class="mb-2" align="<?php echo $_right; ?>">
-                        <button type="button" class="btn btn-primary modal-button open-add-leaves-modal" href="#myModal1" data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>" data-toggle="modal" data-target="#myModal">Add Leave</button>
+                        <button type="button" class="btn btn-primary modal-button open-add-leaves-modal"
+                            href="#myModal1" data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>"
+                            data-toggle="modal" data-target="#myModal">Add Leave</button>
                     </div>
                     <h3>Leave List</h3>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -174,7 +180,7 @@
                                     <td class="" style="text-align: left;">
                                         <?php
                                         $getStatus = $pdo->query(
-                                            'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId where leaveId = ' . $recEmpData[$i]['id']  . ';'
+                                            'SELECT s.status_name from `status` s join employee_leave_status es on s.id=es.statusId where leaveId = ' . $recEmpData[$i]['id'] . ';'
                                         );
                                         $HOD = false;
                                         $OM = false;
@@ -189,12 +195,12 @@
                                                 $getStatus[$j]['status_name'] ==
                                                 'OM_approved'
                                             ) {
-                                                $AM = 'approved';
+                                                $OM = 'approved';
                                             } elseif (
                                                 $getStatus[$j]['status_name'] ==
                                                 'OM_disapproved'
                                             ) {
-                                                $AM = 'disapprove';
+                                                $OM = 'disapprove';
                                             } elseif (
                                                 $getStatus[$j]['status_name'] ==
                                                 'HOD_disapproved'
@@ -202,9 +208,9 @@
                                                 $HOD = 'disapprove';
                                             } elseif (
                                                 $getStatus[$j]['status_name'] ==
-                                                'HR_disapproved'
+                                                'HR_approved'
                                             ) {
-                                                $HR = 'disapprove';
+                                                $HR = 'approve';
                                             } elseif (
                                                 $getStatus[$j]['status_name'] ==
                                                 'HR_disapproved'
@@ -215,39 +221,48 @@
                                         ?>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HOD == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104)';
-                                                                        } elseif ($HOD == 'disapprove') {
-                                                                            echo 'background-color: red;';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HOD == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104)';
+                                        } elseif ($HOD == 'disapprove') {
+                                            echo 'background-color: red;';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HOD</div>
                                         <div class="ant-tag " style="<?php if (
-                                                                            $OM == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104)';
-                                                                        } elseif ($OM == 'disapprove') {
-                                                                            echo 'background-color: red;';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $OM == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104)';
+                                        } elseif ($OM == 'disapprove') {
+                                            echo 'background-color: red;';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             OM</div>
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HR == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104)';
-                                                                        } elseif ($HR == 'disapprove') {
-                                                                            echo 'background-color: red;';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HR == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104)';
+                                        } elseif ($HR == 'disapprove') {
+                                            echo 'background-color: red;';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HR</div>
                                     </td>
-                                    <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i class="fa fa-folder"></i></button></td>
 
+
+                                    <td>
+                                        <?php $pdf_base64 = base64_encode($recEmpData[$i]['attachment']); ?>
+                                        <button class="attachment-btn" data-pdf="<?php echo $pdf_base64 ?>"
+                                            data-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
+                                            onclick="showPdfModal(this)">
+                                            <i class="fa fa-folder"></i>
+                                        </button>
                                     </td>
+
+
                                     <?php
                                     $clearnace_attachment_found = false;
                                     if ($recEmpData[$i]['clearance_attachment'] != null)
@@ -255,26 +270,31 @@
 
                                     if ($clearnace_attachment_found) {
 
-                                    ?>
-                                        <td><button class="clearance-attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i class="fa fa-folder"></i></button></td>
+                                        ?>
+                                        <td><button class="clearance-attachment-btn"
+                                                data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i
+                                                    class="fa fa-folder"></i></button></td>
 
                                         </td>
 
-                                    <?php
-                                    } else  if (
+                                        <?php
+                                    } else if (
                                         $HOD == 'approved'
                                     ) {
 
-                                    ?>
+                                        ?>
 
-                                        </td>
+                                            </td>
 
-                                        <td>
-                                            <button type="button" class="btn btn-primary modal-button open-add-clearance-modal" href="#myModal3" data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>" data-toggle="modal" data-target="#myModal">Add Clearance Form</button>
+                                            <td>
+                                                <button type="button" class="btn btn-primary modal-button open-add-clearance-modal"
+                                                    href="#myModal3"
+                                                    data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>"
+                                                    data-toggle="modal" data-target="#myModal">Add Clearance Form</button>
 
-                                        </td>
+                                            </td>
 
-                                    <?php
+                                        <?php
                                     }
                                     ?>
 
@@ -291,7 +311,7 @@
     <div id="myModal1" class="modal">
 
         <div class="modal-dialog" role="document">
-            <form name="add-leave-formx" method="post">
+            <form name="add-leave-formx" method="post" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addClaimModalLabel">Add Leave</h5>
@@ -327,17 +347,20 @@
                         </div>
 
 
+
                         <div class="form-group">
-                            <label for="leave-attachments">Leave Attachment (Please add attachment)</label>
+                            <label for="leave-attachments">PDF File (Please submit Leave application form)</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="leave-attachments" name="leave-attachments" accept=".pdf">
+                                <input type="file" class="custom-file-input" id="leave-attachments"
+                                    name="leave-attachments" accept=".pdf">
                                 <label class="custom-file-label" for="leave-attachments">Choose file</label>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="add-leave-submit" name="add_leave_submit" type="submit" class="btn btn-primary">Add Leave</button>
+                        <button id="add-leave-submit" name="add_leave_submit" type="submit" class="btn btn-primary">Add
+                            Leave</button>
                     </div>
 
                 </div>
@@ -363,14 +386,16 @@
                         <div class="form-group">
                             <label for="clearance-attachments">Clearnce Attachment (Please add attachment)</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="clearance-attachments" name="clearance-attachments" accept=".pdf" multiple>
+                                <input type="file" class="custom-file-input" id="clearance-attachments"
+                                    name="clearance-attachments" accept=".pdf" multiple>
                                 <label class="custom-file-label" for="clearance-attachments">Choose file</label>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="add-clearance-leave-submit" name="add_clearance_form_submit" type="submit" class="btn btn-primary">Save</button>
+                        <button id="add-clearance-leave-submit" name="add_clearance_form_submit" type="submit"
+                            class="btn btn-primary">Save</button>
                     </div>
 
                 </div>
@@ -420,6 +445,36 @@
 
 
     <script>
+        function showPdfModal(button) {
+            const pdfBase64 = button.dataset.pdf;
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+            const closeButton = document.createElement('span');
+            closeButton.className = 'close';
+            closeButton.innerHTML = '&times;';
+            closeButton.onclick = function () {
+                modal.style.display = 'none';
+            };
+            const embedElement = document.createElement('embed');
+            embedElement.type = 'application/pdf';
+            embedElement.width = '100%';
+            embedElement.height = '100%';
+            embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+            const leaveIdInput = document.createElement('input');
+            leaveIdInput.type = 'hidden';
+            leaveIdInput.name = 'leave_id';
+            leaveIdInput.id = 'leave_id';
+            leaveIdInput.value = button.dataset.Id;
+            modalContent.appendChild(leaveIdInput);
+
+            modalContent.appendChild(closeButton);
+            modalContent.appendChild(embedElement);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+        }
         var btn = document.querySelectorAll("button.modal-button");
 
         // All page modals
@@ -430,7 +485,7 @@
 
         // When the user clicks the button, open the modal
         for (var i = 0; i < btn.length; i++) {
-            btn[i].onclick = function(e) {
+            btn[i].onclick = function (e) {
                 e.preventDefault();
                 modal = document.querySelector(e.target.getAttribute("href"));
                 modal.style.display = "block";
@@ -439,7 +494,7 @@
 
         // When the user clicks on <span> (x), close the modal
         for (var i = 0; i < spans.length; i++) {
-            spans[i].onclick = function() {
+            spans[i].onclick = function () {
                 for (var index in modals) {
                     if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
                 }
@@ -447,7 +502,7 @@
         }
 
         // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 for (var index in modals) {
                     if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
@@ -457,9 +512,9 @@
 
         $.widget.bridge('uitooltip', $.ui.tooltip);
 
-        (function($) {
-            $(document).ready(function() {
-                $('#no-of-days').change(function() {
+        (function ($) {
+            $(document).ready(function () {
+                $('#no-of-days').change(function () {
                     var days = $(this).val();
                     var startDate = new Date();
                     startDate.setDate(startDate.getDate() + parseInt(days));
@@ -476,93 +531,10 @@
 
 
 
-        $(document).ready(function() {
-            // Attach a click event handler to the attachment buttons
-            $(".attachment-btn").on("click", function() {
-                // Get the expense ID from the data-id attribute of the button
-                var id = $(this).data("id");
-                var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/get_attachment/get_leave_attachment';
-                $.ajax({
-                    url: __table_url,
-                    "data": {
-                        "id": id
-                    },
-                    type: 'POST',
-                    dataType: "json",
-                    success: function(data) {
-
-                        console.log(data);
-
-                        var images = [];
-                        // Loop through the binary data and convert it to base64-encoded strings
-                        for (var i = 0; i < data.result.length; i++) {
-                            images.push("data:application/pdf;base64," + (data.result[i]));
-                        }
-
-                        // Loop through the PDFs and create a modal for each one
-                        for (var i = 0; i < images.length; i++) {
-                            // Create a modal to display the PDF
-                            var modal = $('<div id="myModal' + i + '" class="modal"></div>');
-
-                            // Create a modal dialog
-                            var dialog = $('<div class="modal-dialog" role="document"></div>');
-
-                            // Create a modal content container
-                            var content = $('<div class="modal-content"></div>');
-
-                            // Create a modal header
-                            var header = $('<div class="modal-header"></div>');
-
-                            // Create a modal title
-                            var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachment ' + i + '</h5>');
-
-                            // Add the title to the header
-                            header.append("Attachment");
-
-                            // Add the header to the content
-                            content.append(header);
-
-                            // Create an object tag for the PDF
-                            var pdf = $('<object>').attr('data', images[i]).attr('height', '100%').attr('width', '100%').attr('type', 'application/pdf');
-
-                            // Create an embed tag for the PDF (for older browsers)
-                            // var embed = $('<embed>').attr('src', images[i]).attr('height', '100%').attr('width', '100%').attr('type', 'application/pdf');
-
-                            // Create a wrapper for the object and embed tags
-                            var pdfWrapper = $('<div>').addClass('pdf-wrapper').append(pdf); //.append(embed);
-
-                            // Add the PDF wrapper to the content
-                            content.append(pdfWrapper);
-
-                            // Add the content to the dialog
-                            dialog.append(content);
-
-                            // Add the dialog to the modal
-                            modal.append(dialog);
-
-                            // Add the modal to the page and show it
-                            $('body').append(modal);
-                            modal.show();
-
-                            // Attach a mouseup event handler to the modal
-                            modal.on('mouseup', function(e) {
-                                // If the clicked element is not inside the modal content, close the modal
-                                if (!$(e.target).closest('.modal-content').length) {
-                                    modal.hide();
-                                }
-                            });
-                        }
+        $(document).ready(function () {
 
 
-                    },
-                    error: function(xhr, status, error) {
-                        console.log("Error: " + error);
-                    }
-                });
-            });
-
-
-            $(".clearance-attachment-btn").on("click", function() {
+            $(".clearance-attachment-btn").on("click", function () {
                 // Get the expense ID from the data-id attribute of the button
                 var id = $(this).data("id");
                 var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/get_attachment/get_clearance_leave_attachment';
@@ -573,7 +545,7 @@
                     },
                     type: 'POST',
                     dataType: "json",
-                    success: function(data) {
+                    success: function (data) {
 
                         console.log(data);
 
@@ -629,7 +601,7 @@
                             modal.show();
 
                             // Attach a mouseup event handler to the modal
-                            modal.on('mouseup', function(e) {
+                            modal.on('mouseup', function (e) {
                                 // If the clicked element is not inside the modal content, close the modal
                                 if (!$(e.target).closest('.modal-content').length) {
                                     modal.hide();
@@ -639,7 +611,7 @@
 
 
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.log("Error: " + error);
                     }
                 });
