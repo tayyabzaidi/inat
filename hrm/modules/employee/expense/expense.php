@@ -355,7 +355,7 @@
             $.ajax({
                 url: __table_url,
                 "data": {
-                    "expenseId": expenseId
+                    "foreignId": expenseId
                 },
                 type: 'POST',
                 dataType: "json",
@@ -469,37 +469,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdf_hex = bin2hex($attachment_data);
             $pdf_hex = '0x' . $pdf_hex;
-            $attachment = $pdo->query("INSERT INTO attachment( attachment, expenseId) VALUES ('$pdf_hex','$expenseId[0]['id']')");
+            $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId) VALUES ('$pdf_hex','$expenseId[0]['id']')");
         }
 
     }
 }
 ?>
 
-<!-- 
-            <script>
-
-    function detailedExpenseInfo(expenseId, comment) {
-      // Make an AJAX request to the PHP script to get the item data
-      $.ajax({
-        url: "getExpenseAttachment.php",
-        type: "POST",
-        data: {
-          expenseId: expenseId,
-          comment: comment
-        },
-        dataType: "text",
-        success: function(data) {
-          // Your code to view the item goes here, using the returned data
-          console.log(data+'sfdasfsastassfsauhasihfdasidi');
-          console.log("Success");
-        },
-        error: function(xhr, status, error) {
-          // Handle errors
-          console.log("Error: " + error );
-        }
-      });
-    }
-  </script> -->
 
 </html>

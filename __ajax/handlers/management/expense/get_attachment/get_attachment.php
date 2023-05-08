@@ -1,9 +1,9 @@
 <?php
-$expenseId = $_POST["expenseId"];
+$expenseId = $_POST["foreignId"];
 // Connect to the database
 $pdo->bind('id', $expenseId);
 $result = $pdo->query(
-    "SELECT attachment FROM attachment WHERE expenseId = :id"
+    "SELECT attachment FROM attachment WHERE foreignId = :id"
 );
 for ($i = 0; $i < count($result); $i++) {
 

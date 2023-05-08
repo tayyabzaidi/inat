@@ -38,7 +38,7 @@
         }
 
         .modal-dialog {
-            height: 120%;
+            height: 35%;
             max-width: 80%;
             margin: 1.75rem auto;
         }
@@ -144,7 +144,7 @@
                             <th>Name</th>
                             <th>Form</th>
                             <th>Total Amount</th>
-                            <th>Attachmnet</th>
+                            <th>Attachment</th>
                             <th>Approve</th>
                             <th>Disapprove</th>
                         </tr>
@@ -184,7 +184,7 @@
                                 </td>
 
                                 <td>
-                                    <form action="#" method="POST">
+                                    <form action="#" method="POST" id="myForm">
                                         <!-- other form inputs -->
                                         <label>
                                             <input type="checkbox" name="status" value="approve"
@@ -210,7 +210,7 @@
                                     $isChecked = $s[0]['status'] == "disapprove";
 
                                     echo $isChecked; ?>
-                                    <form action="#" method="POST">
+                                    <form action="#" method="POST" id="myForm">
                                         <!-- other form inputs -->
                                         <label>
                                             <input type="checkbox" name="status" value="disapprove"
@@ -305,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $.ajax({
                 url: __table_url,
                 "data": {
-                    "expenseId": expenseId
+                    "foreignId": expenseId
                 },
                 type: 'POST',
                 dataType: "json",
@@ -348,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     // Loop through the images and create image tags
                     for (var i = 0; i < images.length; i++) {
-                        var img = $('<img>').attr('src', images[i]).attr('height', 200).attr('width', 200);
+                        var img = $('<img>').attr('src', images[i]).attr('height', 200).attr('width', 200).css('margin-right', '15px');
                         imageContainer.append(img);
                     }
 
@@ -384,54 +384,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     });
 
 </script>
-
-<!-- The Modal -->
-<!-- 
- <div id="myModal2" class="modal">
-
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>
-                                </div>
-                                <form>
-                                    <label>ID:</label>
-
-                                    <input type="text" id="idField" name="idField" readonly>
-                                </form>
-                                <div class="modal-body">
-                       <?php
-                       // Connect to the database
-                       //    echo "<script>expenseId</script>";
-                       $result = $pdo->query(
-                           'SELECT attachment FROM attachment where expenseId=1;'
-                       );
-                       echo "<div class='modal-image-container'>";
-                       foreach ($result as $blob) {
-                           // Convert the binary data to a base64-encoded string
-                           $base64Data = base64_encode($blob['attachment']);
-                           // Create an img tag with the src set to a data URI that includes the base64-encoded data
-                           echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
-                               base64_encode($blob['attachment']) .
-                               "'  height='200px' width='200px' role='presentation'>";
-                       }
-                       echo "</div>";
-
-
-                       ?>
-            </div>
-        </div>
-    </div>
-
-</div> 
-
-<div id="myModal" class="modal">
-   
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 id="modal-title">Attachment</h2>
-        <img id="attachment-img" src="" alt="">
-    </div>
-</div>-->
 
 </html>

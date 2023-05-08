@@ -72,7 +72,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a href="<?php echo __APP_URL__ . 'management/employees'; ?>" style="font-size: 13px; text-decoration: underline;"><i class="fa fa-edit"></i> Manage
+                    <a href="<?php echo __APP_URL__ . 'management/employees'; ?>"
+                        style="font-size: 13px; text-decoration: underline;"><i class="fa fa-edit"></i> Manage
                         Employees</a>
                 </div>
 
@@ -95,7 +96,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a href="<?php echo __APP_URL__ . 'management/departments'; ?>" style="font-size: 13px; text-decoration: underline;"><i class="fa  fa-edit"></i> Manage
+                    <a href="<?php echo __APP_URL__ . 'management/departments'; ?>"
+                        style="font-size: 13px; text-decoration: underline;"><i class="fa  fa-edit"></i> Manage
                         Departments</a>
                 </div>
             </div>
@@ -109,11 +111,16 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Manage Types</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <ul style="font-size:13px; list-style: none; margin: 2px; padding: 0px; padding-top:5px;">
-                                    <li><a href="<?php echo __APP_URL__ . 'management/leave-types'; ?>" style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i>
+                                <ul
+                                    style="font-size:13px; list-style: none; margin: 2px; padding: 0px; padding-top:5px;">
+                                    <li><a href="<?php echo __APP_URL__ . 'management/leave-types'; ?>"
+                                            style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i>
                                             Leaves</a></li>
-                                    <li><a href="<?php echo __APP_URL__ . 'management/visa-types'; ?>" style="font-size: 13px; line-height: 2;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i> Visas</a></li>
-                                    <li><a href="<?php echo __APP_URL__ . 'management/ticket-types'; ?>" style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i>
+                                    <li><a href="<?php echo __APP_URL__ . 'management/visa-types'; ?>"
+                                            style="font-size: 13px; line-height: 2;"><i
+                                                class="fa  fa-arrow-<?php echo $_right; ?>"></i> Visas</a></li>
+                                    <li><a href="<?php echo __APP_URL__ . 'management/ticket-types'; ?>"
+                                            style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i>
                                             Tickets</a></li>
                                 </ul>
                             </div>
@@ -137,7 +144,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                     <hr>
 
                     <div class="mb-2" align="<?php echo $_right; ?>">
-                        <a href="<?php echo __APP_URL__ . 'management/employees'; ?>" class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> Manage Employees </a>
+                        <a href="<?php echo __APP_URL__ . 'management/employees'; ?>" class="btn btn-md btn-primary"> <i
+                                class="fa fa-1x fa-users"></i> Manage Employees </a>
                     </div>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
@@ -172,7 +180,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                 <h3>Claim List</h3>
                 <hr>
                 <div class="mb-2" align="<?php echo $_right; ?>">
-                    <a href="<?php echo __APP_URL__ . 'management/expenses'; ?>" class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> Manage Expense Claims </a>
+                    <a href="<?php echo __APP_URL__ . 'management/expenses'; ?>" class="btn btn-md btn-primary"> <i
+                            class="fa fa-1x fa-users"></i> Manage Expense Claims </a>
                 </div>
 
 
@@ -227,7 +236,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                     <h3>Leave List</h3>
                     <hr>
                     <div class="mb-2" align="<?php echo $_right; ?>">
-                        <a href="<?php echo __APP_URL__ . 'management/leave-management'; ?>" class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> Manage Leave Requests</a>
+                        <a href="<?php echo __APP_URL__ . 'management/leave-management'; ?>"
+                            class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> Manage Leave Requests</a>
                     </div>
 
 
@@ -239,7 +249,6 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                                 <th>No of days</th>
                                 <th>Leave type</th>
                                 <th>Status</th>
-                                <th>PDF</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -298,41 +307,38 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                                         ?>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HOD == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($HOD == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HOD == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($HOD == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HOD</div>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HR == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($HR == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HR == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($HR == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HR</div>
                                         <div class="ant-tag " style="<?php if (
-                                                                            $OM == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($OM == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $OM == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($OM == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             OM</div>
                                     </td>
 
-                                    <td>
-                                        <button class="modal-button" id="employee-data-btn" href="#myModal2" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>"><i class="fa fa-folder"></i></button>
-                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>

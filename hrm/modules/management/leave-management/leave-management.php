@@ -43,20 +43,19 @@
         }
 
         .modal-dialog {
-            height: 150%;
-            max-width: 80%;
-            margin: 1.75rem auto;
+            height: 100%;
+            max-width: 100%;
         }
 
         .modal-content {
             background-color: #fefefe;
             margin: auto;
-            margin-top: 10%;
+            margin-top: 5%;
             margin-bottom: 10%;
             padding: 20px;
             border: 1px solid #888;
             width: 60%;
-            height: 40%;
+            height: 80%;
         }
 
         .close {
@@ -127,6 +126,7 @@
                                 <th>Leave type</th>
                                 <th>Status</th>
                                 <th>PDF</th>
+                                <th>Other Forms</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -186,43 +186,56 @@
                                         ?>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HOD == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($HOD == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HOD == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($HOD == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HOD</div>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HR == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($HR == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HR == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($HR == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HR</div>
                                         <div class="ant-tag " style="<?php if (
-                                                                            $OM == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($OM == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $OM == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($OM == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             OM</div>
                                     </td>
 
                                     <td>
-                                        <button class="modal-button" id="employee-data-btn" href="#myModal2" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>"><i class="fa fa-folder"></i></button>
+                                        <button data-pdf="<?php echo
+                                            base64_encode($recEmpData[$i]['attachment']);
+
+                                        ?>" data-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
+                                            onclick="showPdfModal(this)">
+                                            <i class="fa fa-folder "></i>
+                                        </button>
+                                    </td>
+                                    <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
+                                            style="background: none;"><i class="fa fa-folder"></i></button></td>
+
                                     </td>
                                     <td>
-                                        <button class="modal-button approve-disapprove-btn" id="<?php echo $recEmpData[$i]['id']; ?>" href="#myModal1" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>">Approve/Disapprove</button>
+                                        <button class="modal-button approve-disapprove-btn"
+                                            id="<?php echo $recEmpData[$i]['id']; ?>" href="#myModal1"
+                                            style="background: none;"
+                                            data-id="<?php echo $recEmpData[$i]['id']; ?>">Approve/Disapprove</button>
                                     </td>
 
                                 </tr>
@@ -233,44 +246,6 @@
             </div>
         </div>
     </div>
-
-    <!-- The Modal -->
-    <div id="myModal2" class="modal">
-
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <?php
-                    $result = $pdo->query(
-                        'SELECT el.attachment from employee_leaves el where id = 1;'
-                    );
-                    echo "<div class='modal-image-container'>";
-                    foreach ($result as $blob) {
-                        // Convert the binary data to a base64-encoded string
-                        $base64Data = base64_encode($blob['attachment']);
-                        // Create an img tag with the src set to a data URI that includes the base64-encoded data
-                        echo "<img class='claim-view-images' src='data:image/jpeg;base64," .
-                            base64_encode($blob['attachment']) .
-                            "'  height='200px' width='200px' role='presentation'>";
-                    }
-                    echo '</div>';
-                    ?>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
 
     <!-- The Modal -->
     <div id="myModal1" class="modal">
@@ -308,6 +283,36 @@
 
 
     <script>
+        function showPdfModal(button) {
+            const pdfBase64 = button.dataset.pdf;
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+            const closeButton = document.createElement('span');
+            closeButton.className = 'close';
+            closeButton.innerHTML = '&times;';
+            closeButton.onclick = function () {
+                modal.style.display = 'none';
+            };
+            const embedElement = document.createElement('embed');
+            embedElement.type = 'application/pdf';
+            embedElement.width = '100%';
+            embedElement.height = '100%';
+            embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+            const leaveIdInput = document.createElement('input');
+            leaveIdInput.type = 'hidden';
+            leaveIdInput.name = 'leave_id';
+            leaveIdInput.id = 'leave_id';
+            leaveIdInput.value = button.dataset.id;
+            modalContent.appendChild(leaveIdInput);
+
+            modalContent.appendChild(closeButton);
+            modalContent.appendChild(embedElement);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+        }
         // JavaScript code here
         var btn = document.querySelectorAll("button.modal-button");
 
@@ -319,7 +324,7 @@
 
         // When the user clicks the button, open the modal
         for (var i = 0; i < btn.length; i++) {
-            btn[i].onclick = function(e) {
+            btn[i].onclick = function (e) {
                 e.preventDefault();
                 modal = document.querySelector(e.target.getAttribute("href"));
                 modal.style.display = "block";
@@ -328,7 +333,7 @@
 
         // When the user clicks on <span> (x), close the modal
         for (var i = 0; i < spans.length; i++) {
-            spans[i].onclick = function() {
+            spans[i].onclick = function () {
                 for (var index in modals) {
                     if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
                 }
@@ -336,7 +341,7 @@
         }
 
         // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 for (var index in modals) {
                     if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
@@ -344,9 +349,97 @@
             }
         }
 
-        $('.approve-disapprove-btn').click(function() {
+        $('.approve-disapprove-btn').click(function () {
             var leaveStatusId = $(this).data('id');
             $('#leaveStatusId').val(leaveStatusId);
+        });
+
+
+        $(document).ready(function () {
+            // Attach a click event handler to the attachment buttons
+            $(".attachment-btn").on("click", function () {
+                // Get the expense ID from the data-id attribute of the button
+                var leaveId = $(this).data("id");
+                var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
+                $.ajax({
+                    url: __table_url,
+                    "data": {
+                        "foreignId": leaveId
+                    },
+                    type: 'POST',
+                    dataType: "json",
+                    success: function (data) {
+                        var images = [];
+                        if (data.result === null) {
+                            // Display an alert message if there are no attachments
+                            alert("There are no attachments.");
+                            return;
+                        }
+                        // Loop through the binary data and convert it to base64-encoded strings
+                        for (var i = 0; i < data.result.length; i++) {
+                            images.push("data:application/pdf;base64," + (data.result[i]));
+                        }
+                        // Create a modal to display the images
+                        var modal = $('<div id="myModal2" class="modal"></div>');
+
+                        // Create a modal dialog
+                        var dialog = $('<div class="modal-dialog" role="document"></div>');
+
+                        // Create a modal content container
+                        var content = $('<div class="modal-content"></div>');
+
+                        // Create a modal header
+                        var header = $('<div class="modal-header"></div>');
+
+                        // Create a modal title
+                        var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
+
+                        // Add the title to the header
+                        header.append(title);
+
+                        // Add the header to the content
+                        content.append(header);
+                        var body = $('<div class="modal-body"></div>');
+
+                        // Create a container for the images
+                        var imageContainer = $('<div class="modal-image-container"></div>');
+
+                        // Loop through the images and create image tags
+                        for (var i = 0; i < images.length; i++) {
+                            var img = $('<object>').attr('data', images[i]).attr('type', 'application/pdf').attr('height', 400).attr('width', 300).attr("margin-right", 10).css('margin-right', '15px');
+
+                            imageContainer.append(img);
+                        }
+
+                        // Add the image container to the body
+                        body.append(imageContainer);
+
+                        // Add the body to the content
+                        content.append(body);
+
+                        // Add the content to the dialog
+                        dialog.append(content);
+
+                        // Add the dialog to the modal
+                        modal.append(dialog);
+
+                        // Add the modal to the page and show it
+                        $('body').append(modal);
+                        modal.show();
+
+                        // Attach a mouseup event handler to the modal
+                        modal.on('mouseup', function (e) {
+                            // If the clicked element is not inside the modal content, close the modal
+                            if (!$(e.target).closest('.modal-content').length) {
+                                modal.hide();
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
+                });
+            });
         });
     </script>
 </body>
