@@ -151,9 +151,27 @@
                     </thead>
                     <tbody>
                         <?php
+
+
+                        $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
+                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
+                        $employeeId = isset($_POST['employeeId']) ? $_POST['employeeId'] : null;
+
+                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id';
+
+                        if (!empty($dateFrom) && !empty($dateTo)) {
+                            // User has provided both date filters
+                            $sql .= " WHERE ee.date BETWEEN '$dateFrom' AND '$dateTo' ORDER BY ee.`date`;";
+                        } else if (!empty($employeeId)) {
+                            $sql .= " WHERE e.empId ='$employeeId' ORDER BY ee.`date`;";
+                        } else
+                            $sql .= " ORDER BY ee.`date`;";
+
+
                         $recEmpData = $pdo->query(
-                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id ORDER BY `date`;'
+                            $sql
                         );
+
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
@@ -241,6 +259,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $expenseID = $_POST['expenseId'];
     $pdo->bind('employeeId', $_SESSION['empId']);
     $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
+
+
+
+
     if (empty($getDesignation))
         echo 'invalid user';
 
@@ -279,12 +301,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $setStatus = $getStatus[0]['id'];
         }
     }
-
+    echo $status;
+    echo $setStatus;
     if ($setStatus != 0) {
         $pdo->bind("id", $setStatus);
         $pdo->bind("expenseId", $expenseID);
         //issue---------------------------------------------------------------------------------------------------------------
         $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
+        echo "<meta http-equiv='refresh' content='0'>";
+
     }
 }
 ?>

@@ -437,8 +437,7 @@
 </body>
 <?php
 $employeeId = $_SESSION['empId'];
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -479,6 +478,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo 'Error inserting data';
         }
     }
+    echo "<meta http-equiv='refresh' content='0'>";
 }
 
 ?>
