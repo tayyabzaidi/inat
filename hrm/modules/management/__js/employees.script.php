@@ -1,7 +1,7 @@
 <?php
 $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-label="Category Options" >'
-        . '<button  dt_btn_action="edit"    type="button" class="btn btn-sm btn-primary" style="font-size:12px;"> <i class="fa fa-edit"></i> Manage</button>'
-        . '</div>';
+    . '<button  dt_btn_action="edit"    type="button" class="btn btn-sm btn-primary" style="font-size:12px;"> <i class="fa fa-edit"></i> Manage</button>'
+    . '</div>';
 ?>
 
 
@@ -27,19 +27,19 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 }
             },
             "columns": [
-                {data: 'empId'},
-                {data: 'empCode'},
-                {data: 'info_fullname_en'},
-                {data: 'info_fathername_en'},
-                {data: 'options'}
+                { data: 'empId' },
+                { data: 'empCode' },
+                { data: 'info_fullname_en' },
+                { data: 'info_fathername_en' },
+                { data: 'options' }
             ],
             "columnDefs": [{
-                    "targets": 4,
-                    "searchable": false,
-                    "data": null,
-                    "orderable": false,
-                    "defaultContent": '<?php echo $__dt_buttons_group; ?>'
-                }],
+                "targets": 4,
+                "searchable": false,
+                "data": null,
+                "orderable": false,
+                "defaultContent": '<?php echo $__dt_buttons_group; ?>'
+            }],
             "destroy": true,
             "lengthMenu": [5, 10, 25, 50, 100, 200],
             "ordering": true,
@@ -116,7 +116,9 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
         $("#_create_record_modal").modal('show');
     }
 
-
+    function __save_excel_employees() {
+        $("#myModal1").modal('show');
+    }
     function __manage_modal(empId) {
 
         $("#_create_record_modal").modal('hide');

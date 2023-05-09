@@ -132,9 +132,9 @@
                                 </td>
                                 <td class="" style="text-align: left;">
                                     <?php
-                                    // $pd->bind('expenseId',$recEmpData[$i]['id']);
+                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
                                     $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=1;'
+                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=:expenseId;'
                                     );
                                     $HOD = false;
                                     $AM = false;

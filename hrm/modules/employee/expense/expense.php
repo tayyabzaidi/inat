@@ -439,7 +439,7 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //    Get form data
-    $unique_id = substr(uniqid(), 0, 5);
+    $unique_id = random_int(10000, 99999);
     $date = date('Y-m-d');
     $employee_id = $_SESSION['empId'];
     $total_amount = $_POST['claim-amount'];

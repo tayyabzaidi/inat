@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => '63054da3c4f68d26d74ebe1a35b5f5c8d9a29fe7',
         'name' => 'iibsys/iibsys',
         'dev' => true,
     ),
     'versions' => array(
         'iibsys/iibsys' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => '63054da3c4f68d26d74ebe1a35b5f5c8d9a29fe7',
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(
@@ -29,12 +29,21 @@
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
-            'pretty_version' => 'v6.5.0',
-            'version' => '6.5.0.0',
+            'pretty_version' => 'v6.8.0',
+            'version' => '6.8.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
-            'reference' => 'a5b5c43e50b7fba655f793ad27303cd74c57363c',
+            'reference' => 'df16b615e371d81fb79e506277faea67a1be18f1',
+            'dev_requirement' => false,
+        ),
+        'phpoffice/phpexcel' => array(
+            'pretty_version' => '1.8.2',
+            'version' => '1.8.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpoffice/phpexcel',
+            'aliases' => array(),
+            'reference' => '1441011fb7ecdd8cc689878f54f8b58a6805f870',
             'dev_requirement' => false,
         ),
         'psr/log' => array(
@@ -51,6 +60,15 @@
             'provided' => array(
                 0 => '1.0.0',
             ),
+        ),
+        'tecnickcom/tcpdf' => array(
+            'pretty_version' => '6.6.2',
+            'version' => '6.6.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../tecnickcom/tcpdf',
+            'aliases' => array(),
+            'reference' => 'e3cffc9bcbc76e89e167e9eb0bbda0cab7518459',
+            'dev_requirement' => false,
         ),
     ),
 );
