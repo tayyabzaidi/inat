@@ -197,9 +197,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', 1);
                         $recEmpData = $pdo->query(
-                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
+                            'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id ORDER BY `date` LIMIT 5;'
                         );
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>

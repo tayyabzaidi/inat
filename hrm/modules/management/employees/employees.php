@@ -323,8 +323,8 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 </div>
 
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
 include '/opt/lampp/htdocs/inat/vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
