@@ -469,7 +469,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdf_hex = bin2hex($attachment_data);
             $pdf_hex = '0x' . $pdf_hex;
-            $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId) VALUES ('$pdf_hex','$expenseId[0]['id']')");
+            $pdo->bind('expenseId', $expenseId[0]['id']);
+            $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId) VALUES ('$pdf_hex',:expenseId)");
         }
 
     }

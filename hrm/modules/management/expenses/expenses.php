@@ -38,7 +38,7 @@
         }
 
         .modal-dialog {
-            height: 35%;
+            height: 150%;
             max-width: 80%;
             margin: 1.75rem auto;
         }
