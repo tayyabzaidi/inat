@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="<?php echo $lang_code; ?>" dir="<?php echo $page_direction; ?>">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <head>
     <style>
@@ -12,21 +11,22 @@
             left: 0;
             top: 0;
             width: 100%;
-            height: 125%;
+            height: 100%;
             overflow: auto;
         }
 
-        .img {
-            margin-right: 30px
+        .modal-image-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow images to wrap to a new line if they exceed the container width */
         }
 
-        .modal-dialog {
-            height: 120%;
-            max-width: 80%;
-            margin: 1.75rem auto;
+        .modal-image {
+            width: 10%;
+            padding: 5px;
+            margin-right: 10px;
+            /* Add some spacing between the images */
         }
-
-
 
         .claim-view-images {
             border: 1px solid #f0f2f5;
@@ -113,12 +113,12 @@
                             <th>Date</th>
                             <th>Status</th>
                             <th>Total Amount</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $pdo->bind('employeeId', $_SESSION['empId']);
+                        $employeeId = $_SESSION['empId'];
+                        $pdo->bind('employeeId', $employeeId);
                         $recEmpData = $pdo->query(
                             'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE `employee_id`=:employeeId ORDER BY `date` LIMIT 5;'
                         );
@@ -164,29 +164,28 @@
                                     ?>
 
                                     <div class="ant-tag " style="<?php if (
-                                                                        $HOD == 'approved'
-                                                                    ) {
-                                                                        echo 'background-color: rgb(135, 208, 104)';
-                                                                    } elseif ($HOD == 'disapprove') {
-                                                                        echo 'background-color: red;';
-                                                                    } else {
-                                                                        echo 'background-color: white';
-                                                                    } ?>">
+                                        $HOD == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($HOD == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
                                         HOD</div>
                                     <div class="ant-tag " style="<?php if (
-                                                                        $AM == 'approved'
-                                                                    ) {
-                                                                        echo 'background-color: rgb(135, 208, 104)';
-                                                                    } elseif ($AM == 'disapprove') {
-                                                                        echo 'background-color: red;';
-                                                                    } else {
-                                                                        echo 'background-color: white';
-                                                                    } ?>">
+                                        $AM == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($AM == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
                                         AM</div>
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
-                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>" style="background: none;"><i class="fa fa-folder"></i></button></td>
 
 
 
@@ -199,6 +198,51 @@
     </div>
 </div>
 
+
+<!-- The Modal -->
+<script>
+    var btn = document.querySelectorAll("button.modal-button");
+
+    // All page modals
+    var modals = document.querySelectorAll('.modal');
+
+    // Get the <span> element that closes the modal
+    var spans = document.getElementsByClassName("btn btn-secondary");
+    // When the user clicks the button, open the modal
+    for (var i = 0; i < btn.length; i++) {
+        btn[i].onclick = function (e) {
+            e.preventDefault();
+            modal = document.querySelector(e.target.getAttribute("href"));
+            modal.style.display = "block";
+        }
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    for (var i = 0; i < spans.length; i++) {
+        spans[i].onclick = function () {
+            for (var index in modals) {
+                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+            }
+        }
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target.classList.contains('modal')) {
+            for (var index in modals) {
+                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+            }
+        }
+    }
+</script>
+
+<?php
+
+$employeeId = $_SESSION['empId'];
+
+?>
+
+
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
@@ -207,29 +251,26 @@
 
 
                 <div class="card-body">
-                    <?php
-
-                    $pdo->bind('employeeId', $_SESSION['empId']);
-                    $recEmpData = $pdo->query(
-                        'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id WHERE el.emp_id=:employeeId order by id desc limit 5'
+                    <?php $recEmpData = $pdo->query(
+                        'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id where e.empId = ' . $employeeId . ' order by id desc limit 5'
                     );
                     ?>
                     <h3>Leave List</h3>
                     <hr>
                     <div class="mb-2" align="<?php echo $_right; ?>">
-                        <a href="<?php echo __APP_URL__ . 'employee/leaves'; ?>" class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> All Leave Requests</a>
+                        <a href="<?php echo __APP_URL__ . 'employee/leaves'; ?>" class="btn btn-md btn-primary"> <i
+                                class="fa fa-1x fa-users"></i> Manage Leave Requests</a>
                     </div>
 
 
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <!-- <th>I.D</th>
-                                <th>Name</th>-->
+                                <!-- <th>I.D</th>-->
+                                <!--  <th>Name</th>-->
                                 <th>No of days</th>
                                 <th>Leave type</th>
                                 <th>Status</th>
-                                <th>PDF</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -237,8 +278,8 @@
                             <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                                 <tr>
                                     <!-- <td><?php echo $recEmpData[$i]['id']; ?>
-                                    </td>
-                                    <td><?php echo $recEmpData[$i]['name']; ?>
+                                    </td>-->
+                                    <!--   <td><?php echo $recEmpData[$i]['name']; ?>
                                     </td>-->
                                     <td><?php echo $recEmpData[$i]['no_of_days']; ?>
                                     </td>
@@ -288,41 +329,38 @@
                                         ?>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HOD == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($HOD == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HOD == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($HOD == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HOD</div>
 
                                         <div class="ant-tag " style="<?php if (
-                                                                            $HR == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($HR == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $HR == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($HR == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             HR</div>
                                         <div class="ant-tag " style="<?php if (
-                                                                            $OM == 'approved'
-                                                                        ) {
-                                                                            echo 'background-color: rgb(135, 208, 104); color:white';
-                                                                        } elseif ($OM == 'disapprove') {
-                                                                            echo 'background-color: red; color:white';
-                                                                        } else {
-                                                                            echo 'background-color: white';
-                                                                        } ?>">
+                                            $OM == 'approved'
+                                        ) {
+                                            echo 'background-color: rgb(135, 208, 104); color:white';
+                                        } elseif ($OM == 'disapprove') {
+                                            echo 'background-color: red; color:white';
+                                        } else {
+                                            echo 'background-color: white';
+                                        } ?>">
                                             OM</div>
                                     </td>
 
-                                    <td>
-                                        <button class="modal-button" id="employee-data-btn" href="#myModal2" style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>"><i class="fa fa-folder"></i></button>
-                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -331,105 +369,8 @@
             </div>
         </div>
     </div>
-</div>
 
-
-
-
-<script>
-    $(document).ready(function() {
-        // Attach a click event handler to the attachment buttons
-        $(".attachment-btn").on("click", function() {
-            // Get the expense ID from the data-id attribute of the button
-            var expenseId = $(this).data("id");
-            var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
-            $.ajax({
-                url: __table_url,
-                "data": {
-                    "expenseId": expenseId
-                },
-                type: 'POST',
-                dataType: "json",
-                success: function(data) {
-                    var images = [];
-                    if (data.result === null) {
-                        // Display an alert message if there are no attachments
-                        alert("There are no attachments.");
-                        return;
-                    }
-                    // Loop through the binary data and convert it to base64-encoded strings
-                    for (var i = 0; i < data.result.length; i++) {
-                        images.push("data:image/jpeg;base64," + (data.result[i]));
-                        console.log(images[i]);
-                    }
-                    // Create a modal to display the images
-                    var modal = $('<div id="myModal2" class="modal"></div>');
-
-                    // Create a modal dialog
-                    var dialog = $('<div class="modal-dialog" role="document"></div>');
-
-                    // Create a modal content container
-                    var content = $('<div class="modal-content"></div>');
-
-                    // Create a modal header
-                    var header = $('<div class="modal-header"></div>');
-
-                    // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
-
-                    // Add the title to the header
-                    header.append(title);
-
-                    // Add the header to the content
-                    content.append(header);
-                    var body = $('<div class="modal-body"></div>');
-
-                    // Create a container for the images
-                    var imageContainer = $('<div class="modal-image-container"></div>');
-
-                    // Loop through the images and create image tags
-                    for (var i = 0; i < images.length; i++) {
-                        var img = $('<img>').attr('class', 'img').attr('src', images[i]).attr('height', 350).attr('width', 250)
-                        imageContainer.append(img);
-                    }
-
-                    // Add the image container to the body
-                    body.append(imageContainer);
-
-                    // Add the body to the content
-                    content.append(body);
-
-                    // Add the content to the dialog
-                    dialog.append(content);
-
-                    // Add the dialog to the modal
-                    modal.append(dialog);
-
-                    // Add the modal to the page and show it
-                    $('body').append(modal);
-                    modal.show();
-
-                    // Attach a mouseup event handler to the modal
-                    modal.on('mouseup', function(e) {
-                        // If the clicked element is not inside the modal content, close the modal
-                        if (!$(e.target).closest('.modal-content').length) {
-                            modal.hide();
-                        }
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.log("Error: " + error);
-                }
-            });
-        });
-    });
-</script>
-
-
-
-
-
-<!-- 
+    <!-- 
             <script>
 
     function detailedExpenseInfo(expenseId, comment) {
