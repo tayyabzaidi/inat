@@ -1,7 +1,0 @@
-Time : 23:42:58
-SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'BY ee.`date`' at line 1
-
-Time : 23:42:58
-SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'BY ee.`date`' at line 1
-Raw SQL : SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_idORDER BY ee.`date`;
-

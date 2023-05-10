@@ -33,7 +33,8 @@ define('__SECTION_JS_PATH_', '__js/root.script.php');
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employees</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $stats->__get_active_employees(); ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <?php echo $stats->__get_active_employees(); ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -41,7 +42,9 @@ define('__SECTION_JS_PATH_', '__js/root.script.php');
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a href="<?php echo __APP_URL__ . 'management/employees'; ?>" style="font-size: 13px; text-decoration: underline;"><i class="fa fa-edit"></i>  Manage Employees</a>
+                    <a href="<?php echo __APP_URL__ . 'management/employees'; ?>"
+                        style="font-size: 13px; text-decoration: underline;"><i class="fa fa-edit"></i> Manage
+                        Employees</a>
                 </div>
 
             </div>
@@ -54,7 +57,8 @@ define('__SECTION_JS_PATH_', '__js/root.script.php');
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Departments</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $stats->__get_active_departments(); ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <?php echo $stats->__get_active_departments(); ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-building fa-2x text-gray-300"></i>
@@ -62,7 +66,9 @@ define('__SECTION_JS_PATH_', '__js/root.script.php');
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a href="<?php echo __APP_URL__ . 'management/departments'; ?>" style="font-size: 13px; text-decoration: underline;"><i class="fa  fa-edit"></i>  Manage Departments</a>
+                    <a href="<?php echo __APP_URL__ . 'management/departments'; ?>"
+                        style="font-size: 13px; text-decoration: underline;"><i class="fa  fa-edit"></i> Manage
+                        Departments</a>
                 </div>
             </div>
         </div>
@@ -75,10 +81,17 @@ define('__SECTION_JS_PATH_', '__js/root.script.php');
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Manage Types</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <ul style="font-size:13px; list-style: none; margin: 2px; padding: 0px; padding-top:5px;">
-                                    <li><a href="<?php echo __APP_URL__ . 'management/leave-types'; ?>" style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i> Leaves</a></li>
-                                    <li><a href="<?php echo __APP_URL__ . 'management/visa-types'; ?>" style="font-size: 13px; line-height: 2;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i> Visas</a></li>
-                                    <li><a href="<?php echo __APP_URL__ . 'management/ticket-types'; ?>" style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i> Tickets</a></li>
+                                <ul
+                                    style="font-size:13px; list-style: none; margin: 2px; padding: 0px; padding-top:5px;">
+                                    <li><a href="<?php echo __APP_URL__ . 'management/leave-types'; ?>"
+                                            style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i>
+                                            Leaves</a></li>
+                                    <li><a href="<?php echo __APP_URL__ . 'management/visa-types'; ?>"
+                                            style="font-size: 13px; line-height: 2;"><i
+                                                class="fa  fa-arrow-<?php echo $_right; ?>"></i> Visas</a></li>
+                                    <li><a href="<?php echo __APP_URL__ . 'management/ticket-types'; ?>"
+                                            style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i>
+                                            Tickets</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -104,7 +117,8 @@ define('__SECTION_JS_PATH_', '__js/root.script.php');
                     <hr>
 
                     <div class="mb-2" align="<?php echo $_right; ?>">
-                        <a href="<?php echo __APP_URL__ . 'management/employees'; ?>" class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> Manage Employees </a>
+                        <a href="<?php echo __APP_URL__ . 'management/employees'; ?>" class="btn btn-md btn-primary"> <i
+                                class="fa fa-1x fa-users"></i> Manage Employees </a>
                     </div>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
@@ -130,4 +144,3 @@ define('__SECTION_JS_PATH_', '__js/root.script.php');
         </div>
     </div>
 </div>
-
