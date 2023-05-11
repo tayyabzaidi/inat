@@ -83,10 +83,10 @@
                     </form>
 
                     <form action="#" method="POST">
-                        <label for="employeeId">Employee ID:</label>
-                        <input type="text" id="employeeId" name="employeeId">
+                        <label for="employeeId">Employee:</label>
+                        <input type="text" id="employee" name="employee">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Employee ID</button>
+                            Employee</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -104,7 +104,7 @@
                         <?php
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
-                        $employeeId = isset($_POST['employeeId']) ? $_POST['employeeId'] : null;
+                        $employee = isset($_POST['employee']) ? $_POST['employee'] : null;
 
                         // Build the SQL query based on the provided filter values
                         $sql = 'SELECT s.id as id, e.info_fullname_en AS `name`, (date) AS latest_month_salary, slip,discrepancy_reason  FROM salary s join employees e on e.empId=s.employee_id  where date=(Select Max(date) from salary where s.employee_id=employee_id) ';
@@ -112,11 +112,11 @@
                         if (!empty($dateFrom) && !empty($dateTo)) {
                             // User has provided both date filters
                             $sql .= " AND s.date BETWEEN '$dateFrom' AND '$dateTo' GROUP BY employee_id ORDER BY e.info_fullname_en;";
-                        } else if (!empty($employeeId)) {
+                        } else if (!empty($employee)) {
                             // User has provided the employeeId filter
                             $sql = str_replace("MAX(date)", "date", $sql);
 
-                            $sql .= " AND employee_id = $employeeId  ORDER BY s.date;";
+                            $sql .= " AND e.info_fullname_en like '%" . $employee . "%'  ORDER BY s.date;";
 
                         } else
                             $sql .= "GROUP BY employee_id ORDER BY e.info_fullname_en;";
@@ -193,43 +193,37 @@
         modal.style.display = 'block';
     }
 
-    var btn = document.querySelectorAll("button.modal-button");
-
-
-    // All page modals
-    var modals = document.querySelectorAll('.modal');
-
-    // Get the <span> element that closes the modal
+    var btn = document.querySelectorAll(" button.modal-button"); // All page modals var
+    modals = document.querySelectorAll('.modal'); // Get the <span> element that closes
+                                    the modal
     var spans = document.getElementsByClassName("close");
 
     for (var i = 0; i < btn.length; i++) {
         btn[i].onclick = function (e) {
-            e.preventDefault();
-            modal = document.querySelector(e.target.getAttribute("href"));
+            e.preventDefault(); modal = document.querySelector(e.target.getAttribute("href"));
             modal.style.display = "block";
         }
-    }
-
-
-    // When the user clicks on <span> (x), close the modal
+    } // When the user clicks on <span> (x), close
+                                        the modal
     for (var i = 0; i < spans.length; i++) {
         spans[i].onclick = function () {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+            for (var
+                index in modals) {
+                if (typeof modals[index].style !== 'undefined')
+                    modals[index].style.display = "none";
             }
         }
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target.classList.contains('modal')) {
+    } // When the user clicks anywhere
+                                            outside of the modal, close it window.onclick = function (event) {
+        if
+            (event.target.classList.contains('modal')) {
             for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+                if
+                    (typeof modals[index].style !== 'undefined')
+                    modals[index].style.display = "none";
             }
         }
-    }
-
-</script>
+    } </script>
 
 
 <div id="myModal1" class="modal">
@@ -237,13 +231,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="height: 30%;">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Salary Slip</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">Salary Slip
+                </h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data" style="float: none;">
 
                     <div class="form-group">
-                        <label for="claim-pdf">PDF File (Salary Slip)</label>
+                        <label for="claim-pdf">PDF File (Salary
+                            Slip)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
                             <label class="custom-file-label" for="claim-pdf">Choose file</label>

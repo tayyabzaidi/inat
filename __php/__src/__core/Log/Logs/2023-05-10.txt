@@ -1,7 +1,0 @@
-Time : 12:22:08
-SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '27-5' for key 'unique'
-
-Time : 12:22:08
-SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '27-5' for key 'unique'
-Raw SQL : INSERT INTO employee_leave_status (leaveId,statusId,comments) VALUES ('27', '5', 'yeah it is approved')
-

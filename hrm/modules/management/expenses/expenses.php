@@ -130,10 +130,10 @@
                     </form>
 
                     <form action="#" method="POST">
-                        <label for="employeeId">Employee ID:</label>
-                        <input type="text" id="employeeId" name="employeeId">
+                        <label for="employeeId">Employee:</label>
+                        <input type="text" id="employee" name="employee">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Employee ID</button>
+                            Employee</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
@@ -155,15 +155,15 @@
 
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
-                        $employeeId = isset($_POST['employeeId']) ? $_POST['employeeId'] : null;
+                        $employee = isset($_POST['employee']) ? $_POST['employee'] : null;
 
                         $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id';
 
                         if (!empty($dateFrom) && !empty($dateTo)) {
                             // User has provided both date filters
                             $sql .= " WHERE ee.date BETWEEN '$dateFrom' AND '$dateTo' ORDER BY ee.`date`;";
-                        } else if (!empty($employeeId)) {
-                            $sql .= " WHERE e.empId ='$employeeId' ORDER BY ee.`date`;";
+                        } else if (!empty($employee)) {
+                            $sql .= " AND e.info_fullname_en like '%" . $employee . "%'  ORDER BY ee.date;";
                         } else
                             $sql .= " ORDER BY ee.`date`;";
 
@@ -260,58 +260,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pdo->bind('employeeId', $_SESSION['empId']);
     $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
 
-
-
-
-    if (empty($getDesignation))
-        echo 'invalid user';
-
-    if ($status == "approve") {
-        $setStatus = 0;
-        if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-            $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
-            $setStatus = $getStatus[0]['id'];
-        }
-        if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-            $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
-            $setStatus = $getStatus[0]['id'];
-        }
-        if ($getDesignation[0]['name'] == 'HR MANAGER') {
-            $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
-            if (!empty($getStatus)) {
+    if (!empty($getDesignation)) {
+        if ($status == "approve") {
+            $setStatus = 0;
+            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
                 $setStatus = $getStatus[0]['id'];
             }
-        }
-    }
-    if ($status == "disapprove") {
-        $setStatus = 0;
-        if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
-            $getStatus = $pdo->query("select id from status where status_name like ('HOD_d%');");
-            if (!empty($getStatus))
+            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
                 $setStatus = $getStatus[0]['id'];
+            }
+            if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
+                if (!empty($getStatus)) {
+                    $setStatus = $getStatus[0]['id'];
+                }
+            }
         }
-        if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-            $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
-            if (!empty($getStatus))
-                $setStatus = $getStatus[0]['id'];
+        if ($status == "disapprove") {
+            $setStatus = 0;
+            if ($getDesignation[0]['name'] == 'DEPARTMENT HEAD') {
+                $getStatus = $pdo->query("select id from status where status_name like ('HOD_d%');");
+                if (!empty($getStatus))
+                    $setStatus = $getStatus[0]['id'];
+            }
+            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
+                $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
+                if (!empty($getStatus))
+                    $setStatus = $getStatus[0]['id'];
+            }
+            if ($getDesignation[0]['name'] == 'HR MANAGER') {
+                $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
+                if (!empty($getStatus))
+                    $setStatus = $getStatus[0]['id'];
+            }
         }
-        if ($getDesignation[0]['name'] == 'HR MANAGER') {
-            $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
-            if (!empty($getStatus))
-                $setStatus = $getStatus[0]['id'];
-        }
-    }
-    echo $status;
-    echo $setStatus;
-    if ($setStatus != 0) {
-        $pdo->bind("id", $setStatus);
-        $pdo->bind("expenseId", $expenseID);
-        //issue---------------------------------------------------------------------------------------------------------------
-        $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
-        echo "<meta http-equiv='refresh' content='0'>";
+        if ($setStatus != 0) {
+            $pdo->bind("id", $setStatus);
+            $pdo->bind("expenseId", $expenseID);
+            //issue---------------------------------------------------------------------------------------------------------------
+            $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
+            echo "<meta http-equiv='refresh' content='0'>";
 
+        }
     }
 }
+
 ?>
 <script>
     document.getElementById('myForm').addEventListener('submit', function (event) {

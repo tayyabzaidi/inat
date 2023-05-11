@@ -392,7 +392,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $sql = $sql . 'NULL' . ',';
 
             }
-            echo $sql;
             $sql = $sql . '\'' . $worksheet->getCell(PHPExcel_Cell::stringFromColumnIndex($col) . $row)->getValue() . '\'' . ")";
             $result = $pdo->query($sql);
             $sql = $temp;
