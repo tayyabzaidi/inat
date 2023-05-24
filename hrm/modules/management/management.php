@@ -44,10 +44,15 @@
 
                 <?php
                 switch ($route->subpage) {
+                    case 'visa-management':
+                        require_once('visa-management/visa-management.php');
+                        break;
                     case 'approve-disapprove-leave':
                         require_once('leave-management/approve-disapprove-leave.php');
                         break;
-
+                    case 'encashment':
+                        require_once('encashment/encashment.php');
+                        break;
                     case 'slip_download':
                         require_once('salaries/download.php');
                         break;

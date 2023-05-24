@@ -38,9 +38,8 @@
         }
 
         .modal-dialog {
-            height: 150%;
-            max-width: 80%;
-            margin: 1.75rem auto;
+            height: 140%;
+            max-width: 100%;
         }
 
         .modal-content {
@@ -117,55 +116,32 @@
             <div class="card-body">
 
 
-                <h3>Claim List</h3>
+                <h3>Visa List</h3>
 
-                <div class="form-container">
-                    <form action="#" method="POST">
-                        <label for="dateFrom">Date From:</label>
-                        <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">Date To:</label>
-                        <input type="date" id="dateTo" name="dateTo">
-                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Date</button>
-                    </form>
-
-                    <form action="#" method="POST">
-                        <label for="employeeId">Employee:</label>
-                        <input type="text" id="employee" name="employee">
-                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Employee</button>
-                    </form>
-                </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
                             <th>I.D</th>
                             <th>Date</th>
                             <th>Name</th>
-                            <th>Form</th>
-                            <th>Total Amount</th>
+                            <th>Status</th>
                             <th>Attachment</th>
-                            <th>Approve</th>
-                            <th>Disapprove</th>
+                            <?php if ($_SESSION['designation'] == 'DEPARTMENT HEAD') { ?>
+                                <th>Approve</th>
+                                <th>Disapprove</th>
+                            <?php } ?>
+                            <?php if ($_SESSION['designation'] == 'HR MANAGER') { ?>
+                                <th></th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
 
+                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM visa ee join employees e on e.empId=ee.employeeId';
 
-                        $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
-                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
-                        $employee = isset($_POST['employee']) ? $_POST['employee'] : null;
 
-                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id';
-
-                        if (!empty($dateFrom) && !empty($dateTo)) {
-                            // User has provided both date filters
-                            $sql .= " WHERE ee.date BETWEEN '$dateFrom' AND '$dateTo' ORDER BY ee.`date`;";
-                        } else if (!empty($employee)) {
-                            $sql .= " AND e.info_fullname_en like '%" . $employee . "%'  ORDER BY ee.date;";
-                        } else
-                            $sql .= " ORDER BY ee.`date`;";
+                        $sql .= " ORDER BY ee.`date`;";
 
 
                         $recEmpData = $pdo->query(
@@ -175,23 +151,47 @@
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i]['unique_id']; ?>
+                                <td><?php echo $recEmpData[$i]['id']; ?>
                                 </td>
                                 <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
                                 <td><?php echo $recEmpData[$i]['name']; ?>
                                 </td>
-                                <td>
+                                <td class="" style="text-align: left;">
                                     <?php
-                                    echo '<iframe src="data:application/pdf;base64,' . base64_encode($recEmpData[$i]['form_data']) . '" width="50%" height="300px"></iframe>';
+                                    $pdo->bind('visaId', $recEmpData[$i]['id']);
+                                    $getStatus = $pdo->query(
+                                        'SELECT s.status_name from `status` s join visa_status es on s.id=es.statusId where es.visaId=:visaId;'
+                                    );
+                                    $HOD = '';
+                                    $HR = '';
 
-                                    //  echo $pdf_data;
+                                    for ($j = 0; $j < count($getStatus); $j++) {
+                                        if (
+                                            $getStatus[$j]['status_name'] ==
+                                            'HOD_approved'
+                                        ) {
+                                            $HOD = 'approved';
+                                        } elseif (
+                                            $getStatus[$j]['status_name'] ==
+                                            'HOD_disapproved'
+                                        ) {
+                                            $HOD = 'disapprove';
+                                        }
+                                    }
                                     ?>
 
+                                    <div class="ant-tag " style="<?php if (
+                                        $HOD == 'approved'
+                                    ) {
+                                        echo 'background-color: rgb(135, 208, 104)';
+                                    } elseif ($HOD == 'disapprove') {
+                                        echo 'background-color: red;';
+                                    } else {
+                                        echo 'background-color: white';
+                                    } ?>">
+                                        HOD</div>
 
-
-                                </td>
-                                <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
                                 <!-- <td><button data-expenseId=<?php echo $recEmpData[$i]["id"] ?> class="modal-button"
                                         href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button>
@@ -199,53 +199,63 @@
                                 <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
                                         style="background: none;"><i class="fa fa-folder"></i></button></td>
 
-                                </td>
 
-                                <td>
-                                    <form action="#" method="POST" id="myForm">
-                                        <!-- other form inputs -->
-                                        <label>
-                                            <input type="checkbox" name="status" value="approve"
-                                                onchange="this.form.submit();" <?php
-                                                $pdo->bind('employeeId', $_SESSION['empId']);
-                                                $pdo->bind('expenseId', $recEmpData[$i]['id']);
-                                                $s = $pdo->query('select "approve" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId
+                                <?php if ($_SESSION['designation'] == 'DEPARTMENT HEAD') { ?>
+                                    <td>
+
+                                        <form action="#" method="POST" id="myForm">
+                                            <!-- other form inputs -->
+                                            <label>
+                                                <input type="checkbox" name="status" value="approve"
+                                                    onchange="this.form.submit();" <?php
+                                                    $pdo->bind('employeeId', $_SESSION['empId']);
+                                                    $pdo->bind('visaId', $recEmpData[$i]['id']);
+                                                    $s = $pdo->query('select "approve" as `status` from status s join visa_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.visaId=:visaId
                                                 and s.status_name not like "%disapproved";');
-                                                if ($s[0]['status'] == 'approve')
-                                                    echo "checked"; ?>>
-                                        </label>
-                                        <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
-                                        <input type="hidden" name="action" value="update">
-                                        <button type="submit" style="display:none;"></button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <?php
-                                    // retrieve the status of the checkbox from the server
-                                    $pdo->bind('employeeId', $_SESSION['empId']);
-                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
-                                    $s = $pdo->query('select "disapprove" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId and s.status_name like "%disapproved";');
-                                    $isChecked = $s[0]['status'] == "disapprove";
+                                                    if ($s[0]['status'] == 'approve')
+                                                        echo "checked"; ?>>
+                                            </label>
+                                            <input type="hidden" name="visaId" value="<?php echo $recEmpData[$i]['id']; ?>">
+                                            <input type="hidden" name="action" value="update">
+                                            <button type="submit" style="display:none;"></button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        // retrieve the status of the checkbox from the server
+                                        $pdo->bind('employeeId', $_SESSION['empId']);
+                                        $pdo->bind('visaId', $recEmpData[$i]['id']);
+                                        $s = $pdo->query('select "disapprove" as `status` from status s join visa_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.visaId=:visaId and s.status_name like "%disapproved";');
+                                        $isChecked = $s[0]['status'] == "disapprove";
 
-                                    echo $isChecked; ?>
-                                    <form action="#" method="POST" id="myForm">
-                                        <!-- other form inputs -->
-                                        <label>
-                                            <input type="checkbox" name="status" value="disapprove"
-                                                onchange="this.form.submit();" <?php if ($isChecked) {
-                                                    echo "checked";
-                                                } ?>>
-                                        </label>
-                                        <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
-                                        <button type="submit" style="display:none;"></button>
-                                    </form>
+                                        echo $isChecked; ?>
+                                        <form action="#" method="POST" id="myForm">
+                                            <!-- other form inputs -->
+                                            <label>
+                                                <input type="checkbox" name="status" value="disapprove"
+                                                    onchange="this.form.submit();" <?php if ($isChecked) {
+                                                        echo "checked";
+                                                    } ?>>
+                                            </label>
+                                            <input type="hidden" name="visaId" value="<?php echo $recEmpData[$i]['id']; ?>">
+                                            <button type="submit" style="display:none;"></button>
+                                        </form>
 
-                                    <!-- save the staus hod or am approve base on the user id -->
-                                    <?php
-                        } ?>
-                            </td>
-                        </tr>
+                                        <!-- save the staus hod or am approve base on the user id -->
 
+                                    </td>
+                                <?php } ?>
+                                <?php if ($_SESSION['designation'] == 'HR MANAGER') { ?>
+
+                                    <td> <button type="button" class="btn btn-primary modal-button" href="#myModal1"
+                                            data-toggle="modal" data-target="#myModal"
+                                            data-id="<?php echo $recEmpData[$i]['id']; ?>">Upload
+                                            Visa</button>
+
+                                    </td>
+                                <?php } ?>
+                            </tr>
+                        <?php } ?>
                     </tbody>
 
                 </table>
@@ -256,7 +266,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status = $_POST['status'];
-    $expenseID = $_POST['expenseId'];
+    $visaId = $_POST['visaId'];
     $pdo->bind('employeeId', $_SESSION['empId']);
     $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
 
@@ -267,16 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
                 $setStatus = $getStatus[0]['id'];
             }
-            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
-                $setStatus = $getStatus[0]['id'];
-            }
-            if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
-                if (!empty($getStatus)) {
-                    $setStatus = $getStatus[0]['id'];
-                }
-            }
+
         }
         if ($status == "disapprove") {
             $setStatus = 0;
@@ -285,22 +286,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (!empty($getStatus))
                     $setStatus = $getStatus[0]['id'];
             }
-            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
-                if (!empty($getStatus))
-                    $setStatus = $getStatus[0]['id'];
-            }
-            if ($getDesignation[0]['name'] == 'HR MANAGER') {
-                $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
-                if (!empty($getStatus))
-                    $setStatus = $getStatus[0]['id'];
-            }
+
         }
         if ($setStatus != 0) {
             $pdo->bind("id", $setStatus);
-            $pdo->bind("expenseId", $expenseID);
+            $pdo->bind("visaId", $visaId);
             //issue---------------------------------------------------------------------------------------------------------------
-            $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
+            $result = $pdo->query("INSERT INTO visa_status  (statusId , visaId) values (:id,:visaId)");
             echo "<meta http-equiv='refresh' content='0'>";
 
         }
@@ -308,25 +300,119 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 ?>
+
+
+
+
+
+
+
+
+
+
+<div id="myModal1" class="modal">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="height: 30%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addClaimModalLabel">Visa
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data" style="float: none;">
+
+                    <div class="form-group">
+                        <label for="claim-pdf">PDF File (Visa)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
+                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="visaId" id="visaId" value="">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
-    document.getElementById('myForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        var checkbox = document.getElementsByName('status')[0];
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change'));
-        event.target.submit();
-    });
+
+
+    var btn = document.querySelectorAll(" button.modal-button"); // All page modals var
+    modals = document.querySelectorAll('.modal'); // Get the <span> element that closes
+    var spans = document.getElementById("closebtn");
+
+    for (var i = 0; i < btn.length; i++) {
+        btn[i].onclick = function (e) {
+
+            e.preventDefault();
+            modal = document.querySelector(e.target.getAttribute("href"));
+            var id = $(this).data('id');
+            $('#visaId').val(id);
+            modal.style.display = "block";
+        }
+    } // When the user clicks on <span> (x), close
+    // for (var i = 0; i < spans.length; i++) {
+    spans.onclick = function () {
+        for (var
+            index in modals) {
+            if (typeof modals[index].style !== 'undefined')
+                modals[index].style.display = "none";
+        }
+        //    }
+    } // When the user clicks anywhere
+
+
+
+
+
+
+</script>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    //    Get form data
+    echo '------------';
+    $date = date('Y-m-d');
+    $visaId = $_POST['visaId'];
+    $pdf = file_get_contents($_FILES['claim-pdf']['tmp_name']);
+    $pdf_hex = bin2hex($pdf);
+    $pdf_hex = '0x' . $pdf_hex;
+    // echo $pdf_hex;
+    // // Insert form data into database
+
+    $sql = "UPDATE visa set visa=$pdf_hex where id= " . $visaId;
+
+    $result = $pdo->query($sql);
+}
+
+?>
+
+
+
+
+
+
+
+<script>
+
     $(document).ready(function () {
         // Attach a click event handler to the attachment buttons
         $(".attachment-btn").on("click", function () {
             // Get the expense ID from the data-id attribute of the button
-            var expenseId = $(this).data("id");
+            var visaId = $(this).data("id");
             var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
             $.ajax({
                 url: __table_url,
                 "data": {
-                    "foreignId": expenseId,
-                    "type": "expense"
+                    "foreignId": visaId,
+                    "type": "visa"
                 },
                 type: 'POST',
                 dataType: "json",

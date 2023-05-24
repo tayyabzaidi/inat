@@ -64,7 +64,8 @@
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Salary</button>
+                        data-target="#myModal">Add
+                        Salary</button>
 
                 </div>
                 <hr>
@@ -162,68 +163,6 @@
         </div>
     </div>
 </div>
-<script>  function showPdfModal(button) {
-        const pdfBase64 = button.dataset.pdf;
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        const modalContent = document.createElement('div');
-        modalContent.className = 'modal-content';
-        const closeButton = document.createElement('span');
-        closeButton.className = 'close';
-        closeButton.innerHTML = '&times;';
-        closeButton.onclick = function () {
-            modal.style.display = 'none';
-        };
-        const embedElement = document.createElement('embed');
-        embedElement.type = 'application/pdf';
-        embedElement.width = '100%';
-        embedElement.height = '100%';
-        embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
-        const slipIdInput = document.createElement('input');
-        slipIdInput.type = 'hidden';
-        slipIdInput.name = 'slip_id';
-        slipIdInput.id = 'slip_id';
-        slipIdInput.value = button.dataset.slipId;
-        modalContent.appendChild(slipIdInput);
-
-        modalContent.appendChild(closeButton);
-        modalContent.appendChild(embedElement);
-        modal.appendChild(modalContent);
-        document.body.appendChild(modal);
-        modal.style.display = 'block';
-    }
-
-    var btn = document.querySelectorAll(" button.modal-button"); // All page modals var
-    modals = document.querySelectorAll('.modal'); // Get the <span> element that closes
-                                    the modal
-    var spans = document.getElementsByClassName("close");
-
-    for (var i = 0; i < btn.length; i++) {
-        btn[i].onclick = function (e) {
-            e.preventDefault(); modal = document.querySelector(e.target.getAttribute("href"));
-            modal.style.display = "block";
-        }
-    } // When the user clicks on <span> (x), close
-                                        the modal
-    for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function () {
-            for (var
-                index in modals) {
-                if (typeof modals[index].style !== 'undefined')
-                    modals[index].style.display = "none";
-            }
-        }
-    } // When the user clicks anywhere
-                                            outside of the modal, close it window.onclick = function (event) {
-        if
-            (event.target.classList.contains('modal')) {
-            for (var index in modals) {
-                if
-                    (typeof modals[index].style !== 'undefined')
-                    modals[index].style.display = "none";
-            }
-        }
-    } </script>
 
 
 <div id="myModal1" class="modal">
@@ -263,12 +202,90 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
             </form>
         </div>
     </div>
+    <script>
+        // const fileInput = document.getElementById('claim-pdf');
+
+        //     // Add an event listener to check the file size when selected
+        //     fileInput.addEventListener('change', function () {
+        //         const file = fileInput.files[0];
+        //         const maxSize = 100 * 1024; // 100 KB (in bytes)
+
+        //         if (file && file.size > maxSize) {
+        //             // File size exceeds the maximum limit
+        //             alert('File size should not exceed 100 KB.');
+        //             // Reset the file input
+        //             fileInput.value = '';
+        //         }
+        //     });
+        function showPdfModal(button) {
+            const pdfBase64 = button.dataset.pdf;
+            if (pdfBase64 == '')
+                alert('There is no salary slip');
+            else {
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                const modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
+
+                const embedElement = document.createElement('embed');
+                embedElement.type = 'application/pdf';
+                embedElement.width = '100%';
+                embedElement.height = '100%';
+                embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+                const slipIdInput = document.createElement('input');
+                slipIdInput.type = 'hidden';
+                slipIdInput.name = 'slip_id';
+                slipIdInput.id = 'slip_id';
+                slipIdInput.value = button.dataset.slipId;
+                modalContent.appendChild(slipIdInput);
+
+                modalContent.appendChild(embedElement);
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+                modal.style.display = 'block';
+                modal.addEventListener('click', function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                })
+            }
+        }
+
+        var btn = document.querySelectorAll(" button.modal-button"); // All page modals var
+        modals = document.querySelectorAll('.modal'); // Get the <span> element that closes
+        var spans = document.getElementById("closebtn");
+
+        for (var i = 0; i < btn.length; i++) {
+            btn[i].onclick = function (e) {
+                e.preventDefault(); modal = document.querySelector(e.target.getAttribute("href"));
+                modal.style.display = "block";
+            }
+        } // When the user clicks on <span> (x), close
+        // for (var i = 0; i < spans.length; i++) {
+        spans.onclick = function () {
+            for (var
+                index in modals) {
+                if (typeof modals[index].style !== 'undefined')
+                    modals[index].style.display = "none";
+            }
+            //    }
+        } // When the user clicks anywhere
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                for (var index in modals) {
+                    if
+                        (typeof modals[index].style !== 'undefined')
+                        modals[index].style.display = "none";
+                }
+            }
+        } </script>
+
     <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -282,7 +299,7 @@
         echo $pdf_hex;
         // Insert form data into database
         $sql = "INSERT INTO salary ( employee_id, slip,discrepancy_reason)
-                VALUES ('$employee_id', $pdf_hex,'123')";
+                VALUES ('$employee_id', $pdf_hex,NULL)";
 
         $result = $pdo->query($sql);
         echo "<meta http-equiv='refresh' content='0'>";

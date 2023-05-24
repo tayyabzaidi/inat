@@ -192,35 +192,37 @@
 
     function showPdfModal(button) {
         const pdfBase64 = button.dataset.pdf;
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        const modalContent = document.createElement('div');
-        modalContent.className = 'modal-content';
-        const closeButton = document.createElement('span');
-        closeButton.className = 'close';
-        closeButton.innerHTML = '&times;';
-        closeButton.onclick = function () {
-            modal.style.display = 'none';
-        };
-        const embedElement = document.createElement('embed');
-        embedElement.type = 'application/pdf';
-        embedElement.width = '100%';
-        embedElement.height = '100%';
-        embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
-        const slipIdInput = document.createElement('input');
-        slipIdInput.type = 'hidden';
-        slipIdInput.name = 'slip_id';
-        slipIdInput.id = 'slip_id';
-        slipIdInput.value = button.dataset.slipId;
-        modalContent.appendChild(slipIdInput);
+        if (pdfBase64 == '')
+            alert('There is no salary slip');
+        else {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
 
-        modalContent.appendChild(closeButton);
-        modalContent.appendChild(embedElement);
-        modal.appendChild(modalContent);
-        document.body.appendChild(modal);
-        modal.style.display = 'block';
+            const embedElement = document.createElement('embed');
+            embedElement.type = 'application/pdf';
+            embedElement.width = '100%';
+            embedElement.height = '100%';
+            embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+            const slipIdInput = document.createElement('input');
+            slipIdInput.type = 'hidden';
+            slipIdInput.name = 'slip_id';
+            slipIdInput.id = 'slip_id';
+            slipIdInput.value = button.dataset.slipId;
+            modalContent.appendChild(slipIdInput);
+
+            modalContent.appendChild(embedElement);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            })
+        }
     }
-
 
 
     var modal = document.getElementById("myModal1");

@@ -72,6 +72,16 @@
                             <a href="<?php echo __APP_URL__ . $route->q . '/salary'; ?>"><i
                                     class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Salaries </a>
                         </li>
+                        <li class="list-group-item">
+                            <a href="<?php echo __APP_URL__ . $route->q . '/encashment'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
+                                Encashment </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="<?php echo __APP_URL__ . $route->q . '/visa-management'; ?>"><i
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
+                                Visa </a>
+                        </li>
                     </ul>
                 </div>
             </div>

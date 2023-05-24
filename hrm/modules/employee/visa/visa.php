@@ -43,6 +43,11 @@
             margin: 1.75rem auto;
         }
 
+        .modal-dialog2 {
+            height: 180%;
+            max-width: 100%;
+        }
+
         .modal-content {
             background-color: #fefefe;
             margin: auto;
@@ -52,6 +57,17 @@
             border: 1px solid #888;
             width: 60%;
             height: 40%;
+        }
+
+        .modal-content2 {
+            background-color: #fefefe;
+            margin: auto;
+            margin-top: 5%;
+            margin-bottom: 10%;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%;
+            height: 80%;
         }
 
         .close {
@@ -113,11 +129,11 @@
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Claim</button>
+                        data-target="#myModal">Add Visa</button>
 
                 </div>
 
-                <h3>Claim List</h3>
+                <h3>Visa List</h3>
                 <div class="form-container">
                     <form action="#" method="POST">
                         <label for="dateFrom">Date From:</label>
@@ -133,20 +149,22 @@
                         <tr>
                             <th>I.D</th>
                             <th>Date</th>
-                            <th>Name</th>
                             <th>Status</th>
-                            <th>Total Amount</th>
-                            <th></th>
+                            <th>Comment</th>
+                            <th>Visa</th>
+                            <th>Attachment</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
+
+
                         $pdo->bind('employeeId', $_SESSION['empId']);
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
 
                         // Build the SQL query based on the provided filter values
-                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE ee.`employee_id`=:employeeId ';
+                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM visa ee join employees e on e.empId=ee.employeeId WHERE ee.`employeeId`=:employeeId ';
 
                         if (!empty($dateFrom) && !empty($dateTo)) {
                             // User has provided both date filters
@@ -161,20 +179,17 @@
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i]['unique_id']; ?>
+                                <td><?php echo $recEmpData[$i]['id']; ?>
                                 </td>
                                 <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
-                                <td><?php echo $recEmpData[$i]['name']; ?>
-                                </td>
                                 <td class="" style="text-align: left;">
                                     <?php
-                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
+                                    $pdo->bind('visaId', $recEmpData[$i]['id']);
                                     $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=:expenseId;'
+                                        'SELECT s.status_name from `status` s join visa_status es on s.id=es.statusId where es.visaId=:visaId;'
                                     );
                                     $HOD = '';
-                                    $AM = '';
                                     $HR = '';
 
                                     for ($j = 0; $j < count($getStatus); $j++) {
@@ -185,29 +200,9 @@
                                             $HOD = 'approved';
                                         } elseif (
                                             $getStatus[$j]['status_name'] ==
-                                            'AM_approved'
-                                        ) {
-                                            $AM = 'approved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'AM_disapproved'
-                                        ) {
-                                            $AM = 'disapprove';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
                                             'HOD_disapproved'
                                         ) {
                                             $HOD = 'disapprove';
-                                        } else if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_approved'
-                                        ) {
-                                            $HR = 'approved';
-                                        } else if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_disapproved'
-                                        ) {
-                                            $HR = 'disapprove';
                                         }
                                     }
                                     ?>
@@ -222,28 +217,17 @@
                                         echo 'background-color: white';
                                     } ?>">
                                         HOD</div>
-                                    <div class="ant-tag " style="<?php if (
-                                        $AM == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($AM == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
-                                        AM</div>
-                                    <div class="ant-tag " style="<?php if (
-                                        $HR == 'approved'
-                                    ) {
-                                        echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HR == 'disapprove') {
-                                        echo 'background-color: red;';
-                                    } else {
-                                        echo 'background-color: white';
-                                    } ?>">
-                                        HR</div>
+
                                 </td>
-                                <td> <?php echo $recEmpData[$i]['total_amount']; ?>
+                                <td><?php echo $recEmpData[$i]['comment']; ?></td>
+                                <td>
+                                    <?php $pdf_base64 = base64_encode($recEmpData[$i]['visa']);
+                                    ?>
+                                    <button data-pdf="<?php echo $pdf_base64 ?>"
+                                        data-visa_id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
+                                        onclick="showPdfModal(this)">
+                                        <i class="fa fa-folder <?php echo $_right; ?>"></i>
+                                    </button>
                                 </td>
                                 <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
                                         style="background: none;"><i class="fa fa-folder"></i></button></td>
@@ -268,20 +252,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">Add Visa</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="claim-comment">Comment</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="claim-pdf">PDF File (Please submit expense form)</label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
-                        </div>
                     </div>
                     <div class="form-group">
                         <label for="claim-attachments">Attachments</label>
@@ -291,15 +268,12 @@
                             <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="claim-amount" style="margin-right:20px">Total Amount</label>
-                        <input type="number" id="total" name="claim-amount" value="0">
-                    </div>
+
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Claim</button>
+                <button type="submit" class="btn btn-primary">Add Visa</button>
             </div>
             </form>
         </div>
@@ -310,6 +284,39 @@
 
 
 <script>
+    function showPdfModal(button) {
+        if (button.dataset.pdf == '')
+            alert('There is no visa');
+        else {
+            const pdfBase64 = button.dataset.pdf;
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content2';
+
+            const embedElement = document.createElement('embed');
+            embedElement.type = 'application/pdf';
+            embedElement.width = '100%';
+            embedElement.height = '95%';
+            embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+            const visaIdInput = document.createElement('input');
+            visaIdInput.type = 'hidden';
+            visaIdInput.name = 'visa_id';
+            visaIdInput.id = 'visa_id';
+            visaIdInput.value = button.dataset.visa_id;
+            modalContent.appendChild(visaIdInput);
+
+            modalContent.appendChild(embedElement);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            })
+        }
+    }
     var btn = document.querySelectorAll("button.modal-button");
 
     // All page modals
@@ -336,27 +343,20 @@
         }
     }
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target.classList.contains('modal')) {
-            for (var index in modals) {
-                if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-            }
-        }
-    }
+
 
 
     $(document).ready(function () {
         // Attach a click event handler to the attachment buttons
         $(".attachment-btn").on("click", function () {
             // Get the expense ID from the data-id attribute of the button
-            var expenseId = $(this).data("id");
+            var visaId = $(this).data("id");
             var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
             $.ajax({
                 url: __table_url,
                 "data": {
-                    "foreignId": expenseId,
-                    "type": "expense"
+                    "foreignId": visaId,
+                    "type": "visa"
                 },
                 type: 'POST',
                 dataType: "json",
@@ -439,24 +439,18 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    //    Get form data
-    $unique_id = random_int(10000, 99999);
     $date = date('Y-m-d');
-    $employee_id = $_SESSION['empId'];
-    $total_amount = $_POST['claim-amount'];
+    $employeeId = $_SESSION['empId'];
     $comment = $_POST['claim-comment'];
-    $pdf = file_get_contents($_FILES['claim-pdf']['tmp_name']);
-    $pdf_hex = bin2hex($pdf);
-    $pdf_hex = '0x' . $pdf_hex;
     // Insert form data into database
-    $sql = "INSERT INTO employee_expenses (unique_id, date, employee_id, total_amount, form_data, comment)
-                VALUES ('$unique_id', '$date', '$employee_id', '$total_amount',$pdf_hex, '$comment')";
+    $sql = "INSERT INTO visa ( date, employeeId, comment)
+                VALUES ( '$date', '$employeeId','$comment')";
 
     $result = $pdo->query($sql);
 
     // Step 3: Verify if there is any row and extract status name
     if (!empty($result)) {
-        $expenseId = $pdo->query("SELECT id from employee_expenses where unique_id = '$unique_id';");
+        $visaId = $pdo->query("SELECT MAX(id) as id from visa");
         $attachments = $_FILES['claim-attachments'];
         // Loop through all the uploaded files
         for ($i = 0; $i < count($attachments['name']); $i++) {
@@ -470,8 +464,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdf_hex = bin2hex($attachment_data);
             $pdf_hex = '0x' . $pdf_hex;
-            $pdo->bind('expenseId', $expenseId[0]['id']);
-            $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId,`type`) VALUES (" . $pdf_hex . ",:expenseId,'expense')");
+            $pdo->bind('visaId', $visaId[0]['id']);
+            $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId,`type`) VALUES (" . $pdf_hex . ",:visaId,'visa')");
+
         }
 
     }

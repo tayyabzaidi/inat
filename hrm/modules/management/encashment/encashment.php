@@ -117,7 +117,7 @@
             <div class="card-body">
 
 
-                <h3>Claim List</h3>
+                <h3>Encashment List</h3>
 
                 <div class="form-container">
                     <form action="#" method="POST">
@@ -142,8 +142,6 @@
                             <th>I.D</th>
                             <th>Date</th>
                             <th>Name</th>
-                            <th>Form</th>
-                            <th>Total Amount</th>
                             <th>Attachment</th>
                             <th>Approve</th>
                             <th>Disapprove</th>
@@ -157,7 +155,7 @@
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
                         $employee = isset($_POST['employee']) ? $_POST['employee'] : null;
 
-                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id';
+                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_encashments ee join employees e on e.empId=ee.employee_id';
 
                         if (!empty($dateFrom) && !empty($dateTo)) {
                             // User has provided both date filters
@@ -181,21 +179,7 @@
                                 </td>
                                 <td><?php echo $recEmpData[$i]['name']; ?>
                                 </td>
-                                <td>
-                                    <?php
-                                    echo '<iframe src="data:application/pdf;base64,' . base64_encode($recEmpData[$i]['form_data']) . '" width="50%" height="300px"></iframe>';
 
-                                    //  echo $pdf_data;
-                                    ?>
-
-
-
-                                </td>
-                                <td> <?php echo $recEmpData[$i]['total_amount']; ?>
-                                </td>
-                                <!-- <td><button data-expenseId=<?php echo $recEmpData[$i]["id"] ?> class="modal-button"
-                                        href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button>
-                                </td> -->
                                 <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
                                         style="background: none;"><i class="fa fa-folder"></i></button></td>
 
@@ -208,13 +192,14 @@
                                             <input type="checkbox" name="status" value="approve"
                                                 onchange="this.form.submit();" <?php
                                                 $pdo->bind('employeeId', $_SESSION['empId']);
-                                                $pdo->bind('expenseId', $recEmpData[$i]['id']);
-                                                $s = $pdo->query('select "approve" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId
+                                                $pdo->bind('encashmentId', $recEmpData[$i]['id']);
+                                                $s = $pdo->query('select "approve" as `status` from status s join employee_encashment_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.encashmentId=:encashmentId
                                                 and s.status_name not like "%disapproved";');
                                                 if ($s[0]['status'] == 'approve')
                                                     echo "checked"; ?>>
                                         </label>
-                                        <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
+                                        <input type="hidden" name="encashmentId"
+                                            value="<?php echo $recEmpData[$i]['id']; ?>">
                                         <input type="hidden" name="action" value="update">
                                         <button type="submit" style="display:none;"></button>
                                     </form>
@@ -223,11 +208,10 @@
                                     <?php
                                     // retrieve the status of the checkbox from the server
                                     $pdo->bind('employeeId', $_SESSION['empId']);
-                                    $pdo->bind('expenseId', $recEmpData[$i]['id']);
-                                    $s = $pdo->query('select "disapprove" as `status` from status s join employee_expense_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.expenseId=:expenseId and s.status_name like "%disapproved";');
+                                    $pdo->bind('encashmentId', $recEmpData[$i]['id']);
+                                    $s = $pdo->query('select "disapprove" as `status` from status s join employee_encashment_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.encashmentId=:encashmentId and s.status_name like "%disapproved";');
                                     $isChecked = $s[0]['status'] == "disapprove";
-
-                                    echo $isChecked; ?>
+                                    ?>
                                     <form action="#" method="POST" id="myForm">
                                         <!-- other form inputs -->
                                         <label>
@@ -236,7 +220,8 @@
                                                     echo "checked";
                                                 } ?>>
                                         </label>
-                                        <input type="hidden" name="expenseId" value="<?php echo $recEmpData[$i]['id']; ?>">
+                                        <input type="hidden" name="encashmentId"
+                                            value="<?php echo $recEmpData[$i]['id']; ?>">
                                         <button type="submit" style="display:none;"></button>
                                     </form>
 
@@ -256,9 +241,9 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status = $_POST['status'];
-    $expenseID = $_POST['expenseId'];
+    $encashmentId = $_POST['encashmentId'];
     $pdo->bind('employeeId', $_SESSION['empId']);
-    $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER","ACCOUNTANT")');
+    $getDesignation = $pdo->query('SELECT d.name from employee_designations d join employees e on e.desigId=d.desigId where e.empId=:employeeId and d.name in ("DEPARTMENT HEAD","HR MANAGER")');
 
     if (!empty($getDesignation)) {
         if ($status == "approve") {
@@ -267,10 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $getStatus = $pdo->query("select id from status where status_name like ('HOD_a%');");
                 $setStatus = $getStatus[0]['id'];
             }
-            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                $getStatus = $pdo->query("select id from status where status_name like ('AM_a%');");
-                $setStatus = $getStatus[0]['id'];
-            }
+
             if ($getDesignation[0]['name'] == 'HR MANAGER') {
                 $getStatus = $pdo->query("select id from status where status_name like ('HR_a%');");
                 if (!empty($getStatus)) {
@@ -285,11 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (!empty($getStatus))
                     $setStatus = $getStatus[0]['id'];
             }
-            if ($getDesignation[0]['name'] == 'ACCOUNTANT') {
-                $getStatus = $pdo->query("select id from status where status_name like ('AM_d%');");
-                if (!empty($getStatus))
-                    $setStatus = $getStatus[0]['id'];
-            }
+
             if ($getDesignation[0]['name'] == 'HR MANAGER') {
                 $getStatus = $pdo->query("select id from status where status_name like ('HR_d%');");
                 if (!empty($getStatus))
@@ -298,9 +276,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         if ($setStatus != 0) {
             $pdo->bind("id", $setStatus);
-            $pdo->bind("expenseId", $expenseID);
+            $pdo->bind("encashmentId", $encashmentId);
             //issue---------------------------------------------------------------------------------------------------------------
-            $result = $pdo->query("INSERT INTO employee_expense_status  (statusId , expenseId) values (:id,:expenseId)");
+            $result = $pdo->query("INSERT INTO employee_encashment_status  (statusId , encashmentId) values (:id,:encashmentId)");
             echo "<meta http-equiv='refresh' content='0'>";
 
         }
@@ -320,13 +298,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Attach a click event handler to the attachment buttons
         $(".attachment-btn").on("click", function () {
             // Get the expense ID from the data-id attribute of the button
-            var expenseId = $(this).data("id");
+            var encashmentId = $(this).data("id");
             var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
             $.ajax({
                 url: __table_url,
                 "data": {
-                    "foreignId": expenseId,
-                    "type": "expense"
+                    "foreignId": encashmentId,
+                    "type": "encashment"
                 },
                 type: 'POST',
                 dataType: "json",

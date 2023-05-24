@@ -285,33 +285,36 @@
     <script>
         function showPdfModal(button) {
             const pdfBase64 = button.dataset.pdf;
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            const modalContent = document.createElement('div');
-            modalContent.className = 'modal-content';
-            const closeButton = document.createElement('span');
-            closeButton.className = 'close';
-            closeButton.innerHTML = '&times;';
-            closeButton.onclick = function () {
-                modal.style.display = 'none';
-            };
-            const embedElement = document.createElement('embed');
-            embedElement.type = 'application/pdf';
-            embedElement.width = '100%';
-            embedElement.height = '100%';
-            embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
-            const leaveIdInput = document.createElement('input');
-            leaveIdInput.type = 'hidden';
-            leaveIdInput.name = 'leave_id';
-            leaveIdInput.id = 'leave_id';
-            leaveIdInput.value = button.dataset.id;
-            modalContent.appendChild(leaveIdInput);
+            if (pdfBase64 == '')
+                alert('There is no Attachment');
+            else {
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                const modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
 
-            modalContent.appendChild(closeButton);
-            modalContent.appendChild(embedElement);
-            modal.appendChild(modalContent);
-            document.body.appendChild(modal);
-            modal.style.display = 'block';
+                const embedElement = document.createElement('embed');
+                embedElement.type = 'application/pdf';
+                embedElement.width = '100%';
+                embedElement.height = '100%';
+                embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+                const leaveIdInput = document.createElement('input');
+                leaveIdInput.type = 'hidden';
+                leaveIdInput.name = 'leave_id';
+                leaveIdInput.id = 'leave_id';
+                leaveIdInput.value = button.dataset.id;
+                modalContent.appendChild(leaveIdInput);
+
+                modalContent.appendChild(embedElement);
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+                modal.style.display = 'block';
+                modal.addEventListener('click', function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                })
+            }
         }
         // JavaScript code here
         var btn = document.querySelectorAll("button.modal-button");
@@ -364,7 +367,8 @@
                 $.ajax({
                     url: __table_url,
                     "data": {
-                        "foreignId": leaveId
+                        "foreignId": leaveId,
+                        "type": "leave"
                     },
                     type: 'POST',
                     dataType: "json",

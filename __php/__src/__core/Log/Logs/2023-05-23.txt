@@ -1,0 +1,7 @@
+Time : 17:31:23
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'encashmentId' cannot be null
+
+Time : 17:31:23
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'encashmentId' cannot be null
+Raw SQL : INSERT INTO employee_encashment_status  (statusId , encashmentId) values (:id,:encashmentId)
+

@@ -458,7 +458,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdf_hex = '0x' . $pdf_hex;
             $pdo->bind("leaveId", $leaveId);
             // $pdo->bind("pdf", $pdf_hex);
-            $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId) VALUES (" . $pdf_hex . ",:leaveId)");
+            $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId,`type`) VALUES (" . $pdf_hex . ",:leaveId,'leave')");
         }
     } else if (isset($_POST['add_leave_submit'])) {
         // Get the form data
