@@ -1,22 +1,20 @@
 <?php
 $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-label="Category Options" >'
-        . '<button  dt_btn_action="edit"    type="button" class="btn btn-sm btn-primary" style="font-size:12px;"> <i class="fa fa-edit"></i> Edit</button>'
-        . '</div>';
+    . '<button  dt_btn_action="edit"    type="button" class="btn btn-sm btn-primary" style="font-size:12px;"> <i class="fa fa-edit"></i> تعديل</button>'
+    . '</div>';
 ?>
-
-
 <script>
-    console.log('department script init....');
+    console.log('تهيئة سكربت القسم....');
 
     /*
-     * Section Globals 
+     * قسم العناصر العامة
      */
 
     var __table;
     var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=datatable/management/departments/departments';
 
     /*
-     * Section Globals 
+     * قسم العناصر العامة
      */
 
     function __table_init() {
@@ -25,7 +23,7 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
             "ajax": {
                 url: __table_url,
                 "data": {
-                    "_dtsis": 'data to send.'
+                    "_dtsis": 'بيانات للإرسال.'
                 },
                 type: 'POST',
                 dataFilter: function (data) {
@@ -36,18 +34,18 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 }
             },
             "columns": [
-                {data: 'deptId'},
-                {data: 'name'},
-                {data: 'status'},
-                {data: 'options'}
+                { data: 'deptId' },
+                { data: 'name' },
+                { data: 'status' },
+                { data: 'options' }
             ],
             "columnDefs": [{
-                    "targets": 3,
-                    "searchable": false,
-                    "data": null,
-                    "orderable": false,
-                    "defaultContent": '<?php echo $__dt_buttons_group; ?>'
-                }],
+                "targets": 3,
+                "searchable": false,
+                "data": null,
+                "orderable": false,
+                "defaultContent": '<?php echo $__dt_buttons_group; ?>'
+            }],
             "destroy": true,
             "lengthMenu": [5, 10, 25, 50, 100, 200],
             "ordering": true,
@@ -81,17 +79,17 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 "lengthMenu": "_MENU_",
                 "loadingRecords": "...",
                 "processing": "<?php echo $lib->_('spinner_text'); ?>",
-                "search": "Search",
-                "zeroRecords": "No match found.",
+                "search": "بحث",
+                "zeroRecords": "لا توجد نتائج مطابقة.",
                 "paginate": {
-                    "first": "<<",
-                    "last": ">>",
-                    "next": ">",
-                    "previous": "<"
+                    "first": "الأول",
+                    "last": "الأخير",
+                    "next": "التالي",
+                    "previous": "السابق"
                 },
                 "aria": {
-                    "sortAscending": ": activate to sort column ascending",
-                    "sortDescending": ": activate to sort column descending"
+                    "sortAscending": ": تفعيل لترتيب العمود تصاعديًا",
+                    "sortDescending": ": تفعيل لترتيب العمود تنازليًا"
                 }
             }
 
@@ -139,19 +137,17 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
 
             case 'delete':
                 console.log(data);
-                console.log('delete called');
+                console.log('الحذف المطلوب');
                 break;
 
             default:
-                console.log('undefined action ' + action);
+                console.log('إجراء غير معروف ' + action);
         }
     }
 
     function cb_close_the_editor(__r) {
         $("#_edit_record_modal").modal('hide');
     }
-
-
 
 
 </script>

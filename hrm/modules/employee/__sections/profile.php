@@ -32,22 +32,22 @@
                         <div class="row pt-0 p-5 pt-0">
                             <div class="text-center">
 
-                                <h4><?php echo $_auth_emp_rec['info_fullname_en']; ?></h4>
+                                <h4><?php echo $_auth_emp_rec['info_fullname_ar']; ?></h4>
 
                                 <br />
                             </div>
                             <div class="panel-footer"></div>
                             <div class="container">
                                 <p>
-                                    <small>Employment Code</small>
+                                    <small>رمز التوظيف</small>
                                     <?php echo $_auth_emp_rec['empCode']; ?>
                                 </p>
                                 <p>
-                                    <small>Email</small>
+                                    <small>البريد الإلكتروني</small>
                                     <?php echo $_auth_info['authEmail']; ?>
                                 </p>
                                 <p>
-                                    <small>Phone</small>
+                                    <small>الهاتف</small>
                                     <?php echo $_auth_emp_rec['info_phone']; ?>
                                 </p>
 

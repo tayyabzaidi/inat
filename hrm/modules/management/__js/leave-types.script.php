@@ -1,22 +1,20 @@
 <?php
-$__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-label="Category Options" >'
-        . '<button  dt_btn_action="edit"    type="button" class="btn btn-sm btn-primary" style="font-size:12px;"> <i class="fa fa-edit"></i> Edit</button>'
-        . '</div>';
+$__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-label="خيارات الفئة" >'
+    . '<button  dt_btn_action="edit"    type="button" class="btn btn-sm btn-primary" style="font-size:12px;"> <i class="fa fa-edit"></i> تعديل</button>'
+    . '</div>';
 ?>
-
-
 <script>
-    console.log('leave type script init....');
+    console.log('تهيئة سكريبت أنواع الإجازات....');
 
     /*
-     * Section Globals 
+     * المتغيرات العامة
      */
 
     var __table;
     var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=datatable/management/leave-types/leave-types';
 
     /*
-     * Section Globals 
+     * المتغيرات العامة
      */
 
     function __table_init() {
@@ -26,7 +24,7 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
             "ajax": {
                 url: __table_url,
                 "data": {
-                    "_dtsis": 'data to send.'
+                    "_dtsis": 'البيانات المرسلة.'
                 },
                 type: 'POST',
                 dataFilter: function (data) {
@@ -37,21 +35,21 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 }
             },
             "columns": [
-                {data: 'id'},
-                {data: 'name'},
-                {data: 'days'},
-                {data: 'resetmode'},
-                {data: 'carryover'},
-                {data: 'status'},
-                {data: 'options'}
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'days' },
+                { data: 'resetmode' },
+                { data: 'carryover' },
+                { data: 'status' },
+                { data: 'options' }
             ],
             "columnDefs": [{
-                    "targets": 6,
-                    "searchable": false,
-                    "data": null,
-                    "orderable": false,
-                    "defaultContent": '<?php echo $__dt_buttons_group; ?>'
-                }],
+                "targets": 6,
+                "searchable": false,
+                "data": null,
+                "orderable": false,
+                "defaultContent": '<?php echo $__dt_buttons_group; ?>'
+            }],
             "destroy": true,
             "lengthMenu": [5, 10, 25, 50, 100, 200],
             "ordering": true,
@@ -85,8 +83,8 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 "lengthMenu": "_MENU_",
                 "loadingRecords": "...",
                 "processing": "<?php echo $lib->_('spinner_text'); ?>",
-                "search": "Search",
-                "zeroRecords": "No match found.",
+                "search": "بحث",
+                "zeroRecords": "لا توجد نتائج.",
                 "paginate": {
                     "first": "<<",
                     "last": ">>",
@@ -94,8 +92,8 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                     "previous": "<"
                 },
                 "aria": {
-                    "sortAscending": ": activate to sort column ascending",
-                    "sortDescending": ": activate to sort column descending"
+                    "sortAscending": ": تنشيط الترتيب تصاعديًا",
+                    "sortDescending": ": تنشيط الترتيب تنازليًا"
                 }
             }
 
@@ -147,11 +145,11 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
 
             case 'delete':
                 console.log(data);
-                console.log('delete called');
+                console.log('تم استدعاء الحذف');
                 break;
 
             default:
-                console.log('undefined action ' + action);
+                console.log('إجراء غير معرف ' + action);
         }
     }
 

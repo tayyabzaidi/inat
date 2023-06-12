@@ -46,6 +46,8 @@ if ($auth->checkAuth()) {
         $_SESSION['empId'] = $_auth_emp_rec['empId'];
         $_SESSION['designation'] = $_auth_emp_rec['designation'];
         $_SESSION['designation_id'] = $_auth_emp_rec['designationId'];
+        $_SESSION['available_leaves'] = $_auth_emp_rec['available_leaves'];
+        $_SESSION['total_tickets'] = $_auth_emp_rec['air_tickets'];
     }
 
 

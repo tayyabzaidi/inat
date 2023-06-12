@@ -44,11 +44,27 @@
 
                 <?php
                 switch ($route->subpage) {
-
+                    case 'visa-management':
+                        require_once('visa-management/visa-management.php');
+                        break;
                     case 'approve-disapprove-leave':
                         require_once('leave-management/approve-disapprove-leave.php');
                         break;
-
+                    case 'approve-disapprove-item':
+                        require_once('allot_item/approve-disapprove-item.php');
+                        break;
+                    case 'approve-disapprove-trip':
+                        require_once('business_trip/approve-disapprove-trip.php');
+                        break;
+                    case 'encashment':
+                        require_once('encashment/encashment.php');
+                        break;
+                    case 'slip_download':
+                        require_once('salaries/download.php');
+                        break;
+                    case 'salary':
+                        require_once('salaries/salaries.php');
+                        break;
                     case 'expenses':
                         require_once('expenses/expenses.php');
                         break;
@@ -57,7 +73,9 @@
                         require_once('employees/employees.php');
                         break;
 
-
+                    case 'filters':
+                        require_once('filters/filters.php');
+                        break;
                     case 'designations':
                         require_once('designations/designations.php');
                         break;
@@ -84,8 +102,12 @@
                     case 'leave-management':
                         require_once('leave-management/leave-management.php');
                         break;
-
-
+                    case 'items':
+                        require_once('allot_item/allot_item.php');
+                        break;
+                    case 'trip':
+                        require_once('business_trip/business_trip.php');
+                        break;
                     default:
                         require_once('options.php');
                 }

@@ -1,0 +1,21 @@
+Time : 13:39:08
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'expenseId' in 'where clause'
+
+Time : 13:39:08
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'expenseId' in 'where clause'
+Raw SQL : SELECT attachment FROM attachment where expenseId=1;
+
+Time : 13:38:32
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'expenseId' in 'where clause'
+
+Time : 13:38:32
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'expenseId' in 'where clause'
+Raw SQL : SELECT attachment FROM attachment where expenseId=111;
+
+Time : 13:37:59
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'expenseId' in 'where clause'
+
+Time : 13:37:59
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'expenseId' in 'where clause'
+Raw SQL : SELECT attachment FROM attachment where expenseId=1;
+
