@@ -86,27 +86,26 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-                <h3>Salary Slips</h3>
+                <h3>كشوفات الرواتب</h3>
                 <hr>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">Date From:</label>
+                        <label for="dateFrom">التاريخ من:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">Date To:</label>
+                        <label for="dateTo">التاريخ إلى:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Date</button>
+                            فلترة</button>
                     </form>
                 </div>
-
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Slip</th>
-                            <th>View</th>
-                            <th>Any Issue?</th>
+                            <th>الرقم التعريفي</th>
+                            <th>التاريخ</th>
+                            <th>الكشوف</th>
+                            <th>عرض</th>
+                            <th>هل هناك مشكلة؟</th>
 
 
                         </tr>
@@ -163,6 +162,7 @@
                         <?php } ?>
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
@@ -177,11 +177,11 @@
     <div class="modal-content" style=" width: 40%;
             height: 40%;">
         <form id="commentForm" method="post">
-            <label for="comment">Discrepancy Reason:</label>
+            <label for="comment">سبب الاختلاف:</label>
             <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
             <br>
             <input type="hidden" id="idField" name="idField">
-            <button type="submit" style="float: right;">Save</button>
+            <button type="submit" style="float: right;">حفظ</button>
         </form>
     </div>
 </div>
@@ -257,7 +257,7 @@
                 // alert('saved successfully');
                 closeModal();
                 setTimeout(function () {
-                    alert('Comment saved successfully');
+                    alert('تم حفظ التعليق بنجاح');
                 }, 100);
                 //   location.reload();
             }

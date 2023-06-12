@@ -1,29 +1,8 @@
 <?php
-/*
- * Copyright (C) 2015 Zeeshan Abbas <zeeshan@iibsys.com> <+966 55 4137245>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+
 define('__SECTION_JS_PATH_', '__js/employees.script.php');
 
-/*
- * Required Data
- */
 
-
-//Departments
 $pdo->bind('status', 'active');
 $rd_depts = $pdo->query("SELECT * FROM departments WHERE `status`=:status ");
 
@@ -39,35 +18,37 @@ $rd_desig = $pdo->query("SELECT * FROM employee_designations ORDER BY desigId AS
 //Countries
 $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
-/*
- * Required Data
- */
-?>
 
+?>
 <div class="container-fluid">
     <h5 class="mb-2 p-1 text-gray-800">
-        <a href="<?php echo __APP_URL__ . $route->q; ?>">Management</a>
+        <a href="<?php echo __APP_URL__ . $route->q; ?>">الإدارة</a>
         <i class="fa fa-chevron-<?php echo $_right; ?>"></i>
-        Employees
+        الموظفين
     </h5>
-
+    php
+    Copy code
     <br>
     <div id="__employees_module_alert_container"></div>
 
     <div class="row">
         <div class="col-xl-12 col-lg-12">
 
-            <h2>Employees</h2>
+            <h2>الموظفين</h2>
             <hr>
 
             <div class="mb-2" align="<?php echo $_right; ?>">
-                <button onclick="__create_modal();" class="btn btn-md btn-primary"> <i class="fas fa-plus"></i> Add
-                    Employee </button>
+                <button onclick="__create_modal();" class="btn btn-md btn-primary"> <i class="fas fa-plus"></i> إضافة
+                    موظف </button>
+            </div>
+            <div class="mb-2" align="<?php echo $_right; ?>">
+                <button onclick="__alott_items();" class="btn btn-md btn-primary"> <i class="fas fa-plus"></i> تخصيص
+                    العناصر </button>
             </div>
             <div class="mb-2" align="<?php echo $_right; ?>">
                 <button onclick="__save_excel_employees();" class="btn btn-md btn-primary"> <i class="fas fa-plus"></i>
-                    Import
-                    Employees </button>
+                    استيراد
+                    الموظفين </button>
             </div>
             <div class="card o-hidden border-0 shadow p-2">
                 <table id="dtc_table"
@@ -75,21 +56,22 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
                     style="width:100%">
                     <thead>
                         <tr>
-                            <th> ID.</th>
-                            <th> CODE.</th>
-                            <th> Name</th>
-                            <th> Father Name</th>
-                            <th width="100px">Options</th>
+                            <th>الرقم</th>
+                            <th>الرمز</th>
+                            <th>الاسم</th>
+                            <th>اسم الأب</th>
+                            <th>الإجازات المستخدمة</th>
+                            <th>الإجازات المتبقية</th>
+                            <th>تذاكر الطيران المستخدمة</th>
+                            <th>تذاكر متبقية</th>
+                            <th width="100px">الخيارات</th>
                         </tr>
                     </thead>
                 </table>
-
             </div>
         </div>
     </div>
 </div>
-
-
 <?php $from_prefix = '_create_'; ?>
 <div class="modal fade" id="_create_record_modal" tabindex="-1" role="dialog"
     aria-labelledby="_create_record_modal_label">
@@ -99,14 +81,13 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
             onsubmit="_ajaxCall('_create_record_modal_form', 'management/employees/create'); return false;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="_create_record_modal_label">Add New Employee</h4>
+                    <h4 class="modal-title" id="_create_record_modal_label">إضافة موظف جديد</h4>
                     <button class="btn btn-sm btn-primary btn-default btn-icon-split" type="button"
                         data-dismiss="modal">
                         <span class="icon text-white-100" style="font-size:11px;"><i
                                 class="fa fa-1x fa-times"></i></span>
                     </button>
                 </div>
-
                 <div class=" p-3">
 
                     <div id="_create_record_modal_response_box"></div>
@@ -115,7 +96,7 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>empCode">Employment Code</label>
+                            <label for="<?php echo $from_prefix; ?>empCode">كود التوظيف</label>
                             <input type="text" value="" name="<?php echo $from_prefix; ?>empCode"
                                 id="<?php echo $from_prefix; ?>empCode" class="form-control form-control-md"
                                 required="required">
@@ -124,7 +105,7 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
                         <div class="form-group col-md-6"></div>
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_joindate">Joining Date</label>
+                            <label for="<?php echo $from_prefix; ?>info_joindate">تاريخ الانضمام</label>
                             <input type="date" value="" name="<?php echo $from_prefix; ?>info_joindate"
                                 id="<?php echo $from_prefix; ?>info_joindate" class="form-control form-control-md"
                                 required="required">
@@ -133,11 +114,11 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="<?php echo $from_prefix; ?>groId">System's Type</label>
+                            <label for="<?php echo $from_prefix; ?>groId">نوع النظام</label>
                             <select name="<?php echo $from_prefix; ?>groId" id="<?php echo $from_prefix; ?>groId"
                                 required="required" class="selectpicker_picker form-control" data-live-search="true"
                                 data-style="btn-default" style="width:100%;">
-                                <option value="">Select Type</option>
+                                <option value="">اختر النوع</option>
                                 <?php for ($i = 0; $i < count($rd_empgro); $i++) { ?>
                                     <option value="<?php echo $rd_empgro[$i]['groId']; ?>"><?php echo $rd_empgro[$i]['name']; ?></option>
                                 <?php } ?>
@@ -146,11 +127,24 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
 
                         <div class="form-group col-md-4">
-                            <label for="<?php echo $from_prefix; ?>desigId">Designation</label>
+                            <label for="<?php echo $from_prefix; ?>desigId">المسمى الوظيفي</label>
                             <select name="<?php echo $from_prefix; ?>desigId" id="<?php echo $from_prefix; ?>desigId"
                                 required="required" class="selectpicker_picker form-control" data-live-search="true"
                                 data-style="btn-default" style="width:100%;">
-                                <option value="">Select Designation</option>
+                                <option value="">اختر النوع</option>
+                                <?php for ($i = 0; $i < count($rd_empgro); $i++) { ?>
+                                    <option value="<?php echo $rd_empgro[$i]['groId']; ?>"><?php echo $rd_empgro[$i]['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group col-md-4">
+                            <label for="<?php echo $from_prefix; ?>desigId">المسمى الوظيفي</label>
+                            <select name="<?php echo $from_prefix; ?>desigId" id="<?php echo $from_prefix; ?>desigId"
+                                required="required" class="selectpicker_picker form-control" data-live-search="true"
+                                data-style="btn-default" style="width:100%;">
+                                <option value="">اختر المسمى الوظيفي</option>
                                 <?php for ($i = 0; $i < count($rd_desig); $i++) { ?>
                                     <option value="<?php echo $rd_desig[$i]['desigId']; ?>"><?php echo $rd_desig[$i]['name']; ?></option>
                                 <?php } ?>
@@ -159,11 +153,11 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
 
                         <div class="form-group col-md-4">
-                            <label for="<?php echo $from_prefix; ?>deptId">Department</label>
+                            <label for="<?php echo $from_prefix; ?>deptId">القسم</label>
                             <select name="<?php echo $from_prefix; ?>deptId" id="<?php echo $from_prefix; ?>deptId"
                                 required="required" class="selectpicker_picker form-control" data-live-search="true"
                                 data-style="btn-default" style="width:100%;">
-                                <option value="">Select Department</option>
+                                <option value="">اختر القسم</option>
                                 <?php for ($i = 0; $i < count($rd_depts); $i++) { ?>
                                     <option value="<?php echo $rd_depts[$i]['deptId']; ?>"><?php echo $rd_depts[$i]['name']; ?></option>
                                 <?php } ?>
@@ -174,7 +168,7 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_fullname_en">Employee's Name</label>
+                            <label for="<?php echo $from_prefix; ?>info_fullname_en">اسم الموظف</label>
                             <input type="text" value="" name="<?php echo $from_prefix; ?>info_fullname_en"
                                 id="<?php echo $from_prefix; ?>info_fullname_en" class="form-control form-control-md"
                                 required="required">
@@ -183,7 +177,7 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_fathername_en">Father's Name</label>
+                            <label for="<?php echo $from_prefix; ?>info_fathername_en">اسم الأب</label>
                             <input type="text" value="" name="<?php echo $from_prefix; ?>info_fathername_en"
                                 id="<?php echo $from_prefix; ?>info_fathername_en" class="form-control form-control-md"
                                 required="required">
@@ -191,14 +185,14 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_fullname_ar">Employee's Name [Arabic]</label>
+                            <label for="<?php echo $from_prefix; ?>info_fullname_ar">اسم الموظف [بالعربية]</label>
                             <input type="text" value="" dir="rtl" name="<?php echo $from_prefix; ?>info_fullname_ar"
                                 id="<?php echo $from_prefix; ?>info_fullname_ar" class="form-control form-control-md">
                         </div>
 
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_fathername_ar">Father's Name [Arabic]</label>
+                            <label for="<?php echo $from_prefix; ?>info_fathername_ar">اسم الأب [بالعربية]</label>
                             <input type="text" value="" dir="rtl" name="<?php echo $from_prefix; ?>info_fathername_ar"
                                 id="<?php echo $from_prefix; ?>info_fathername_ar" class="form-control form-control-md">
                         </div>
@@ -208,7 +202,7 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
                     <div class="form-row">
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_dob">Date Of Birth</label>
+                            <label for="<?php echo $from_prefix; ?>info_dob">تاريخ الميلاد</label>
                             <input type="date" value="" name="<?php echo $from_prefix; ?>info_dob"
                                 id="<?php echo $from_prefix; ?>info_dob" class="form-control form-control-md"
                                 required="required">
@@ -217,38 +211,38 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
 
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_gender">Gender</label>
+                            <label for="<?php echo $from_prefix; ?>info_gender">الجنس</label>
                             <select name="<?php echo $from_prefix; ?>info_gender"
                                 id="<?php echo $from_prefix; ?>info_gender" required="required"
                                 class="selectpicker_picker form-control" data-live-search="true"
                                 data-style="btn-default" style="width:100%;">
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="">اختر الجنس</option>
+                                <option value="male">ذكر</option>
+                                <option value="female">أنثى</option>
                             </select>
                         </div>
 
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_maritalstatus">Marital Status</label>
+                            <label for="<?php echo $from_prefix; ?>info_maritalstatus">الحالة الزوجية</label>
                             <select name="<?php echo $from_prefix; ?>info_maritalstatus"
                                 id="<?php echo $from_prefix; ?>info_maritalstatus"
                                 class="selectpicker_picker form-control" data-live-search="true"
                                 data-style="btn-default" style="width:100%;">
-                                <option value="">Select Gender</option>
-                                <option value="single">Single</option>
-                                <option value="married">Married</option>
-                                <option value="divorced">Divorced</option>
+                                <option value="">اختر الحالة الزوجية</option>
+                                <option value="single">أعزب</option>
+                                <option value="married">متزوج</option>
+                                <option value="divorced">مطلق</option>
                             </select>
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="<?php echo $from_prefix; ?>info_countrycode">Country</label>
+                            <label for="<?php echo $from_prefix; ?>info_countrycode">الدولة</label>
                             <select name="<?php echo $from_prefix; ?>info_countrycode"
                                 id="<?php echo $from_prefix; ?>info_countrycode" required="required"
                                 class="selectpicker_picker form-control" data-live-search="true"
                                 data-style="btn-default" style="width:100%;">
-                                <option value="">Select Country</option>
+                                <option value="">اختر الدولة</option>
                                 <?php for ($i = 0; $i < count($rd_contr); $i++) { ?>
                                     <option value="<?php echo $rd_contr[$i]['country_code']; ?>"><?php echo strtoupper($rd_contr[$i]['country_enName']); ?></option>
                                 <?php } ?>
@@ -266,7 +260,7 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
                         <div class="form-group col-md-12" align="<?php echo $_right; ?>">
                             <button class="btn btn-sm  btn-primary btn-icon-split" name="_create_record_modal_form_btn"
                                 id="_create_record_modal_form_btn" type="submit" value="button">
-                                <span class="icon text-white-100"><i class="fas fa-save"></i> Save</span>
+                                <span class="icon text-white-100"><i class="fas fa-save"></i> حفظ</span>
                             </button>
                         </div>
                     </div>
@@ -297,38 +291,95 @@ $rd_contr = $pdo->query("SELECT * FROM countries ORDER BY country_code ASC");
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Employees</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">إضافة موظفين</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
 
                     <div class="form-group">
-                        <label for="claim-excel">Excel File (Please upload excel file to add employees)</label>
+                        <label for="claim-excel">ملف إكسل (الرجاء تحميل ملف إكسل لإضافة الموظفين)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-excel" name="claim-excel"
                                 accept=".xls,.xlsx,.csv">
-                            <label class="custom-file-label" for="claim-excel">Choose file</label>
+                            <label class="custom-file-label" for="claim-excel">اختر ملف</label>
                         </div>
                     </div>
 
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                        <button type="submit" class="btn btn-primary">إضافة الموظفين</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Employees</button>
-            </div>
-            </form>
         </div>
     </div>
 
 </div>
+<div id="myModal2" class="modal">
 
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="height: 30%;">
+            <div class="modal-body">
+                <form action="" method="POST" style="float: none;">
+                    <div class="form-group">
+                        <h2>تخصيص العناصر</h2>
+                        <label for="items">اختر عنصرًا:</label>
+                        <select id="items" name="item_ids[]" multiple>
+                            <?php
+                            $result = $pdo->query('SELECT id ,item as item from alotted_item');
+                            foreach ($result as $row) {
+                                $itemId = $row['id'];
+                                $item_name = $row['item'];
+                                echo "<option value='$itemId'>$item_name</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employees">اختر موظفًا:</label>
+                        <select id="employees" name="employee_id">
+                            <?php
+                            $result = $pdo->query('SELECT e.empId, e.info_fullname_en AS name FROM employees e JOIN employee_designations ed ON ed.desigId=e.desigId WHERE ed.name="LABOUR";');
+
+                            for ($i = 0; $i < count($result); $i++) {
+                                $employee_id = $result[$i]['empId'];
+                                $employee_name = $result[$i]['name'];
+                                echo "<option value='$employee_id'>$employee_name</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', '1');
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 include '/opt/lampp/htdocs/inat/vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the path to the uploaded file
+    if ($_POST['item_ids'] != null) { //one by one insert item in to employee_allocated_item table with employeeId
+        // $result=$pdo->query('INSERT into employee_allocated_item (itemId,employeeId) values ('.$_POST["item_ids"][0]).','.$_SESSION['employeeId'].')');
+        $itemIds = $_POST['item_ids'];
+        // Insert form data into database
+        for ($i = 0; $i < count($itemIds); $i++) {
+            $sql = "INSERT INTO employee_allocated_item ( employeeId, itemId)
+                VALUES (" . $employee_id . "," . $itemIds[$i] . ")";
+            $result = $pdo->query($sql);
+        }
+        echo "<meta http-equiv='refresh' content='0'>";
+    }
     try {
         $file_name = $_FILES['claim-excel']['name'];
         $file_tmp = $_FILES['claim-excel']['tmp_name'];

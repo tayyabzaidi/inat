@@ -129,30 +129,28 @@
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Visa</button>
-
+                        data-target="#myModal">أضف تأشيرة</button>
                 </div>
-
-                <h3>Visa List</h3>
+                <h3>قائمة التأشيرات</h3>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">Date From:</label>
+                        <label for="dateFrom">من تاريخ:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">Date To:</label>
+                        <label for="dateTo">إلى تاريخ:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Date</button>
+                            تاريخ</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>I.D</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Comment</th>
-                            <th>Visa</th>
-                            <th>Attachment</th>
+                            <th>المعرّف</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                            <th>التعليق</th>
+                            <th>التأشيرة</th>
+                            <th>المرفق</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -248,36 +246,36 @@
 
 <!-- The Modal -->
 <div id="myModal1" class="modal">
-
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Visa</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">إضافة تأشيرة</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="claim-comment">Comment</label>
+                        <label for="claim-comment">التعليق</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="claim-attachments">Attachments</label>
+                        <label for="claim-attachments">المرفقات</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-attachments"
                                 name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
+                            <label class="custom-file-label" for="claim-attachments">اختر ملف</label>
                         </div>
                     </div>
 
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Visa</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                <button type="submit" class="btn btn-primary">إضافة تأشيرة</button>
             </div>
             </form>
         </div>
     </div>
+
 
 </div>
 
@@ -364,7 +362,7 @@
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
-                        alert("There are no attachments.");
+                        alert("لا توجد مرفقات.");
                         return;
                     }
                     // Loop through the binary data and convert it to base64-encoded strings
@@ -374,7 +372,6 @@
                     }
                     // Create a modal to display the images
                     var modal = $('<div id="myModal2" class="modal"></div>');
-
                     // Create a modal dialog
                     var dialog = $('<div class="modal-dialog" role="document"></div>');
 
@@ -385,7 +382,7 @@
                     var header = $('<div class="modal-header"></div>');
 
                     // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
 
                     // Add the title to the header
                     header.append(title);

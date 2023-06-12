@@ -60,43 +60,42 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-                <h3>Salary Slips</h3>
+                <h3>كشوف المرتبات</h3>
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add
-                        Salary</button>
+                        data-target="#myModal">إضافة مرتب</button>
 
                 </div>
                 <hr>
 
                 <!-- <div class="mb-2" align="<?php echo $_right; ?>">
-                    <a href="#" class="btn btn-md btn-primary"> <i class="fas fa-filter"></i> Filter </a>
-                </div> -->
+                                <a href="#" class="btn btn-md btn-primary"> <i class="fas fa-filter"></i> تصفية </a>
+                            </div> -->
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">Date From:</label>
+                        <label for="dateFrom">التاريخ من:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">Date To:</label>
+                        <label for="dateTo">التاريخ إلى:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Date</button>
+                            التاريخ</button>
                     </form>
 
                     <form action="#" method="POST">
-                        <label for="employeeId">Employee:</label>
+                        <label for="employeeId">الموظف:</label>
                         <input type="text" id="employee" name="employee">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Employee</button>
+                            الموظف</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Employee</th>
-                            <th>Slip</th>
-                            <th>Discrepancy Reason</th>
+                            <th>التاريخ</th>
+                            <th>الموظف</th>
+                            <th>الكشوف</th>
+                            <th>سبب الاختلاف</th>
                             <th></th>
 
                         </tr>
@@ -163,30 +162,27 @@
         </div>
     </div>
 </div>
-
-
 <div id="myModal1" class="modal">
-
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="height: 30%;">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Salary Slip
+                <h5 class="modal-title" id="addClaimModalLabel">كشوف المرتبات
                 </h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data" style="float: none;">
 
                     <div class="form-group">
-                        <label for="claim-pdf">PDF File (Salary
-                            Slip)</label>
+                        <label for="claim-pdf">ملف PDF (كشوف
+                            المرتبات)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
+                            <label class="custom-file-label" for="claim-pdf">اختر ملف</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="employees">Choose an Employee:</label>
+                        <label for="employees">اختر موظفًا:</label>
                         <select id="employees" name="employee_id">
                             <?php
                             $result = $pdo->query('SELECT e.empId, e.info_fullname_en AS name FROM employees e JOIN employee_designations ed ON ed.desigId=e.desigId WHERE ed.name="LABOUR";');
@@ -202,31 +198,20 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">إغلاق</button>
+                <button type="submit" class="btn btn-primary">حفظ</button>
             </div>
             </form>
         </div>
     </div>
     <script>
-        // const fileInput = document.getElementById('claim-pdf');
 
-        //     // Add an event listener to check the file size when selected
-        //     fileInput.addEventListener('change', function () {
-        //         const file = fileInput.files[0];
-        //         const maxSize = 100 * 1024; // 100 KB (in bytes)
-
-        //         if (file && file.size > maxSize) {
-        //             // File size exceeds the maximum limit
-        //             alert('File size should not exceed 100 KB.');
-        //             // Reset the file input
-        //             fileInput.value = '';
-        //         }
-        //     });
         function showPdfModal(button) {
             const pdfBase64 = button.dataset.pdf;
             if (pdfBase64 == '')
-                alert('There is no salary slip');
+                alert('لا يوجد كشف مرتب');
+
+
             else {
                 const modal = document.createElement('div');
                 modal.className = 'modal';

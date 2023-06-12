@@ -59,9 +59,6 @@
                     case 'visa':
                         require_once('visa/visa.php');
                         break;
-                    // case 'submitLeaves':
-                    //     require_once('leaves/submitLeaves.php');
-                    //     break;
                     case 'leaves':
                         require_once('leaves/leaves.php');
                         break;
@@ -69,8 +66,14 @@
                         require_once('salary/salary.php');
                         break;
                     case 'expense':
-                            require_once('expense/expense.php');
-                            break;
+                        require_once('expense/expense.php');
+                        break;
+                    case 'items':
+                        require_once('allot_item/allot_item.php');
+                        break;
+                    case 'trips':
+                        require_once('business_trip/business_trip.php');
+                        break;
                     default:
                         require_once('default.php');
                 }

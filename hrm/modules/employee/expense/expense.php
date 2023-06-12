@@ -113,29 +113,29 @@
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Claim</button>
+                        data-target="#myModal">إضافة مطالبة</button>
 
                 </div>
 
-                <h3>Claim List</h3>
+                <h3>قائمة المطالبات</h3>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">Date From:</label>
+                        <label for="dateFrom">من تاريخ:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">Date To:</label>
+                        <label for="dateTo">إلى تاريخ:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Date</button>
+                            تاريخ</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>I.D</th>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Total Amount</th>
+                            <th>المعرف</th>
+                            <th>التاريخ</th>
+                            <th>الاسم</th>
+                            <th>الحالة</th>
+                            <th>المبلغ الإجمالي</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -182,66 +182,66 @@
                                             $getStatus[$j]['status_name'] ==
                                             'HOD_approved'
                                         ) {
-                                            $HOD = 'approved';
+                                            $HOD = 'تمت الموافقة';
                                         } elseif (
                                             $getStatus[$j]['status_name'] ==
                                             'AM_approved'
                                         ) {
-                                            $AM = 'approved';
+                                            $AM = 'تمت الموافقة';
                                         } elseif (
                                             $getStatus[$j]['status_name'] ==
                                             'AM_disapproved'
                                         ) {
-                                            $AM = 'disapprove';
+                                            $AM = 'تم الرفض';
                                         } elseif (
                                             $getStatus[$j]['status_name'] ==
                                             'HOD_disapproved'
                                         ) {
-                                            $HOD = 'disapprove';
+                                            $HOD = 'تم الرفض';
                                         } else if (
                                             $getStatus[$j]['status_name'] ==
                                             'HR_approved'
                                         ) {
-                                            $HR = 'approved';
+                                            $HR = 'تمت الموافقة';
                                         } else if (
                                             $getStatus[$j]['status_name'] ==
                                             'HR_disapproved'
                                         ) {
-                                            $HR = 'disapprove';
+                                            $HR = 'تم الرفض';
                                         }
                                     }
                                     ?>
 
                                     <div class="ant-tag " style="<?php if (
-                                        $HOD == 'approved'
+                                        $HOD == 'تمت الموافقة'
                                     ) {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HOD == 'disapprove') {
+                                    } elseif ($HOD == 'تم الرفض') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        HOD</div>
+                                        موافقة المشرف المباشر</div>
                                     <div class="ant-tag " style="<?php if (
-                                        $AM == 'approved'
+                                        $AM == 'تمت الموافقة'
                                     ) {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($AM == 'disapprove') {
+                                    } elseif ($AM == 'تم الرفض') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        AM</div>
+                                        موافقة المدير المباشر</div>
                                     <div class="ant-tag " style="<?php if (
-                                        $HR == 'approved'
+                                        $HR == 'تمت الموافقة'
                                     ) {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HR == 'disapprove') {
+                                    } elseif ($HR == 'تم الرفض') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        HR</div>
+                                        موافقة إدارة الموارد البشرية</div>
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
@@ -261,51 +261,50 @@
         </div>
     </div>
 </div>
-
 <!-- The Modal -->
 <div id="myModal1" class="modal">
-
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">إضافة مطالبة</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="claim-comment">Comment</label>
+                        <label for="claim-comment">التعليق</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="claim-pdf">PDF File (Please submit expense form)</label>
+                        <label for="claim-pdf">ملف PDF (يرجى تقديم نموذج المصروفات)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
+                            <label class="custom-file-label" for="claim-pdf">اختر الملف</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="claim-attachments">Attachments</label>
+                        <label for="claim-attachments">المرفقات</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-attachments"
                                 name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
+                            <label class="custom-file-label" for="claim-attachments">اختر الملف</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="claim-amount" style="margin-right:20px">Total Amount</label>
+                        <label for="claim-amount" style="margin-right:20px">المبلغ الإجمالي</label>
                         <input type="number" id="total" name="claim-amount" value="0">
                     </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Claim</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                <button type="submit" class="btn btn-primary">إضافة مطالبة</button>
             </div>
             </form>
         </div>
     </div>
-
 </div>
+
+
 
 
 
@@ -354,9 +353,9 @@
             var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
             $.ajax({
                 url: __table_url,
-                "data": {
-                    "foreignId": expenseId,
-                    "type": "expense"
+                data: {
+                    foreignId: expenseId,
+                    type: "expense"
                 },
                 type: 'POST',
                 dataType: "json",
@@ -364,12 +363,12 @@
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
-                        alert("There are no attachments.");
+                        alert("لا توجد مرفقات.");
                         return;
                     }
                     // Loop through the binary data and convert it to base64-encoded strings
                     for (var i = 0; i < data.result.length; i++) {
-                        images.push("data:image/jpeg;base64," + (data.result[i]));
+                        images.push("data:image/jpeg;base64," + data.result[i]);
                         console.log(images[i]);
                     }
                     // Create a modal to display the images
@@ -385,13 +384,14 @@
                     var header = $('<div class="modal-header"></div>');
 
                     // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
 
                     // Add the title to the header
                     header.append(title);
 
                     // Add the header to the content
                     content.append(header);
+
                     var body = $('<div class="modal-body"></div>');
 
                     // Create a container for the images

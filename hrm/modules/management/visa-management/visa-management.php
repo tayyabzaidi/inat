@@ -115,30 +115,26 @@
 
             <div class="card-body">
 
-
-                <h3>Visa List</h3>
-
+                <h3>قائمة التأشيرات</h3>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>I.D</th>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Attachment</th>
-                            <?php if ($_SESSION['designation'] == 'DEPARTMENT HEAD') { ?>
-                                <th>Approve</th>
-                                <th>Disapprove</th>
+                            <th>الرقم</th>
+                            <th>التاريخ</th>
+                            <th>الاسم</th>
+                            <th>الحالة</th>
+                            <th>المرفقات</th>
+                            <?php if ($_SESSION['designation'] == 'رئيس القسم') { ?>
+                                <th>الموافقة</th>
+                                <th>الرفض</th>
                             <?php } ?>
-                            <?php if ($_SESSION['designation'] == 'HR MANAGER') { ?>
+                            <?php if ($_SESSION['designation'] == 'مدير الموارد البشرية') { ?>
                                 <th></th>
                             <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-
-                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM visa ee join employees e on e.empId=ee.employeeId';
+                        <?php $sql = 'SELECT ee.*,e.info_fullname_ar as `name` FROM visa ee join employees e on e.empId=ee.employeeId';
 
 
                         $sql .= " ORDER BY ee.`date`;";
@@ -190,17 +186,17 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        HOD</div>
+                                        رئيس القسم</div>
 
                                 </td>
                                 <!-- <td><button data-expenseId=<?php echo $recEmpData[$i]["id"] ?> class="modal-button"
-                                        href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button>
-                                </td> -->
+                    href="#myModal2" style="background: none;"><i class="fa fa-folder"></i></button>
+            </td> -->
                                 <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
                                         style="background: none;"><i class="fa fa-folder"></i></button></td>
 
 
-                                <?php if ($_SESSION['designation'] == 'DEPARTMENT HEAD') { ?>
+                                <?php if ($_SESSION['designation'] == 'رئيس القسم') { ?>
                                     <td>
 
                                         <form action="#" method="POST" id="myForm">
@@ -211,7 +207,7 @@
                                                     $pdo->bind('employeeId', $_SESSION['empId']);
                                                     $pdo->bind('visaId', $recEmpData[$i]['id']);
                                                     $s = $pdo->query('select "approve" as `status` from status s join visa_status ees join employees e on s.id=ees.statusId and s.designation_id=e.desigId where e.empId=:employeeId and ees.visaId=:visaId
-                                                and s.status_name not like "%disapproved";');
+                            and s.status_name not like "%disapproved";');
                                                     if ($s[0]['status'] == 'approve')
                                                         echo "checked"; ?>>
                                             </label>
@@ -245,19 +241,18 @@
 
                                     </td>
                                 <?php } ?>
-                                <?php if ($_SESSION['designation'] == 'HR MANAGER') { ?>
+                                <?php if ($_SESSION['designation'] == 'مدير الموارد البشرية') { ?>
 
                                     <td> <button type="button" class="btn btn-primary modal-button" href="#myModal1"
                                             data-toggle="modal" data-target="#myModal"
-                                            data-id="<?php echo $recEmpData[$i]['id']; ?>">Upload
-                                            Visa</button>
+                                            data-id="<?php echo $recEmpData[$i]['id']; ?>">تحميل
+                                            التأشيرة</button>
 
                                     </td>
                                 <?php } ?>
                             </tr>
                         <?php } ?>
                     </tbody>
-
                 </table>
             </div>
         </div>
@@ -315,17 +310,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="height: 30%;">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Visa
+                <h5 class="modal-title" id="addClaimModalLabel">تأشيرة
                 </h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data" style="float: none;">
 
                     <div class="form-group">
-                        <label for="claim-pdf">PDF File (Visa)</label>
+                        <label for="claim-pdf">ملف PDF (التأشيرة)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
+                            <label class="custom-file-label" for="claim-pdf">اختر ملف</label>
                         </div>
                     </div>
 
@@ -333,12 +328,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">إغلاق</button>
+                <button type="submit" class="btn btn-primary">حفظ</button>
             </div>
             </form>
         </div>
     </div>
+
 </div>
 <script>
 
@@ -420,7 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
-                        alert("There are no attachments.");
+                        alert("لا توجد مرفقات.");
                         return;
                     }
                     // Loop through the binary data and convert it to base64-encoded strings
@@ -441,7 +437,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     var header = $('<div class="modal-header"></div>');
 
                     // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
 
                     // Add the title to the header
                     header.append(title);

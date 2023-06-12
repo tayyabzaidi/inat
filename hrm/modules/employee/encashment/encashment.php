@@ -113,28 +113,28 @@
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">Add Encashment</button>
+                        data-target="#myModal">إضافة السحب النقدي</button>
 
                 </div>
 
-                <h3>Encashment List</h3>
+                <h3>قائمة السحب النقدي</h3>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">Date From:</label>
+                        <label for="dateFrom">من تاريخ:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">Date To:</label>
+                        <label for="dateTo">إلى تاريخ:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            Date</button>
+                            التاريخ</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>I.D</th>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Status</th>
+                            <th>الرقم</th>
+                            <th>التاريخ</th>
+                            <th>الاسم</th>
+                            <th>الحالة</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -145,7 +145,7 @@
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
 
                         // Build the SQL query based on the provided filter values
-                        $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_encashments ee join employees e on e.empId=ee.employee_id WHERE ee.`employee_id`=:employeeId ';
+                        $sql = 'SELECT ee.*,e.info_fullname_ar as `name` FROM employee_encashments ee join employees e on e.empId=ee.employee_id WHERE ee.`employee_id`=:employeeId ';
 
                         if (!empty($dateFrom) && !empty($dateTo)) {
                             // User has provided both date filters
@@ -209,7 +209,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        HOD</div>
+                                        مدير الإدارة</div>
 
                                     <div class="ant-tag " style="<?php if (
                                         $HR == 'approved'
@@ -220,7 +220,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        HR</div>
+                                        مدير الموارد البشرية</div>
                                 </td>
 
                                 <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
@@ -246,28 +246,28 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">Add Encashment</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">إضافة السحب النقدي</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="claim-comment">Comment</label>
+                        <label for="claim-comment">التعليق</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="claim-attachments">Attachments</label>
+                        <label for="claim-attachments">المرفقات</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-attachments"
                                 name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
+                            <label class="custom-file-label" for="claim-attachments">اختر ملف</label>
                         </div>
                     </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Encashment</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                <button type="submit" class="btn btn-primary">إضافة السحب النقدي</button>
             </div>
             </form>
         </div>
@@ -332,7 +332,7 @@
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
-                        alert("There are no attachments.");
+                        alert("لا توجد مرفقات.");
                         return;
                     }
                     // Loop through the binary data and convert it to base64-encoded strings
@@ -353,7 +353,7 @@
                     var header = $('<div class="modal-header"></div>');
 
                     // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
 
                     // Add the title to the header
                     header.append(title);
