@@ -4,17 +4,17 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
     . '</div>';
 ?>
 <script>
-    console.log('تهيئة سكربت أقسام....');
+    console.log('Initializing Leave Types script....');
 
     /*
-     * قسم العناصر العامة 
+     * General variables
      */
 
     var __table;
     var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=datatable/management/leave-types/leave-types';
 
     /*
-     * قسم العناصر العامة 
+     * General variables
      */
 
     function __table_init() {
@@ -24,7 +24,7 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
             "ajax": {
                 url: __table_url,
                 "data": {
-                    "_dtsis": 'البيانات المطلوبة للإرسال.'
+                    "_dtsis": 'Data to send.'
                 },
                 type: 'POST',
                 dataFilter: function (data) {
@@ -83,17 +83,17 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 "lengthMenu": "_MENU_",
                 "loadingRecords": "...",
                 "processing": "<?php echo $lib->_('spinner_text'); ?>",
-                "search": "بحث",
-                "zeroRecords": "لا توجد نتائج مطابقة.",
+                "search": "Search",
+                "zeroRecords": "No match found.",
                 "paginate": {
-                    "first": "الأول",
-                    "last": "الأخير",
-                    "next": "التالي",
-                    "previous": "السابق"
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
                 },
                 "aria": {
-                    "sortAscending": ": تفعيل لترتيب العمود تصاعديًا",
-                    "sortDescending": ": تفعيل لترتيب العمود تنازليًا"
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
                 }
             }
 
@@ -145,19 +145,14 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
 
             case 'delete':
                 console.log(data);
-                console.log('الحذف المطلوب');
+                console.log('Delete action called');
                 break;
 
             default:
-                console.log('إجراء غير معروف ' + action);
+                console.log('Unknown action ' + action);
         }
     }
 
     function cb_close_the_editor(__r) {
         $("#_edit_record_modal").modal('hide');
-    }
-
-
-
-
-</script>
+    }</script>

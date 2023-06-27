@@ -136,14 +136,14 @@
     border: 2px solid rgba(235, 152, 23, 0.7);
     margin-left: 1%;">
             <div class="ant-card-body">
-                <h4 class="heading">الإجازات المرضية</h4>
+                <h4 class="heading">Sick Leaves</h4>
                 <span class="icon" style="display: block; width: 100%;">
-                    <span>الأيام المتاحة: -</span>
+                    <span>Available Days: -</span>
                     <br>
                     <?php
                     $leaves = $pdo->query("SELECT count(id) as leaves_taken from employee_leaves WHERE emp_id=" . $employeeId . " AND leave_type = 'Sick Leave'")
                         ?>
-                    <span>الأيام المستفادة: <?php echo $leaves[0]['leaves_taken'] ?></span>
+                    <span>Utilized Days: <?php echo $leaves[0]['leaves_taken'] ?></span>
                 </span>
                 <div>
                 </div>
@@ -152,14 +152,14 @@
         <?php $available_leaves = $_SESSION['available_leaves']; ?>
         <div style="width:13%; padding-left: 7px; padding-right: 7px; border: 2px solid rgba(235, 152, 23, 0.7);">
             <div class="ant-card-body">
-                <h4 class="heading">الإجازات السنوية</h4>
+                <h4 class="heading">Annual Leaves</h4>
                 <span class="icon" style="display: block; width: 100%;">
                     <?php $annual_leaves = $pdo->query("SELECT count(id) as leaves_taken from employee_leaves WHERE emp_id=" . $employeeId . " AND leave_type = 'Annual Leave'"); ?>
-                    <span>الأيام المتاحة:
+                    <span>Available Days:
                         <?php $days_available = -$annual_leaves[0]['leaves_taken'] + $available_leaves;
                         echo $days_available ?></span>
                     <br>
-                    <span>الأيام المستفادة: <?php echo $annual_leaves[0]['leaves_taken'] ?></span>
+                    <span>Utilized Days: <?php echo $annual_leaves[0]['leaves_taken'] ?></span>
                 </span>
                 <div>
                 </div>
@@ -177,19 +177,19 @@
                         $pdf_policy = base64_encode($policy[0]['policy']);
                         ?>
                         <button class="btn btn-primary" data-pdf="<?php echo $pdf_policy ?>"
-                            onclick="showPdfModal(this)">سياسة الإجازات</button>
+                            onclick="showPdfModal(this)">Leave Policy</button>
                         <button type="button" class="btn btn-primary modal-button" href="#myModal1"
                             data-empid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>" data-toggle="modal"
-                            data-target="#myModal">إضافة إجازة</button>
+                            data-target="#myModal">Add Leave</button>
                     </div>
-                    <h3>قائمة الإجازات</h3>
+                    <h3>Leave List</h3>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>تاريخ البدء</th>
-                                <th>عدد الأيام</th>
-                                <th>نوع الإجازة</th>
-                                <th>الحالة</th>
+                                <th>Start Date</th>
+                                <th>No. of Days</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -228,7 +228,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            مدير القسم</div>
+                                            Department Manager</div>
                                         <div class="ant-tag" style="<?php if ($OM == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($OM == 'disapprove') {
@@ -236,7 +236,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            مدير العمليات</div>
+                                            Operations Manager</div>
                                         <div class="ant-tag" style="<?php if ($HR == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($HR == 'disapprove') {
@@ -244,12 +244,8 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            موارد بشرية</div>
-                                    </td>
-
-
-
-                                    <?php
+                                            HR Manager</div>
+                                    </td> <?php
                                     $clearnace_attachment_found = false;
                                     $result = $pdo->query("SELECT true as 'ex' from attachment where foreignId=" . $recEmpData[$i]["id"]);
                                     if ($result[0]['ex'] == true)
@@ -273,7 +269,7 @@
                                                 <button type="button" class="btn btn-primary modal-button open-add-clearance-modal"
                                                     href="#myModal3"
                                                     data-leaveid="<?php echo $recEmpData ? $recEmpData[0]['id'] : ''; ?>"
-                                                    data-toggle="modal" data-target="#myModal">إضافة نموذج التصريح</button>
+                                                    data-toggle="modal" data-target="#myModal">Add Clearance Form</button>
 
                                             </td>
 
@@ -291,84 +287,81 @@
     </div>
 
     <!-- The Modal -->
-    <div id="myModal1" class="modal">
-
-        <div class="modal-dialog" role="document">
-            <form name="add-leave-formx" method="post" enctype="multipart/form-data">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addClaimModalLabel">إضافة إجازة</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            <label for="start-date">تاريخ البدء:</label>
-                            <input type="text" class="form-control" id="start-date" name="start-date">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="no-of-days">عدد الأيام:</label>
-                            <input type="number" class="form-control" id="no-of-days" name="no-of-days" min="1"
-                                max="<?php echo $days_available ?>">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="leave-type">نوع الإجازة:</label>
-                            <select class="form-control" id="leave-type" name="leave-type">
-                                <?php
-                                $result = $pdo->query(
-                                    'SELECT * FROM request_types where type="leave"'
-                                );
-                                foreach ($result as $row) {
-                                    echo '<option value="' . $row['name'] . '">' . $row['name'] . '</option>';
-                                }
-
-                                ?>
-                            </select>
-                        </div>
-
-
-
-                        <div class="form-group">
-                            <label for="leave-attachments">ملف PDF (يرجى تقديم طلب الإجازة بصيغة PDF)</label>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="leave-attachments"
-                                    name="leave-attachments" accept=".pdf">
-                                <label class="custom-file-label" for="leave-attachments">اختر ملف</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="add-leave-submit" name="add_leave_submit" type="submit"
-                            class="btn btn-primary">إضافة
-                            إجازة</button>
-                    </div>
-
+    <div class="modal-dialog" role="document">
+        <form name="add-leave-formx" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addClaimModalLabel">Add Leave</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </form>
-        </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="start-date">Start Date:</label>
+                        <input type="text" class="form-control" id="start-date" name="start-date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="no-of-days">Number of Days:</label>
+                        <input type="number" class="form-control" id="no-of-days" name="no-of-days" min="1"
+                            max="<?php echo $days_available ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="leave-type">Leave Type:</label>
+                        <select class="form-control" id="leave-type" name="leave-type">
+                            <?php
+                            $result = $pdo->query(
+                                'SELECT * FROM request_types where type="leave"'
+                            );
+                            foreach ($result as $row) {
+                                echo '<option value="' . $row['name'] . '">' . $row['name'] . '</option>';
+                            }
+
+                            ?>
+                        </select>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="leave-attachments">PDF File (Please submit leave request in PDF format)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="leave-attachments" name="leave-attachments"
+                                accept=".pdf">
+                            <label class="custom-file-label" for="leave-attachments">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="add-leave-submit" name="add_leave_submit" type="submit" class="btn btn-primary">Add
+                        Leave</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
 
     </div>
     <div class="modal-dialog" role="document">
         <form name="clearance-add-leave-formx" method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="clearance-label">إضافة النماذج المتبقية</h5>
+                    <h5 class="modal-title" id="clearance-label">Add Remaining Forms</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="claim-attachments">المرفقات (يرجى إضافة المرفقات مثل نماذج المصادقة على
-                            المركبات)</label>
+                        <label for="claim-attachments">Attachments (Please add attachments like vehicle clearance
+                            forms)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-attachments"
                                 name="claim-attachments[]" accept=".pdf" multiple>
-                            <label class="custom-file-label" for="claim-attachments">اختر ملف</label>
+                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
                         <input type="text" id="leaveId" name="leaveId">
                     </div>
@@ -377,7 +370,7 @@
 
                 <div class="modal-footer">
                     <button id="add-clearance-leave-submit" name="add_clearance_form_submit" type="submit"
-                        class="btn btn-primary">حفظ</button>
+                        class="btn btn-primary">Save</button>
                 </div>
 
             </div>
@@ -394,19 +387,19 @@
             <form name="clearance-add-leave-formx" method="post" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="clearance-label">إضافة النماذج المتبقية</h5>
+                        <h5 class="modal-title" id="clearance-label">Add Remaining Forms</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="claim-attachments">المرفقات (يرجى إضافة المرفقات مثل نماذج التصريح
-                                بالمركبات)</label>
+                            <label for="claim-attachments">Attachments (Please add attachments like vehicle declaration
+                                forms)</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="claim-attachments"
                                     name="claim-attachments[]" accept=".pdf" multiple>
-                                <label class="custom-file-label" for="claim-attachments">اختر ملف</label>
+                                <label class="custom-file-label" for="claim-attachments">Choose file</label>
                             </div>
                             <input type="text" id="leaveId" name="leaveId">
                         </div>
@@ -415,7 +408,7 @@
 
                     <div class="modal-footer">
                         <button id="add-clearance-leave-submit" name="add_clearance_form_submit" type="submit"
-                            class="btn btn-primary">حفظ</button>
+                            class="btn btn-primary">Save</button>
                     </div>
 
                 </div>
@@ -423,8 +416,6 @@
         </div>
 
     </div>
-
-
 
 
     <script>

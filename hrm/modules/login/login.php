@@ -1,18 +1,20 @@
 <?php
 /*
- * حقوق النشر © 2015 زيشان عباس <zeeshan@iibsys.com> <+966 55 4137245>
+ * Copyright © 2015 Zeeshan Abbas <zeeshan@iibsys.com> <+966 55 4137245>
  *
- * هذا البرنامج هو برنامج حر ؛ يمكنك إعادة توزيعه و/أو
- * تعديله وفقًا لشروط الرخصة العامة المتداولة لـ GNU
- * كما نُشرتها مؤسسة البرمجيات الحرة ؛ الإصدار 2
- * من الرخصة ، أو (باختيارك) أي إصدار لاحق.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- * يتم توزيع هذا البرنامج على أمل أن يكون مفيدًا ؛
- * ولكن دون أي ضمان ؛ دون حتى ضمان ضمني للقابلية للبيع أو الصلاحية لغرض معين. انظر
- * الرخصة العامة للبرمجيات العامة للمزيد من التفاصيل.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * يجب تلقي نسخة من الرخصة العامة للبرمجيات العامة
- * مع هذا البرنامج ؛ إذا لم يتم ذلك ، فاكتب إلى مؤسسة البرمجيات الحرة ، إنك. ، 59 معبد مكان - مجموعة 330 ، بوسطن ، ماساتشوستس 02111-1307 ، الولايات المتحدة الأمريكية.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 ?>
 <!DOCTYPE html>
@@ -24,7 +26,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="generator" content="">
-    <title><?php echo $lib->_('عنوان_الصفحة'); ?></title>
+    <title><?php echo $lib->_('Page_Title'); ?></title>
     <?php require __DIR__ . '/../_ui/css.php'; ?>
     <style>
 
@@ -49,7 +51,7 @@
                                 <div class="col-lg-7">
                                     <div class="p-5">
                                         <div class="text-<?php echo $_left; ?>">
-                                            <h2 class="h2 mb-4">تسجيل الدخول الآن!</h2>
+                                            <h2 class="h2 mb-4">Login Now!</h2>
                                         </div>
 
                                         <form class="user" name="authForm" id="authForm" method="POST"
@@ -62,24 +64,23 @@
                                             <div class="form-group">
                                                 <input type="text" class="form-control form-control-user" id="user_name"
                                                     name="user_name" aria-describedby="" autocomplete="off"
-                                                    placeholder="رمز الوصول أو البريد الإلكتروني">
+                                                    placeholder="Access Code or Email">
                                             </div>
                                             <div class="form-group">
                                                 <input type="password" name="user_password" id="user_password"
-                                                    class="form-control form-control-user" placeholder="كلمة المرور">
+                                                    class="form-control form-control-user" placeholder="Password">
                                             </div>
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox small">
                                                     <input type="checkbox" class="custom-control-input"
                                                         name="user_remember" id="user_remember">
-                                                    <label class="custom-control-label"
-                                                        for="user_remember">تذكرني</label>
+                                                    <label class="custom-control-label" for="user_remember">Remember
+                                                        Me</label>
                                                 </div>
                                             </div>
 
                                             <div align="right">
-                                                <button type="submit" class="btn btn-primary btn-user ">تسجيل
-                                                    الدخول</button>
+                                                <button type="submit" class="btn btn-primary btn-user ">Login</button>
                                             </div>
                                         </form>
 

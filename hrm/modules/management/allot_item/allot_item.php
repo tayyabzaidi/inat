@@ -82,16 +82,16 @@
         <div class="col-lg-12 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <h3>العناصر المخصصة</h3>
+                    <h3>Custom Items</h3>
                     <hr>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>التاريخ</th>
-                                <th>الموظف</th>
-                                <th>العناصر المخصصة</th>
-                                <th>الحالة</th>
-                                <th>الإجراء</th>
+                                <th>Date</th>
+                                <th>Employee</th>
+                                <th>Custom Items</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -130,7 +130,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            مدير الإدارة</div>
+                                            Department Manager</div>
                                         <div class="ant-tag " style="<?php if ($HR == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($HR == 'disapproved') {
@@ -138,13 +138,13 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            إدارة الموارد البشرية</div>
+                                            Human Resources</div>
                                     </td>
                                     <td>
                                         <button class="modal-button approve-disapprove-btn"
                                             id="<?php echo $recEmpData[$i]['employee_item_id']; ?>" href="#myModal1"
                                             style="background: none;"
-                                            data-id="<?php echo $recEmpData[$i]['employee_item_id']; ?>">الموافقة/الرفض</button>
+                                            data-id="<?php echo $recEmpData[$i]['employee_item_id']; ?>">Approve/Disapprove</button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -159,7 +159,7 @@
             <form name="approve-dispprove-item" method="post" action="approve-disapprove-item">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addClaimModalLabel">الموافقة/الرفض</h5>
+                        <h5 class="modal-title" id="addClaimModalLabel">Approve/Disapprove</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -167,18 +167,19 @@
                     <div class="modal-body">
                         <input style="display: none" type="text" name="itemId" id="itemId">
                         <div class=" form-group">
-                            <label for="comments">التعليقات:</label>
+                            <label for="comments">Comments:</label>
                             <input type="text" class="form-control" name="comments" id="comments">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" name="approve" id="approve">الموافقة</button>
-                        <button type="submit" class="btn btn-danger" id="disapprove">الرفض</button>
+                        <button type="submit" class="btn btn-success" name="approve" id="approve">Approve</button>
+                        <button type="submit" class="btn btn-danger" id="disapprove">Disapprove</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
     <script>
         $('.approve-disapprove-btn').click(function () {
             var itemId = $(this).data('id');

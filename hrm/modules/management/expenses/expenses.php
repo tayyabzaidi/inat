@@ -124,36 +124,38 @@
                             <div class="card-body">
 
 
-                                <h3>قائمة المطالبات</h3>
+                                <h3>Claims List</h3>
                                 <div class="form-container">
                                     <form action="#" method="POST">
-                                        <label for="dateFrom">تاريخ من:</label>
+                                        <label for="dateFrom">Date From:</label>
                                         <input type="date" id="dateFrom" name="dateFrom">
-                                        <label for="dateTo">تاريخ إلى:</label>
+                                        <label for="dateTo">Date To:</label>
                                         <input type="date" id="dateTo" name="dateTo">
                                         <button type="submit" class="btn btn-md btn-primary"><i
-                                                class="fa fa-filter"></i> تاريخ</button>
+                                                class="fa fa-filter"></i> Filter by Date</button>
                                     </form>
                                     <form action="#" method="POST">
-                                        <label for="employeeId">الموظف:</label>
+                                        <label for="employeeId">Employee:</label>
                                         <input type="text" id="employee" name="employee">
                                         <button type="submit" class="btn btn-md btn-primary"><i
-                                                class="fa fa-filter"></i> الموظف</button>
+                                                class="fa fa-filter"></i> Filter by Employee</button>
                                     </form>
                                 </div>
+
                                 <table class="table table-sm table-responsive-sm table-condensed table-striped"
                                     style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>الرقم</th>
-                                            <th>التاريخ</th>
-                                            <th>الاسم</th>
-                                            <th>النموذج</th>
-                                            <th>المبلغ الإجمالي</th>
-                                            <th>المرفقات</th>
-                                            <th>الموافقة</th>
-                                            <th>عدم الموافقة</th>
+                                            <th>Number</th>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Form</th>
+                                            <th>Total Amount</th>
+                                            <th>Attachments</th>
+                                            <th>Approval</th>
+                                            <th>Disapproval</th>
                                         </tr>
+
                                     </thead>
                                     <tbody>
                                         <?php
@@ -243,7 +245,7 @@
                                                                 onchange="this.form.submit();" <?php if ($isChecked) {
                                                                     echo "checked";
                                                                 } ?>>
-             </label>
+                     </label>
                                                         <input type="hidden" name="expenseId"
                                                             value="<?php echo $recEmpData[$i]['id']; ?>">
                                                         <button type="submit" style="display:none;"></button>
@@ -343,7 +345,7 @@
                                     var images = [];
                                     if (data.result === null) {
                                         // Display an alert message if there are no attachments
-                                        alert("لا توجد مرفقات.");
+                                        alert("There are no attachments.");
                                         return;
                                     }
                                     // Loop through the binary data and convert it to base64-encoded strings
@@ -364,7 +366,7 @@
                                     var header = $('<div class="modal-header"></div>');
 
                                     // Create a modal title
-                                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
+                                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
 
                                     // Add the title to the header
                                     header.append(title);

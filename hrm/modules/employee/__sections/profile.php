@@ -39,15 +39,15 @@
                             <div class="panel-footer"></div>
                             <div class="container">
                                 <p>
-                                    <small>رمز التوظيف</small>
+                                    <small>Employee Code</small>
                                     <?php echo $_auth_emp_rec['empCode']; ?>
                                 </p>
                                 <p>
-                                    <small>البريد الإلكتروني</small>
+                                    <small>Email</small>
                                     <?php echo $_auth_info['authEmail']; ?>
                                 </p>
                                 <p>
-                                    <small>الهاتف</small>
+                                    <small>Phone</small>
                                     <?php echo $_auth_emp_rec['info_phone']; ?>
                                 </p>
 

@@ -4,17 +4,17 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
     . '</div>';
 ?>
 <script>
-    console.log('تهيئة سكربت التصنيفات....');
+    console.log('Initializing designations script....');
 
     /*
-     * قسم العناصر العامة
+     * General section
      */
 
     var __table;
     var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=datatable/management/designations/designations';
 
     /*
-     * قسم العناصر العامة
+     * General section
      */
 
     function __table_init() {
@@ -23,7 +23,7 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
             "ajax": {
                 url: __table_url,
                 "data": {
-                    "_dtsis": 'بيانات للإرسال.'
+                    "_dtsis": 'Data to send.'
                 },
                 type: 'POST',
                 dataFilter: function (data) {
@@ -79,17 +79,17 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 "lengthMenu": "_MENU_",
                 "loadingRecords": "...",
                 "processing": "<?php echo $lib->_('spinner_text'); ?>",
-                "search": "بحث",
-                "zeroRecords": "لا توجد نتائج مطابقة.",
+                "search": "Search",
+                "zeroRecords": "No matching records found.",
                 "paginate": {
-                    "first": "الأول",
-                    "last": "الأخير",
-                    "next": "التالي",
-                    "previous": "السابق"
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
                 },
                 "aria": {
-                    "sortAscending": ": تفعيل لترتيب العمود تصاعديًا",
-                    "sortDescending": ": تفعيل لترتيب العمود تنازليًا"
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
                 }
             }
 
@@ -100,16 +100,6 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
             var data = __table.row($(this).parents('tr')).data();
             __call_table_actions(action, data);
         });
-
-
-        /*
-         __table.on('click', 'tr', function () {
-         $(this).toggleClass('selected');
-         let _sel_row = __table.row($(this)).data();
-         console.log(_sel_row);
-         });
-         * 
-         */
 
     }
 
@@ -137,19 +127,16 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
 
             case 'delete':
                 console.log(data);
-                console.log('الحذف المطلوب');
+                console.log('Deletion requested');
                 break;
 
             default:
-                console.log('إجراء غير معروف ' + action);
+                console.log('Unknown action ' + action);
         }
     }
 
     function cb_close_the_editor(__r) {
         $("#_edit_record_modal").modal('hide');
     }
-
-
-
 
 </script>

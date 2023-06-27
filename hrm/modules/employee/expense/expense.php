@@ -111,31 +111,28 @@
             <div class="card-body">
 
                 <div class="mb-2" align="<?php echo $_right; ?>">
-
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">إضافة مطالبة</button>
-
+                        data-target="#myModal">Add Claim</button>
                 </div>
-
-                <h3>قائمة المطالبات</h3>
+                <h3>Claims List</h3>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">من تاريخ:</label>
+                        <label for="dateFrom">From Date:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">إلى تاريخ:</label>
+                        <label for="dateTo">To Date:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            تاريخ</button>
+                            Filter</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>المعرف</th>
-                            <th>التاريخ</th>
-                            <th>الاسم</th>
-                            <th>الحالة</th>
-                            <th>المبلغ الإجمالي</th>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Total Amount</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -143,9 +140,7 @@
                         <?php
                         $pdo->bind('employeeId', $_SESSION['empId']);
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
-                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
-
-                        // Build the SQL query based on the provided filter values
+                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null; // Build the SQL query based on the provided filter values
                         $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM employee_expenses ee join employees e on e.empId=ee.employee_id WHERE ee.`employee_id`=:employeeId ';
 
                         if (!empty($dateFrom) && !empty($dateTo)) {
@@ -154,107 +149,70 @@
                         } else
                             $sql .= "ORDER BY ee.`date`;";
 
-                        $recEmpData = $pdo->query(
-                            $sql
-                        );
+                        $recEmpData = $pdo->query($sql);
 
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i]['unique_id']; ?>
-                                </td>
-                                <td><?php echo $recEmpData[$i]['date']; ?>
-                                </td>
-                                <td><?php echo $recEmpData[$i]['name']; ?>
-                                </td>
+                                <td><?php echo $recEmpData[$i]['unique_id']; ?></td>
+                                <td><?php echo $recEmpData[$i]['date']; ?></td>
+                                <td><?php echo $recEmpData[$i]['name']; ?></td>
                                 <td class="" style="text-align: left;">
                                     <?php
                                     $pdo->bind('expenseId', $recEmpData[$i]['id']);
-                                    $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=:expenseId;'
-                                    );
+                                    $getStatus = $pdo->query('SELECT s.status_name from `status` s join employee_expense_status es on s.id=es.statusId where es.expenseId=:expenseId;');
                                     $HOD = '';
                                     $AM = '';
                                     $HR = '';
 
                                     for ($j = 0; $j < count($getStatus); $j++) {
-                                        if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_approved'
-                                        ) {
-                                            $HOD = 'تمت الموافقة';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'AM_approved'
-                                        ) {
-                                            $AM = 'تمت الموافقة';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'AM_disapproved'
-                                        ) {
-                                            $AM = 'تم الرفض';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_disapproved'
-                                        ) {
-                                            $HOD = 'تم الرفض';
-                                        } else if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_approved'
-                                        ) {
-                                            $HR = 'تمت الموافقة';
-                                        } else if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_disapproved'
-                                        ) {
-                                            $HR = 'تم الرفض';
+                                        if ($getStatus[$j]['status_name'] == 'HOD_approved') {
+                                            $HOD = 'Approved';
+                                        } elseif ($getStatus[$j]['status_name'] == 'AM_approved') {
+                                            $AM = 'Approved';
+                                        } elseif ($getStatus[$j]['status_name'] == 'AM_disapproved') {
+                                            $AM = 'Disapproved';
+                                        } elseif ($getStatus[$j]['status_name'] == 'HOD_disapproved') {
+                                            $HOD = 'Disapproved';
+                                        } else if ($getStatus[$j]['status_name'] == 'HR_approved') {
+                                            $HR = 'Approved';
+                                        } else if ($getStatus[$j]['status_name'] == 'HR_disapproved') {
+                                            $HR = 'Disapproved';
                                         }
                                     }
                                     ?>
-
-                                    <div class="ant-tag " style="<?php if (
-                                        $HOD == 'تمت الموافقة'
-                                    ) {
+                                    <div class="ant-tag " style="<?php if ($HOD == 'Approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HOD == 'تم الرفض') {
+                                    } elseif ($HOD == 'Disapproved') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        موافقة المشرف المباشر</div>
-                                    <div class="ant-tag " style="<?php if (
-                                        $AM == 'تمت الموافقة'
-                                    ) {
+                                        HOD</div>
+                                    <div class="ant-tag " style="<?php if ($AM == 'Approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($AM == 'تم الرفض') {
+                                    } elseif ($AM == 'Disapproved') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        موافقة المدير المباشر</div>
-                                    <div class="ant-tag " style="<?php if (
-                                        $HR == 'تمت الموافقة'
-                                    ) {
+                                        AM</div>
+                                    <div class="ant-tag " style="<?php if ($HR == 'Approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HR == 'تم الرفض') {
+                                    } elseif ($HR == 'Disapproved') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        موافقة إدارة الموارد البشرية</div>
+                                        HR</div>
                                 </td>
-                                <td> <?php echo $recEmpData[$i]['total_amount']; ?>
+                                <td> <?php echo $recEmpData[$i]['total_amount']; ?></td>
+                                <td>
+                                    <button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
+                                        style="background: none;"><i class="fa fa-folder"></i></button>
                                 </td>
-                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
-                                        style="background: none;"><i class="fa fa-folder"></i></button></td>
-
-                                </td>
-                                </td>
-
-
                             </tr>
-                        <?php }
-                        ?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -266,48 +224,42 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">إضافة مطالبة</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">Add Claim</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="claim-comment">التعليق</label>
+                        <label for="claim-comment">Comment</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="claim-pdf">ملف PDF (يرجى تقديم نموذج المصروفات)</label>
+                        <label for="claim-pdf">PDF File (Please submit the expense form)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">اختر الملف</label>
+                            <label class="custom-file-label" for="claim-pdf">Choose file</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="claim-attachments">المرفقات</label>
+                        <label for="claim-attachments">Attachments</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-attachments"
                                 name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">اختر الملف</label>
+                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="claim-amount" style="margin-right:20px">المبلغ الإجمالي</label>
+                        <label for="claim-amount" style="margin-right:20px">Total Amount</label>
                         <input type="number" id="total" name="claim-amount" value="0">
                     </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
-                <button type="submit" class="btn btn-primary">إضافة مطالبة</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Claim</button>
             </div>
             </form>
         </div>
     </div>
 </div>
-
-
-
-
-
 <script>
     var btn = document.querySelectorAll("button.modal-button");
 
@@ -344,7 +296,6 @@
         }
     }
 
-
     $(document).ready(function () {
         // Attach a click event handler to the attachment buttons
         $(".attachment-btn").on("click", function () {
@@ -363,7 +314,7 @@
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
-                        alert("لا توجد مرفقات.");
+                        alert("There are no attachments.");
                         return;
                     }
                     // Loop through the binary data and convert it to base64-encoded strings
@@ -384,7 +335,7 @@
                     var header = $('<div class="modal-header"></div>');
 
                     // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
 
                     // Add the title to the header
                     header.append(title);
@@ -438,7 +389,6 @@
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     //    Get form data
     $unique_id = random_int(10000, 99999);
     $date = date('Y-m-d');
@@ -473,10 +423,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->bind('expenseId', $expenseId[0]['id']);
             $attachment = $pdo->query("INSERT INTO attachment( attachment, foreignId,`type`) VALUES (" . $pdf_hex . ",:expenseId,'expense')");
         }
-
     }
     echo "<meta http-equiv='refresh' content='0'>";
-
 }
 ?>
 

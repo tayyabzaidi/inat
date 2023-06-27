@@ -102,14 +102,14 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-                <h3>قائمة المطالبات</h3>
+                <h3>Claims List</h3>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
-                            <th>الحالة</th>
-                            <th>المبلغ الإجمالي</th>
+                            <th>Number</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,7 +126,6 @@
                                 </td>
                                 <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
-                                </td>
                                 <td class="" style="text-align: left;">
                                     <?php
                                     $pdo->bind('expenseId', $recEmpData[$i]['id']);
@@ -137,31 +136,31 @@
                                     $AM = false;
                                     for ($j = 0; $j < count($getStatus); $j++) {
                                         if ($getStatus[$j]['status_name'] == 'HOD_approved') {
-                                            $HOD = 'موافقة';
+                                            $HOD = 'Approved';
                                         } elseif ($getStatus[$j]['status_name'] == 'AM_approved') {
-                                            $AM = 'موافقة';
+                                            $AM = 'Approved';
                                         } elseif ($getStatus[$j]['status_name'] == 'AM_disapproved') {
-                                            $AM = 'رفض';
+                                            $AM = 'Rejected';
                                         } elseif ($getStatus[$j]['status_name'] == 'HOD_disapproved') {
-                                            $HOD = 'رفض';
+                                            $HOD = 'Rejected';
                                         }
                                     }
-                                    ?><div class="ant-tag " style="<?php if ($HOD == 'موافقة') {
+                                    ?><div class="ant-tag " style="<?php if ($HOD == 'Approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($HOD == 'رفض') {
+                                    } elseif ($HOD == 'Rejected') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        مدير القسم</div>
-                                    <div class="ant-tag " style="<?php if ($AM == 'موافقة') {
+                                        HOD</div>
+                                    <div class="ant-tag " style="<?php if ($AM == 'Approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
-                                    } elseif ($AM == 'رفض') {
+                                    } elseif ($AM == 'Rejected') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        المدير الإداري</div>
+                                        AM</div>
                                 </td>
                                 <td> <?php echo $recEmpData[$i]['total_amount']; ?>
                                 </td>
@@ -230,18 +229,18 @@ $employeeId = $_SESSION['empId'];
                         'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id where e.empId = ' . $employeeId . ' order by id desc limit 5'
                     );
                     ?>
-                    <h3>قائمة الإجازات</h3>
+                    <h3>Leaves List</h3>
                     <hr>
                     <div class="mb-2" align="<?php echo $_right; ?>">
                         <a href="<?php echo __APP_URL__ . 'employee/leaves'; ?>" class="btn btn-md btn-primary"> <i
-                                class="fa fa-1x fa-users"></i> إدارة طلبات الإجازة</a>
+                                class="fa fa-1x fa-users"></i> Manage Leave Requests</a>
                     </div>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>عدد الأيام</th>
-                                <th>نوع الإجازة</th>
-                                <th>الحالة</th>
+                                <th>Number of Days</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody><?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
@@ -264,47 +263,47 @@ $employeeId = $_SESSION['empId'];
                                         $OM = false;
                                         for ($j = 0; $j < count($getStatus); $j++) {
                                             if ($getStatus[$j]['status_name'] == 'HOD_approved') {
-                                                $HOD = 'موافقة';
+                                                $HOD = 'Approved';
                                             } elseif ($getStatus[$j]['status_name'] == 'HOD_disapproved') {
-                                                $HOD = 'رفض';
+                                                $HOD = 'Rejected';
                                             } elseif ($getStatus[$j]['status_name'] == 'HR_approved') {
-                                                $HR = 'موافقة';
+                                                $HR = 'Approved';
                                             } elseif ($getStatus[$j]['status_name'] == 'HR_disapproved') {
-                                                $HR = 'رفض';
+                                                $HR = 'Rejected';
                                             } elseif ($getStatus[$j]['status_name'] == 'OM_approved') {
-                                                $OM = 'موافقة';
+                                                $OM = 'Approved';
                                             } elseif ($getStatus[$j]['status_name'] == 'OM_disapproved') {
-                                                $OM = 'رفض';
+                                                $OM = 'Rejected';
                                             }
                                         }
                                         ?>
 
-                                        <div class="ant-tag " style="<?php if ($HOD == 'موافقة') {
+                                        <div class="ant-tag " style="<?php if ($HOD == 'Approved') {
                                             echo 'background-color: rgb(135, 208, 104); color:white';
-                                        } elseif ($HOD == 'رفض') {
+                                        } elseif ($HOD == 'Rejected') {
                                             echo 'background-color: red; color:white';
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            مدير القسم</div>
+                                            HOD</div>
 
-                                        <div class="ant-tag " style="<?php if ($HR == 'موافقة') {
+                                        <div class="ant-tag " style="<?php if ($HR == 'Approved') {
                                             echo 'background-color: rgb(135, 208, 104); color:white';
-                                        } elseif ($HR == 'رفض') {
+                                        } elseif ($HR == 'Rejected') {
                                             echo 'background-color: red; color:white';
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            إدارة الموارد البشرية</div>
+                                            HR</div>
 
-                                        <div class="ant-tag " style="<?php if ($OM == 'موافقة') {
+                                        <div class="ant-tag " style="<?php if ($OM == 'Approved') {
                                             echo 'background-color: rgb(135, 208, 104); color:white';
-                                        } elseif ($OM == 'رفض') {
+                                        } elseif ($OM == 'Rejected') {
                                             echo 'background-color: red; color:white';
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            مدير العمليات</div>
+                                            OM</div>
                                     </td>
 
                                 </tr>
@@ -315,8 +314,10 @@ $employeeId = $_SESSION['empId'];
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 
+
+<!-- 
             <script>
 
     function detailedExpenseInfo(expenseId, comment) {

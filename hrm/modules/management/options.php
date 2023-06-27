@@ -25,72 +25,75 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item disabled">
-                            <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> إدارة النظام</h5>
+                            <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> System Management</h5>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/leave-types'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> أنواع الإجازات</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Leave Types</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/visa-types'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> أنواع التأشيرات</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Visa Types</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/ticket-types'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> أنواع التذاكر</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Ticket Types</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
 
+
         <div class="col-sm-6 p-3">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item disabled">
-                            <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> إدارة الموظفين</h5>
+                            <h5 class="p-0 m-0"> <i class="fa fas  fa-tasks"></i> Employee Management</h5>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/departments'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> الأقسام</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Departments</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/designations'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> التصنيفات</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Designations</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/employees'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> الموظفين</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Employees</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/expenses'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> المصروفات</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> Expenses</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/salary'; ?>"><i
-                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i> المرتبات</a>
+                                    class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
+                                Salaries</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/encashment'; ?>"><i
                                     class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
-                                تحويل النقود </a>
+                                Cash Encashment</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/visa-management'; ?>"><i
                                     class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
-                                التأشيرة </a>
+                                Visa Management</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/items'; ?>"><i
                                     class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
-                                العناصر المخصصة </a>
+                                Custom Items</a>
                         </li>
                         <li class="list-group-item">
                             <a href="<?php echo __APP_URL__ . $route->q . '/trip'; ?>"><i
                                     class="fa fas  fa-arrow-<?php echo $_right; ?>"></i>
-                                رحلة عمل</a>
+                                Business Trip</a>
                         </li>
+
                     </ul>
                 </div>
             </div>

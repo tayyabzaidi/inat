@@ -125,38 +125,34 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-
                 <div class="mb-2" align="<?php echo $_right; ?>">
-
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">أضف تأشيرة</button>
+                        data-target="#myModal">Add Visa</button>
                 </div>
-                <h3>قائمة التأشيرات</h3>
+                <h3>Visa List</h3>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">من تاريخ:</label>
+                        <label for="dateFrom">From Date:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">إلى تاريخ:</label>
+                        <label for="dateTo">To Date:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            تاريخ</button>
+                            Filter</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>المعرّف</th>
-                            <th>التاريخ</th>
-                            <th>الحالة</th>
-                            <th>التعليق</th>
-                            <th>التأشيرة</th>
-                            <th>المرفق</th>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Comment</th>
+                            <th>Visa</th>
+                            <th>Attachment</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-
-
                         $pdo->bind('employeeId', $_SESSION['empId']);
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
@@ -170,73 +166,56 @@
                         } else
                             $sql .= "ORDER BY ee.`date`;";
 
-                        $recEmpData = $pdo->query(
-                            $sql
-                        );
-
+                        $recEmpData = $pdo->query($sql);
                         ?>
+
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i]['id']; ?>
-                                </td>
-                                <td><?php echo $recEmpData[$i]['date']; ?>
-                                </td>
+                                <td><?php echo $recEmpData[$i]['id']; ?></td>
+                                <td><?php echo $recEmpData[$i]['date']; ?></td>
                                 <td class="" style="text-align: left;">
                                     <?php
                                     $pdo->bind('visaId', $recEmpData[$i]['id']);
-                                    $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join visa_status es on s.id=es.statusId where es.visaId=:visaId;'
-                                    );
+                                    $getStatus = $pdo->query('SELECT s.status_name from `status` s join visa_status es on s.id=es.statusId where es.visaId=:visaId;');
                                     $HOD = '';
                                     $HR = '';
 
                                     for ($j = 0; $j < count($getStatus); $j++) {
-                                        if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_approved'
-                                        ) {
+                                        if ($getStatus[$j]['status_name'] == 'HOD_approved') {
                                             $HOD = 'approved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_disapproved'
-                                        ) {
+                                        } elseif ($getStatus[$j]['status_name'] == 'HOD_disapproved') {
                                             $HOD = 'disapprove';
                                         }
                                     }
                                     ?>
 
-                                    <div class="ant-tag " style="<?php if (
-                                        $HOD == 'approved'
-                                    ) {
+                                    <div class="ant-tag" style="<?php if ($HOD == 'approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
                                     } elseif ($HOD == 'disapprove') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        HOD</div>
-
+                                        HOD
+                                    </div>
                                 </td>
                                 <td><?php echo $recEmpData[$i]['comment']; ?></td>
                                 <td>
-                                    <?php $pdf_base64 = base64_encode($recEmpData[$i]['visa']);
-                                    ?>
+                                    <?php $pdf_base64 = base64_encode($recEmpData[$i]['visa']); ?>
                                     <button data-pdf="<?php echo $pdf_base64 ?>"
                                         data-visa_id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
                                         onclick="showPdfModal(this)">
                                         <i class="fa fa-folder <?php echo $_right; ?>"></i>
                                     </button>
                                 </td>
-                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
-                                        style="background: none;"><i class="fa fa-folder"></i></button></td>
-
+                                <td>
+                                    <button class="attachment-btn" data-id="<?php echo $recEmpData[$i]['id'] ?>"
+                                        style="background: none;">
+                                        <i class="fa fa-folder"></i>
+                                    </button>
                                 </td>
-                                </td>
-
-
                             </tr>
-                        <?php }
-                        ?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -249,34 +228,30 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">إضافة تأشيرة</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">Add Visa</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="claim-comment">التعليق</label>
+                        <label for="claim-comment">Comment</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="claim-attachments">المرفقات</label>
+                        <label for="claim-attachments">Attachments</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-attachments"
                                 name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">اختر ملف</label>
+                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
                     </div>
-
-
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
-                <button type="submit" class="btn btn-primary">إضافة تأشيرة</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Visa</button>
             </div>
-            </form>
         </div>
     </div>
-
-
 </div>
 
 

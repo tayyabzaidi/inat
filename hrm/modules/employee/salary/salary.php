@@ -86,33 +86,30 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-                <h3>كشوفات الرواتب</h3>
+                <h3>Salary Statements</h3>
                 <hr>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">التاريخ من:</label>
+                        <label for="dateFrom">Date From:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">التاريخ إلى:</label>
+                        <label for="dateTo">Date To:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            فلترة</button>
+                            Filter</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>الرقم التعريفي</th>
-                            <th>التاريخ</th>
-                            <th>الكشوف</th>
-                            <th>عرض</th>
-                            <th>هل هناك مشكلة؟</th>
-
-
+                            <th>Employee ID</th>
+                            <th>Date</th>
+                            <th>Statement</th>
+                            <th>View</th>
+                            <th>Is there a problem?</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
                         $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
                         $sql = "SELECT * FROM salary  WHERE employee_id= :employeeId";
@@ -121,29 +118,22 @@
                         }
                         $sql .= " ORDER BY `date` LIMIT 5";
                         $pdo->bind('employeeId', $_SESSION['empId']);
-                        $recEmpData = $pdo->query(
-                            $sql
-                        );
-                        for ($i = 0; $i < count($recEmpData); $i++) { ?>
+                        $recEmpData = $pdo->query($sql);
+                        for ($i = 0; $i < count($recEmpData); $i++) {
+                            ?>
                             <tr>
                                 <td><?php echo $recEmpData[$i]['id'] ?></td>
-                                <td><?php echo $recEmpData[$i][
-                                    'date'
-                                ]; ?>
-                                </td>
-                                <td><?php
-                                header("Content-Type: application/pdf");
-
-                                // Convert the binary PDF data to a base64-encoded string
-                                $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
-
-                                // Embed the base64-encoded PDF data into an HTML object tag
-                                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="40%" height="200px"></object>';
-
-                                ?>
+                                <td><?php echo $recEmpData[$i]['date']; ?></td>
+                                <td>
+                                    <?php
+                                    header("Content-Type: application/pdf");
+                                    // Convert the binary PDF data to a base64-encoded string
+                                    $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
+                                    // Embed the base64-encoded PDF data into an HTML object tag
+                                    echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="40%" height="200px"></object>';
+                                    ?>
                                 </td>
                                 <td>
-
                                     <button class="attachment-btn" data-pdf="<?php echo $pdf_base64 ?>"
                                         data-slip-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
                                         onclick="showPdfModal(this)">
@@ -151,37 +141,29 @@
                                     </button>
                                 </td>
                                 <td onclick="openModal('<?php echo $recEmpData[$i]['id']; ?>')">
-
-                                    <!-- <?php echo $recEmpData[$i]['discrepancy_reason'] ?> -->
                                     <button class="comment-button" style="background: none;">
-                                        <i class="fa fa-comment"></i> </button>
+                                        <i class="fa fa-comment"></i>
+                                    </button>
                                 </td>
-
-
                             </tr>
-                        <?php } ?>
+                            <?php
+                        }
+                        ?>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
 </div>
-
-
-
-
-
-<!-- // modal for adding comment -->
+<!-- Modal for adding comment -->
 <div id="myModal1" class="modal">
-    <div class="modal-content" style=" width: 40%;
-            height: 40%;">
+    <div class="modal-content" style=" width: 40%; height: 40%;">
         <form id="commentForm" method="post">
-            <label for="comment">سبب الاختلاف:</label>
+            <label for="comment">Reason for discrepancy:</label>
             <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
             <br>
             <input type="hidden" id="idField" name="idField">
-            <button type="submit" style="float: right;">حفظ</button>
+            <button type="submit" style="float: right;">Save</button>
         </form>
     </div>
 </div>

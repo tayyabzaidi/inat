@@ -6,9 +6,9 @@ define('__SECTION_JS_PATH_', '__js/designations.script.php');
 <div class="container-fluid">
 
     <h5 class="mb-2 p-1 text-gray-800">
-        <a href="<?php echo __APP_URL__ . $route->q; ?>">الإدارة</a>
+        <a href="<?php echo __APP_URL__ . $route->q; ?>">Administration</a>
         <i class="fa fa-chevron-<?php echo $_right; ?>"></i>
-        التسميات الوظيفية
+        Job Titles
     </h5>
 
     <br>
@@ -17,7 +17,7 @@ define('__SECTION_JS_PATH_', '__js/designations.script.php');
     <div class="row">
 
         <div class="col-xl-4 col-lg-4">
-            <h2>إضافة تسمية وظيفية</h2>
+            <h2>Add Job Title</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
@@ -28,11 +28,9 @@ define('__SECTION_JS_PATH_', '__js/designations.script.php');
 
                             <div class=" p-3">
 
-
-
                                 <div class="form-row">
                                     <div class="form-group col-md-9">
-                                        <label for="name">اسم التسمية الوظيفية</label>
+                                        <label for="name">Job Title</label>
                                         <input type="text" value="" name="name" id="name" autocomplete="off"
                                             class="form-control form-control-sm">
                                     </div>
@@ -42,7 +40,7 @@ define('__SECTION_JS_PATH_', '__js/designations.script.php');
                                         <button class="btn btn-sm  btn-primary btn-icon-split"
                                             name="_create_record_modal_form_btn" id="_create_record_modal_form_btn"
                                             type="submit" value="button">
-                                            <span class="icon text-white-100"><i class="fa fa-save"></i> حفظ</span>
+                                            <span class="icon text-white-100"><i class="fa fa-save"></i> Save</span>
                                         </button>
                                     </div>
                                 </div>
@@ -58,7 +56,7 @@ define('__SECTION_JS_PATH_', '__js/designations.script.php');
         </div>
 
         <div class="col-xl-8 col-lg-8">
-            <h2>التسميات الوظيفية</h2>
+            <h2>Job Titles</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
@@ -68,10 +66,10 @@ define('__SECTION_JS_PATH_', '__js/designations.script.php');
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>المعرف</th>
-                                    <th>الاسم</th>
-                                    <th>الحالة</th>
-                                    <th width="100px">خيارات</th>
+                                    <th>Identifier</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th width="100px">Options</th>
                                 </tr>
                             </thead>
                         </table>
@@ -85,4 +83,5 @@ define('__SECTION_JS_PATH_', '__js/designations.script.php');
 <div class="modal fade" id="_edit_record_modal" tabindex="-1" role="dialog" aria-labelledby="_edit_record_modal_label">
     <div class="modal-dialog modal-xl " role="document">
         <div class="modal-content " id="_edit_record_ajax_interface"></div>
-    </div
+    </div>
+</div>

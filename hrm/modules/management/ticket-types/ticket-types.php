@@ -20,11 +20,10 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
 ?>
 
 <div class="container-fluid">
-
     <h5 class="mb-2 p-1 text-gray-800">
-        <a href="<?php echo __APP_URL__ . $route->q; ?>">إدارة</a>
+        <a href="<?php echo __APP_URL__ . $route->q; ?>">Management</a>
         <i class="fa fa-chevron-<?php echo $_right; ?>"></i>
-        أنواع التذاكر
+        Ticket Types
     </h5>
 
     <br>
@@ -33,7 +32,7 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
     <div class="row">
 
         <div class="col-xl-4 col-lg-4">
-            <h2>إضافة نوع تذكرة</h2>
+            <h2>Add Ticket Type</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
@@ -43,65 +42,57 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
                             onsubmit="_ajaxCall('_create_record_modal_form', 'management/ticket-types/create'); return false;">
 
                             <div class=" p-3">
-
-
-
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <label for="name">الاسم</label>
+                                        <label for="name">Name</label>
                                         <input type="text" value="" name="name" id="name" autocomplete="off"
                                             class="form-control form-control-md">
                                     </div>
                                 </div>
 
-
-
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="days">التذاكر المسموح بها</label>
+                                        <label for="days">Allowed Tickets</label>
                                         <input type="number" value="" name="days" id="days" autocomplete="off"
                                             class="form-control form-control-md">
                                     </div>
 
                                     <div class="form-group col-md-3">
-                                        <label for="resetmode">إعادة التشغيل</label>
+                                        <label for="resetmode">Reset Mode</label>
                                         <select name="resetmode" id="resetmode" class="selectpicker_picker form-control"
                                             data-live-search="true" data-style="btn-default" style="width:100%;">
-                                            <option data-tokens="yearly" value="yearly">سنوياً</option>
-                                            <option data-tokens="monthly" value="monthly">شهرياً</option>
+                                            <option data-tokens="yearly" value="yearly">Yearly</option>
+                                            <option data-tokens="monthly" value="monthly">Monthly</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-5">
-                                        <label for="carryover">تحويل الرصيد</label>
+                                        <label for="carryover">Carryover</label>
                                         <select name="carryover" id="carryover" class="selectpicker_picker form-control"
                                             data-live-search="true" data-style="btn-default" style="width:100%;">
-                                            <option value="true">صحيح</option>
-                                            <option value="false">غير صحيح</option>
+                                            <option value="true">True</option>
+                                            <option value="false">False</option>
                                         </select>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="form-row">
                                     <div class="form-group col-md-12" align="right">
-
                                         <button class="btn btn-sm  btn-primary btn-icon-split"
                                             name="_create_record_modal_form_btn" id="_create_record_modal_form_btn"
                                             type="submit" value="button">
-                                            <span class="icon text-white-100"><i class="fa fa-save"></i> حفظ</span>
+                                            <span class="icon text-white-100"><i class="fa fa-save"></i> Save</span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="col-xl-8 col-lg-8">
-            <h2>أنواع التذاكر</h2>
+            <h2>Ticket Types</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
@@ -111,26 +102,22 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th> الرقم</th>
-                                    <th> الاسم</th>
-                                    <th> التذاكر</th>
-                                    <th> وضع الإعادة</th>
-                                    <th> إعادة الرصيد</th>
-                                    <th> الحالة</th>
-                                    <th width="100px">الخيارات</th>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>Tickets</th>
+                                    <th>Reset Mode</th>
+                                    <th>Carryover</th>
+                                    <th>Status</th>
+                                    <th width="100px">Options</th>
                                 </tr>
                             </thead>
                         </table>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
-
 <div class="modal fade" id="_edit_record_modal" tabindex="-1" role="dialog" aria-labelledby="_edit_record_modal_label">
     <div class="modal-dialog modal-xl " role="document">
         <div class="modal-content " id="_edit_record_ajax_interface"></div>

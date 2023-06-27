@@ -80,22 +80,17 @@
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
-
             <div class="card-body">
-                <h3>العناصر المخصصة</h3>
-
-
+                <h3>Custom Elements</h3>
                 <hr>
-
-
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>التاريخ</th>
-                            <th>الموظف</th>
-                            <th>التفاصيل</th>
-                            <th>الحالة</th>
-                            <th>الإجراء</th>
+                            <th>Date</th>
+                            <th>Employee</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,84 +101,54 @@
                         
                         $sql = 'SELECT eat.*,e.air_tickets,e.info_fullname_en as name FROM `employee_air_tickets` eat join employees e on eat.employeeId=e.empId ';
 
-
-
-                        $recEmpData = $pdo->query(
-                            $sql
-                        );
+                        $recEmpData = $pdo->query($sql);
                         for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i][
-                                    'date'
-                                ]; ?>
-                                </td>
-                                <td><?php echo $recEmpData[$i][
-                                    'name'
-                                ]; ?></td>
-                                <td><?php echo $recEmpData[$i][
-                                    'details'
-                                ]; ?></td>
+                                <td><?php echo $recEmpData[$i]['date']; ?></td>
+                                <td><?php echo $recEmpData[$i]['name']; ?></td>
+                                <td><?php echo $recEmpData[$i]['details']; ?></td>
                                 <td class="" style="text-align: left;">
                                     <?php
-                                    $getStatus = $pdo->query(
-                                        'SELECT s.status_name from `status` s join employee_trip_status eat on s.id=eat.statusId where eat.tripId = ' . $recEmpData[$i]['id']
-                                    );
+                                    $getStatus = $pdo->query('SELECT s.status_name from `status` s join employee_trip_status eat on s.id=eat.statusId where eat.tripId = ' . $recEmpData[$i]['id']);
                                     $HOD = '';
                                     $HR = '';
                                     for ($j = 0; $j < count($getStatus); $j++) {
-                                        if (
-                                            $recEmpData[$i]['status_name'] ==
-                                            'HOD_approved'
-                                        ) {
+                                        if ($recEmpData[$i]['status_name'] == 'HOD_approved') {
                                             $HOD = 'approved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_disapproved'
-                                        ) {
+                                        } elseif ($getStatus[$j]['status_name'] == 'HOD_disapproved') {
                                             $HOD = 'disapproved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_approved'
-                                        ) {
+                                        } elseif ($getStatus[$j]['status_name'] == 'HR_approved') {
                                             $HR = 'approved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_disapproved'
-                                        ) {
+                                        } elseif ($getStatus[$j]['status_name'] == 'HR_disapproved') {
                                             $HR = 'disapproved';
                                         }
                                     }
                                     ?>
 
-                                    <div class="ant-tag " style="<?php if (
-                                        $HOD == 'approved'
-                                    ) {
+                                    <div class="ant-tag " style="<?php if ($HOD == 'approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
                                     } elseif ($HOD == 'disapproved') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        المدير</div>
-                                    <div class="ant-tag " style="<?php if (
-                                        $HR == 'approved'
-                                    ) {
+                                        Manager</div>
+                                    <div class="ant-tag " style="<?php if ($HR == 'approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
                                     } elseif ($HR == 'disapproved') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        الموارد البشرية</div>
+                                        HR</div>
                                 </td>
                                 <td>
                                     <button class="modal-button approve-disapprove-btn"
                                         id="<?php echo $recEmpData[$i]['id']; ?>" href="#myModal1" style="background: none;"
-                                        data-id="<?php echo $recEmpData[$i]['id']; ?>">الموافقة/عدم الموافقة</button>
+                                        data-id="<?php echo $recEmpData[$i]['id']; ?>">Approve/Disapprove</button>
                                 </td>
                                 <td></td>
                                 <td></td>
-
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -193,36 +158,29 @@
     </div>
 </div>
 <div id="myModal1" class="modal">
-
     <div class="modal-dialog" role="document">
         <form name="approve-disapprove-trip" method="post" action="approve-disapprove-trip">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addClaimModalLabel">الموافقة/عدم الموافقة على الرحلة</h5>
+                    <h5 class="modal-title" id="addClaimModalLabel">Approve/Disapprove Trip</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <input style="display: none" type="text" name="tripId" id="tripId">
-
                     <div class=" form-group">
-                        <label for="comments">التعليقات:</label>
+                        <label for="comments">Comments:</label>
                         <input type="text" class="form-control" name="comments" id="comments">
                     </div>
-
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" name="approve" id="approve">الموافقة</button>
-                    <button type="submit" class="btn btn-danger" id="disapprove">عدم الموافقة</button>
-
+                    <button type="submit" class="btn btn-success" name="approve" id="approve">Approve</button>
+                    <button type="submit" class="btn btn-danger" id="disapprove">Disapprove</button>
                 </div>
-
             </div>
         </form>
     </div>
-
 </div>
 
 

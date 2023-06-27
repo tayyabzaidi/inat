@@ -54,14 +54,13 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
     <div id="_php_error_response"></div>
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
     </div>
-
     <div class="row">
         <div class="col-xl-2 col-md-2 mb-4">
             <div class="card border-left-warning shadow h-100">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">الموظفون</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employees</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 <?php echo $stats->__get_active_employees(); ?></div>
                         </div>
@@ -72,8 +71,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                 </div>
                 <div class="card-footer text-right">
                     <a href="<?php echo __APP_URL__ . 'management/employees'; ?>"
-                        style="font-size: 13px; text-decoration: underline;"><i class="fa fa-edit"></i> إدارة
-                        الموظفين</a>
+                        style="font-size: 13px; text-decoration: underline;"><i class="fa fa-edit"></i> Manage
+                        Employees</a>
                 </div>
 
             </div>
@@ -85,7 +84,7 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">الأقسام</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Departments</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 <?php echo $stats->__get_active_departments(); ?></div>
                         </div>
@@ -96,8 +95,8 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                 </div>
                 <div class="card-footer text-right">
                     <a href="<?php echo __APP_URL__ . 'management/departments'; ?>"
-                        style="font-size: 13px; text-decoration: underline;"><i class="fa  fa-edit"></i> إدارة
-                        الأقسام</a>
+                        style="font-size: 13px; text-decoration: underline;"><i class="fa  fa-edit"></i> Manage
+                        Departments</a>
                 </div>
             </div>
         </div>
@@ -108,23 +107,23 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">إدارة الأنواع</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Type Management</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 <ul
                                     style="font-size:13px; list-style: none; margin: 2px; padding: 0px; padding-top:5px;">
                                     <li><a href="<?php echo __APP_URL__ . 'management/leave-types'; ?>"
                                             style="font-size: 13px;"><i class="fa  fa-arrow-<?php echo $_right; ?>"></i>
-                                            الإجازات</a></li>
+                                            Leaves</a></li>
                                     <li>
                                         <a href="<?php echo __APP_URL__ . 'management/visa-types'; ?>"
                                             style="font-size: 13px; line-height: 2;">
-                                            <i class="fa fa-arrow-<?php echo $_right; ?>"></i> التأشيرات
+                                            <i class="fa fa-arrow-<?php echo $_right; ?>"></i> Visas
                                         </a>
                                     </li>
                                     <li>
                                         <a href="<?php echo __APP_URL__ . 'management/ticket-types'; ?>"
                                             style="font-size: 13px;">
-                                            <i class="fa fa-arrow-<?php echo $_right; ?>"></i> التذاكر
+                                            <i class="fa fa-arrow-<?php echo $_right; ?>"></i> Tickets
                                         </a>
                                     </li>
 
@@ -149,15 +148,15 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
 
                     <div class="mb-2" align="<?php echo $_right; ?>">
                         <a href="<?php echo __APP_URL__ . 'management/employees'; ?>" class="btn btn-md btn-primary">
-                            <i class="fa fa-1x fa-users"></i> إدارة الموظفين
+                            <i class="fa fa-1x fa-users"></i> Manage Employees
                         </a>
                     </div>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>الرقم التعريفي</th>
-                                <th>الكود</th>
-                                <th>الاسم</th>
+                                <th>Employee ID</th>
+                                <th>Code</th>
+                                <th>Name</th>
                             </tr>
                         </thead>
 
@@ -179,17 +178,15 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
         </div>
     </div>
 </div>
-
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
-
             <div class="card-body">
-                <h3>قائمة المطالبات</h3>
+                <h3>Expenses List</h3>
                 <hr>
                 <div class="mb-2" align="<?php echo $_right; ?>">
                     <a href="<?php echo __APP_URL__ . 'management/expenses'; ?>" class="btn btn-md btn-primary">
-                        <i class="fa fa-1x fa-users"></i> إدارة مطالبات المصاريف
+                        <i class="fa fa-1x fa-users"></i> Manage Expense Claims
                     </a>
                 </div>
 
@@ -197,10 +194,10 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>الرقم التعريفي</th>
-                            <th>التاريخ</th>
-                            <th>الاسم</th>
-                            <th>المبلغ الإجمالي</th>
+                            <th>Unique ID</th>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Total Amount</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -228,12 +225,9 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
         </div>
     </div>
 </div>
-
-
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
-
             <div class="card-body">
 
 
@@ -242,11 +236,11 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                         'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id order by id desc limit 5'
                     );
                     ?>
-                    <h3>قائمة الإجازات</h3>
+                    <h3>Leaves List</h3>
                     <hr>
                     <div class="mb-2" align="<?php echo $_right; ?>">
                         <a href="<?php echo __APP_URL__ . 'management/leave-management'; ?>"
-                            class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> إدارة طلبات الإجازة</a>
+                            class="btn btn-md btn-primary"> <i class="fa fa-1x fa-users"></i> Manage Leave Requests</a>
                     </div>
 
 
@@ -254,13 +248,14 @@ define('__SECTION_JS_PATH_', '__js/admin.script.php');
                         <thead>
                             <tr>
                                 <!-- <th>I.D</th>-->
-                                <th>الاسم</th>
-                                <th>عدد الأيام</th>
-                                <th>نوع الإجازة</th>
-                                <th>الحالة</th>
+                                <th>Name</th>
+                                <th>Number of Days</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
+
 
                             <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                                 <tr>

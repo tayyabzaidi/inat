@@ -1,7 +1,5 @@
 <?php
 /*
- * Copyright (C) 2015 Zeeshan Abbas <zeeshan@iibsys.com> <+966 55 4137245>
- *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -9,7 +7,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -20,9 +18,9 @@ define('__SECTION_JS_PATH_', '__js/departments.script.php');
 ?>
 <div class="container-fluid">
     <h5 class="mb-2 p-1 text-gray-800">
-        <a href="<?php echo __APP_URL__ . $route->q; ?>">الإدارة</a>
+        <a href="<?php echo __APP_URL__ . $route->q; ?>">Administration</a>
         <i class="fa fa-chevron-<?php echo $_right; ?>"></i>
-        الأقسام
+        Departments
     </h5>
 
     <br>
@@ -31,7 +29,7 @@ define('__SECTION_JS_PATH_', '__js/departments.script.php');
     <div class="row">
 
         <div class="col-xl-4 col-lg-4">
-            <h2>إضافة قسم</h2>
+            <h2>Add Department</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
@@ -42,11 +40,9 @@ define('__SECTION_JS_PATH_', '__js/departments.script.php');
 
                             <div class=" p-3">
 
-
-
                                 <div class="form-row">
                                     <div class="form-group col-md-9">
-                                        <label for="name">اسم القسم</label>
+                                        <label for="name">Department Name</label>
                                         <input type="text" value="" name="name" id="name" autocomplete="off"
                                             class="form-control form-control-sm">
                                     </div>
@@ -56,7 +52,7 @@ define('__SECTION_JS_PATH_', '__js/departments.script.php');
                                         <button class="btn btn-sm  btn-primary btn-icon-split"
                                             name="_create_record_modal_form_btn" id="_create_record_modal_form_btn"
                                             type="submit" value="button">
-                                            <span class="icon text-white-100"><i class="fa fa-save"></i> حفظ</span>
+                                            <span class="icon text-white-100"><i class="fa fa-save"></i> Save</span>
                                         </button>
                                     </div>
                                 </div>
@@ -72,7 +68,7 @@ define('__SECTION_JS_PATH_', '__js/departments.script.php');
         </div>
 
         <div class="col-xl-8 col-lg-8">
-            <h2>الأقسام</h2>
+            <h2>Departments</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
@@ -82,10 +78,10 @@ define('__SECTION_JS_PATH_', '__js/departments.script.php');
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>المعرف</th>
-                                    <th>الاسم</th>
-                                    <th>الحالة</th>
-                                    <th width="100px">خيارات</th>
+                                    <th>Identifier</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th width="100px">Options</th>
                                 </tr>
                             </thead>
                         </table>

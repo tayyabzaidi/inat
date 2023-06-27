@@ -109,32 +109,28 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-
                 <div class="mb-2" align="<?php echo $_right; ?>">
-
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">إضافة السحب النقدي</button>
-
+                        data-target="#myModal">Add Encashment</button>
                 </div>
-
-                <h3>قائمة السحب النقدي</h3>
+                <h3>Encashment List</h3>
                 <div class="form-container">
                     <form action="#" method="POST">
-                        <label for="dateFrom">من تاريخ:</label>
+                        <label for="dateFrom">From Date:</label>
                         <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">إلى تاريخ:</label>
+                        <label for="dateTo">To Date:</label>
                         <input type="date" id="dateTo" name="dateTo">
                         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            التاريخ</button>
+                            Filter</button>
                     </form>
                 </div>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
-                            <th>الاسم</th>
-                            <th>الحالة</th>
+                            <th>Number</th>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -142,9 +138,7 @@
                         <?php
                         $pdo->bind('employeeId', $_SESSION['empId']);
                         $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
-                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
-
-                        // Build the SQL query based on the provided filter values
+                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null; // Build the SQL query based on the provided filter values
                         $sql = 'SELECT ee.*,e.info_fullname_ar as `name` FROM employee_encashments ee join employees e on e.empId=ee.employee_id WHERE ee.`employee_id`=:employeeId ';
 
                         if (!empty($dateFrom) && !empty($dateTo)) {
@@ -153,19 +147,13 @@
                         } else
                             $sql .= "ORDER BY ee.`date`;";
 
-                        $recEmpData = $pdo->query(
-                            $sql
-                        );
-
+                        $recEmpData = $pdo->query($sql);
                         ?>
                         <?php for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
-                                <td><?php echo $recEmpData[$i]['unique_id']; ?>
-                                </td>
-                                <td><?php echo $recEmpData[$i]['date']; ?>
-                                </td>
-                                <td><?php echo $recEmpData[$i]['name']; ?>
-                                </td>
+                                <td><?php echo $recEmpData[$i]['unique_id']; ?></td>
+                                <td><?php echo $recEmpData[$i]['date']; ?></td>
+                                <td><?php echo $recEmpData[$i]['name']; ?></td>
                                 <td class="" style="text-align: left;">
                                     <?php
                                     $pdo->bind('encashmentId', $recEmpData[$i]['id']);
@@ -176,103 +164,80 @@
                                     $HR = '';
 
                                     for ($j = 0; $j < count($getStatus); $j++) {
-                                        if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_approved'
-                                        ) {
+                                        if ($getStatus[$j]['status_name'] == 'HOD_approved') {
                                             $HOD = 'approved';
-                                        } elseif (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HOD_disapproved'
-                                        ) {
+                                        } elseif ($getStatus[$j]['status_name'] == 'HOD_disapproved') {
                                             $HOD = 'disapprove';
-                                        } else if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_approved'
-                                        ) {
+                                        } elseif ($getStatus[$j]['status_name'] == 'HR_approved') {
                                             $HR = 'approved';
-                                        } else if (
-                                            $getStatus[$j]['status_name'] ==
-                                            'HR_disapproved'
-                                        ) {
+                                        } elseif ($getStatus[$j]['status_name'] == 'HR_disapproved') {
                                             $HR = 'disapprove';
                                         }
                                     }
                                     ?>
 
-                                    <div class="ant-tag " style="<?php if (
-                                        $HOD == 'approved'
-                                    ) {
+                                    <div class="ant-tag " style="<?php if ($HOD == 'approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
                                     } elseif ($HOD == 'disapprove') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        مدير الإدارة</div>
+                                        HOD
+                                    </div>
 
-                                    <div class="ant-tag " style="<?php if (
-                                        $HR == 'approved'
-                                    ) {
+                                    <div class="ant-tag " style="<?php if ($HR == 'approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
                                     } elseif ($HR == 'disapprove') {
                                         echo 'background-color: red;';
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        مدير الموارد البشرية</div>
+                                        HR
+                                    </div>
                                 </td>
 
-                                <td><button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
-                                        style="background: none;"><i class="fa fa-folder"></i></button></td>
-
+                                <td>
+                                    <button class="attachment-btn" data-id="<?php echo $recEmpData[$i]["id"] ?>"
+                                        style="background: none;"><i class="fa fa-folder"></i></button>
                                 </td>
-                                </td>
-
-
                             </tr>
-                        <?php }
-                        ?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-
 <!-- The Modal -->
 <div id="myModal1" class="modal">
-
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">إضافة السحب النقدي</h5>
+                <h5 class="modal-title" id="addClaimModalLabel">Encashment</h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="claim-comment">التعليق</label>
+                        <label for="claim-comment">Comment</label>
                         <textarea class="form-control" id="claim-comment" name="claim-comment" rows="3"></textarea>
                     </div>
-
                     <div class="form-group">
-                        <label for="claim-attachments">المرفقات</label>
+                        <label for="claim-attachments">Attachments</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-attachments"
                                 name="claim-attachments[]" accept=".jpg, .jpeg, .png, .gif, .php, .html" multiple>
-                            <label class="custom-file-label" for="claim-attachments">اختر ملف</label>
+                            <label class="custom-file-label" for="claim-attachments">Choose file</label>
                         </div>
                     </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
-                <button type="submit" class="btn btn-primary">إضافة السحب النقدي</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Encashment</button>
             </div>
             </form>
         </div>
     </div>
-
 </div>
 
 
@@ -332,7 +297,7 @@
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
-                        alert("لا توجد مرفقات.");
+                        alert("No attachments available");
                         return;
                     }
                     // Loop through the binary data and convert it to base64-encoded strings
@@ -353,7 +318,7 @@
                     var header = $('<div class="modal-header"></div>');
 
                     // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
 
                     // Add the title to the header
                     header.append(title);

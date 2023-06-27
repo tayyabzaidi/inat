@@ -89,12 +89,11 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-                <h3>العناصر المخصصة</h3>
+                <h3>Custom Items</h3>
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
-                        data-target="#myModal">طلب
-                        العنصر</button>
+                        data-target="#myModal">Request Item</button>
 
                 </div>
 
@@ -104,16 +103,16 @@
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>التاريخ</th>
-                            <th>العناصر المخصصة</th>
-                            <th>الحالة</th>
+                            <th>Date</th>
+                            <th>Custom Items</th>
+                            <th>Status</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $employee_id = $_SESSION['empId'];
-                        // بناء استعلام SQL بناءً على قيم الفلتر المقدمة
+                        // Build SQL query based on provided filter values
                         $sql = 'SELECT ai.*,eai.id as employee_item_id,eai.date FROM `alotted_item` ai join `employee_allocated_item` eai   on ai.id=eai.itemId   WHERE eai.employeeId=' . $employee_id;
 
                         $recEmpData = $pdo->query(
@@ -169,7 +168,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        المدير العام</div>
+                                        General Manager</div>
                                     <div class="ant-tag " style="<?php
                                     if (
                                         $HR == 'approved'
@@ -180,7 +179,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        الموارد البشرية</div>
+                                        Human Resources</div>
                                 </td>
 
 
@@ -201,8 +200,8 @@
             <div class="modal-body">
                 <form action="" method="POST" style="float: none;">
                     <div class="form-group">
-                        <h2>تخصيص العناصر</h2>
-                        <label for="items">اختر العنصر:</label>
+                        <h2>Allocate Items</h2>
+                        <label for="items">Select Item:</label>
                         <select id="items" name="item_ids[]" multiple>
                             <?php
                             $result = $pdo->query('SELECT id ,item as item from alotted_item');
@@ -216,8 +215,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                            id="closebtn">إغلاق</button>
-                        <button type="submit" class="btn btn-md btn-primary">حفظ</button>
+                            id="closebtn">Close</button>
+                        <button type="submit" class="btn btn-md btn-primary">Save</button>
                     </div>
                 </form>
             </div>

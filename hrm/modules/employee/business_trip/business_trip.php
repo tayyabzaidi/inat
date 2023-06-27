@@ -106,13 +106,13 @@
             <div class="ant-card-body">
                 <?php $available_tickets = $_SESSION['total_tickets'];
 
-                $tickets = $pdo->query("SELECT count(eai.id) as count from employee_air_tickets eai join employee_trip_status ets on ets.tripId=eai.id where employeeId=" . $employee_id . " and 2=(select count(s.id) from employee_trip_status join status s on employee_trip_status.statusId=s.id where employee_trip_status.tripId=eai.id and s.status_name in ('HOD_approved','HR_approved'))");
+                $tickets = $pdo->query("SELECT count(eai.id) as count from employee_air_tickets eai join employee_trip_status ets on ets.tripId=eai.id where employeeId=" . $employeeId . " and 2=(select count(s.id) from employee_trip_status join status s on employee_trip_status.statusId=s.id where employee_trip_status.tripId=eai.id and s.status_name in ('HOD_approved','HR_approved'))");
 
                 ?>
-                <h4 class="heading">تذاكر الطيران</h4>
+                <h4 class="heading">Flight Tickets</h4>
                 <span class="icon" style="display: block; width: 100%;">
-                    <span>التذاكر المتوفرة: <?php echo $available_tickets - $tickets[0]['count'] ?></span><br>
-                    <span>التذاكر المستخدمة: <?php echo $tickets[0]['used_tickets'] ?></span>
+                    <span>Available Tickets: <?php echo $available_tickets - $tickets[0]['count'] ?></span><br>
+                    <span>Used Tickets: <?php echo $tickets[0]['used_tickets'] ?></span>
                 </span>
                 <div></div>
             </div>
@@ -123,28 +123,28 @@
         <div class="col-lg-12 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <h3>رحلات العمل</h3>
+                    <h3>Business Trips</h3>
                     <div class="mb-2" align="<?php echo $_right; ?>">
                         <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
                             data-target="#myModal" <?php if ($available_tickets - $tickets[0]['count'] < 1) {
                                 echo 'disabled';
                             } ?>>
-                            طلب تذكرة طيران
+                            Request Flight Ticket
                         </button>
                     </div>
                     <hr>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>التاريخ</th>
-                                <th>التفاصيل</th>
-                                <th>الحالة</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             // Build the SQL query based on the provided filter values
-                            $sql = 'SELECT id, date, details from employee_air_tickets where employeeId=' . $employee_id;
+                            $sql = 'SELECT id, date, details from employee_air_tickets where employeeId=' . $employeeId;
 
                             $recEmpData = $pdo->query($sql);
                             for ($i = 0; $i < count($recEmpData); $i++) { ?>
@@ -175,7 +175,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            مدير الإدارة</div>
+                                            Department Manager</div>
                                         <div class="ant-tag" style="<?php if ($HR == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($HR == 'disapproved') {
@@ -183,7 +183,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            مدير الموارد البشرية</div>
+                                            HR</div>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -199,21 +199,21 @@
             <form name="" method="POST">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addClaimModalLabel">طلب تذكرة طيران</h5>
+                        <h5 class="modal-title" id="addClaimModalLabel">Flight Ticket Request</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="details">التفاصيل:</label>
+                            <label for="details">Details:</label>
                             <input type="text" class="form-control" name="details" id="details">
-                            <label for="date">اختر تاريخًا:</label>
+                            <label for="date">Select a Date:</label>
                             <input type="date" id="date" name="date">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger">حفظ</button>
+                        <button type="submit" class="btn btn-danger">Save</button>
                     </div>
                 </div>
             </form>

@@ -111,11 +111,7 @@
 <div class="row" style="width: 98%;margin-left: 1%;">
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
-css
-Copy code
         <div class="card-body">
-
-
             <h3>قائمة الصرف</h3>
 
             <div class="form-container">

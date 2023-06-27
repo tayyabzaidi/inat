@@ -109,10 +109,10 @@
         $policy = $pdo->query("SELECT policy from leave_policy where id=(SELECT MAX(id) from leave_policy)");
         $pdf_policy = base64_encode($policy[0]['policy']);
         ?>
-        <button class="btn btn-primary" data-pdf="<?php echo $pdf_policy ?>" onclick="showPdfModal(this)">سياسة
-            الإجازة</button>
+        <button class="btn btn-primary" data-pdf="<?php echo $pdf_policy ?>" onclick="showPdfModal(this)">Leave
+            Policy</button>
         <button type="button" class="btn btn-primary modal-button" href="#myModal2" data-toggle="modal"
-            data-target="#myModal" style="margin-right: 2%;">تغيير سياسة الإجازة</button>
+            data-target="#myModal" style="margin-right: 2%;">Change Leave Policy</button>
     </div>
 
     <div class="row" style="width: 98%;margin-left: 1%;">
@@ -124,19 +124,19 @@
                         'select el.*,e.info_fullname_en as name from employee_leaves el inner join employees e on e.empId=el.emp_id order by id desc limit 5'
                     );
                     ?>
-                    <h3>قائمة الإجازات</h3>
+                    <h3>Leave List</h3>
 
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
                                 <!-- <th>I.D</th>-->
-                                <th>الاسم</th>
-                                <th>عدد الأيام</th>
-                                <th>نوع الإجازة</th>
-                                <th>الحالة</th>
+                                <th>Name</th>
+                                <th>No. of Days</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
                                 <th>PDF</th>
-                                <th>نماذج أخرى</th>
-                                <th>إجراء</th>
+                                <th>Other Attachments</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,7 +203,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            المدير المباشر</div>
+                                            Direct Manager</div>
 
                                         <div class="ant-tag " style="<?php if (
                                             $HR == 'approved'
@@ -214,7 +214,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            الموارد البشرية</div>
+                                            HR</div>
                                         <div class="ant-tag " style="<?php if (
                                             $OM == 'approved'
                                         ) {
@@ -224,7 +224,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            المدير التشغيلي</div>
+                                            Operations Manager</div>
                                     </td>
 
                                     <td>
@@ -243,8 +243,8 @@
                                     <td>
                                         <button class="modal-button approve-disapprove-btn"
                                             id="<?php echo $recEmpData[$i]['id']; ?>" href="#myModal1"
-                                            style="background: none;"
-                                            data-id="<?php echo $recEmpData[$i]['id']; ?>">الموافقة / الرفض</button>
+                                            style="background: none;" data-id="<?php echo $recEmpData[$i]['id']; ?>">Approve
+                                            / Disapprove</button>
                                     </td>
 
                                 </tr>
@@ -263,7 +263,7 @@
             <form name="approve-dispprove-leave" method="post" action="approve-disapprove-leave">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addClaimModalLabel">الموافقة / الرفض</h5>
+                        <h5 class="modal-title" id="addClaimModalLabel">Approve / Disapprove</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -273,14 +273,14 @@
                         <input style="display: none" type="text" name="leaveStatusId" id="leaveStatusId">
 
                         <div class=" form-group">
-                            <label for="comments">التعليقات:</label>
+                            <label for="comments">Comments:</label>
                             <input type="text" class="form-control" name="comments" id="comments">
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" name="approve" id="approve">الموافقة</button>
-                        <button type="submit" class="btn btn-danger" id="disapprove">الرفض</button>
+                        <button type="submit" class="btn btn-success" name="approve" id="approve">Approve</button>
+                        <button type="submit" class="btn btn-danger" id="disapprove">Disapprove</button>
 
                     </div>
 
@@ -296,172 +296,174 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="height: 60%;">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addClaimModalLabel">سياسة الإجازة
+                    <h5 class="modal-title" id="addClaimModalLabel">Leave Policy
                     </h5>
                 </div>
                 <div class="modal-body">
                     <form action="" method="POST" enctype="multipart/form-data" style="float: none;">
 
                         <div class="form-group">
-                            <label for="claim-pdf">ملف PDF (سياسة الإجازة)</label>
+                            <label for="claim-pdf">PDF File (Leave Policy)</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf"
                                     accept=".pdf">
-                                <label class="custom-file-label" for="claim-pdf">اختر ملف</label>
+                                <label class="custom-file-label" for="claim-pdf">Choose file</label>
                             </div>
                         </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">إغلاق</button>
-                    <button type="submit" id="add-leave-policy-submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
+                    <button type="submit" id="add-leave-policy-submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
             </form>
         </div>
+    </div>
 
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            if (isset($_POST['add-leave-policy-submit'])) {
-                $pdf = file_get_contents($_FILES['claim-pdf']['tmp_name']);
-                $pdf_hex = bin2hex($pdf);
-                $pdf_hex = '0x' . $pdf_hex;
-                echo $pdf_hex;
-                // Insert form data into database
-                $sql = "INSERT INTO leave_policy (policy)
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if (isset($_POST['add-leave-policy-submit'])) {
+            $pdf = file_get_contents($_FILES['claim-pdf']['tmp_name']);
+            $pdf_hex = bin2hex($pdf);
+            $pdf_hex = '0x' . $pdf_hex;
+            echo $pdf_hex;
+            // Insert form data into database
+            $sql = "INSERT INTO leave_policy (policy)
                 VALUES ($pdf_hex)";
 
-                $result = $pdo->query($sql);
-                echo "<meta http-equiv='refresh' content='0'>";
+            $result = $pdo->query($sql);
+            echo "<meta http-equiv='refresh' content='0'>";
 
+        }
+    }
+
+
+    ?>
+    <script>
+        function showPdfModal(button) {
+            const pdfBase64 = button.dataset.pdf;
+            if (pdfBase64 == '')
+                alert('No attachment found');
+            else {
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                const modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
+
+                const embedElement = document.createElement('embed');
+                embedElement.type = 'application/pdf';
+                embedElement.width = '100%';
+                embedElement.height = '100%';
+                embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+                const leaveIdInput = document.createElement('input');
+                leaveIdInput.type = 'hidden';
+                leaveIdInput.name = 'leave_id';
+                leaveIdInput.id = 'leave_id';
+                leaveIdInput.value = button.dataset.id;
+                modalContent.appendChild(leaveIdInput);
+
+                modalContent.appendChild(embedElement);
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+                modal.style.display = 'block';
+                modal.addEventListener('click', function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                })
             }
         }
 
+        var btn = document.querySelectorAll("button.modal-button");
+        var modals = document.querySelectorAll('.modal');
+        var spans = document.getElementsByClassName("close");
 
-        ?>
-        <script>
-            function showPdfModal(button) {
-                const pdfBase64 = button.dataset.pdf;
-                if (pdfBase64 == '')
-                    alert('لا يوجد مرفق');
-                else {
-                    const modal = document.createElement('div');
-                    modal.className = 'modal';
-                    const modalContent = document.createElement('div');
-                    modalContent.className = 'modal-content';
+        for (var i = 0; i < btn.length; i++) {
+            btn[i].onclick = function (e) {
+                e.preventDefault();
+                modal = document.querySelector(e.target.getAttribute("href"));
+                modal.style.display = "block";
+            }
+        }
 
-                    const embedElement = document.createElement('embed');
-                    embedElement.type = 'application/pdf';
-                    embedElement.width = '100%';
-                    embedElement.height = '100%';
-                    embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
-                    const leaveIdInput = document.createElement('input');
-                    leaveIdInput.type = 'hidden';
-                    leaveIdInput.name = 'leave_id';
-                    leaveIdInput.id = 'leave_id';
-                    leaveIdInput.value = button.dataset.id;
-                    modalContent.appendChild(leaveIdInput);
+        for (var i = 0; i < spans.length; i++) {
+            spans[i].onclick = function () {
+                for (var index in modals) {
+                    if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+                }
+            }
+        }
 
-                    modalContent.appendChild(embedElement);
-                    modal.appendChild(modalContent);
-                    document.body.appendChild(modal);
-                    modal.style.display = 'block';
-                    modal.addEventListener('click', function (event) {
-                        if (event.target === modal) {
-                            modal.style.display = 'none';
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                for (var index in modals) {
+                    if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
+                }
+            }
+        }
+
+        $('.approve-disapprove-btn').click(function () {
+            var leaveStatusId = $(this).data('id');
+            $('#leaveStatusId').val(leaveStatusId);
+        });
+
+
+        $(document).ready(function () {
+            $(".attachment-btn").on("click", function () {
+                var leaveId = $(this).data("id");
+                var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
+                $.ajax({
+                    url: __table_url,
+                    "data": {
+                        "foreignId": leaveId,
+                        "type": "leave"
+                    },
+                    type: 'POST',
+                    dataType: "json",
+                    success: function (data) {
+                        var images = [];
+                        if (data.result === null) {
+                            alert("لا توجد مرفقات.");
+                            return;
                         }
-                    })
-                }
-            }
-
-            var btn = document.querySelectorAll("button.modal-button");
-            var modals = document.querySelectorAll('.modal');
-            var spans = document.getElementsByClassName("close");
-
-            for (var i = 0; i < btn.length; i++) {
-                btn[i].onclick = function (e) {
-                    e.preventDefault();
-                    modal = document.querySelector(e.target.getAttribute("href"));
-                    modal.style.display = "block";
-                }
-            }
-
-            for (var i = 0; i < spans.length; i++) {
-                spans[i].onclick = function () {
-                    for (var index in modals) {
-                        if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-                    }
-                }
-            }
-
-            window.onclick = function (event) {
-                if (event.target.classList.contains('modal')) {
-                    for (var index in modals) {
-                        if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
-                    }
-                }
-            }
-
-            $('.approve-disapprove-btn').click(function () {
-                var leaveStatusId = $(this).data('id');
-                $('#leaveStatusId').val(leaveStatusId);
-            });
-
-
-            $(document).ready(function () {
-                $(".attachment-btn").on("click", function () {
-                    var leaveId = $(this).data("id");
-                    var __table_url = '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/expense/get_attachment/get_attachment';
-                    $.ajax({
-                        url: __table_url,
-                        "data": {
-                            "foreignId": leaveId,
-                            "type": "leave"
-                        },
-                        type: 'POST',
-                        dataType: "json",
-                        success: function (data) {
-                            var images = [];
-                            if (data.result === null) {
-                                alert("لا توجد مرفقات.");
-                                return;
-                            }
-                            for (var i = 0; i < data.result.length; i++) {
-                                images.push("data:application/pdf;base64," + (data.result[i]));
-                            }
-                            var modal = $('<div id="myModal2" class="modal"></div>');
-                            var dialog = $('<div class="modal-dialog" role="document"></div>');
-                            var content = $('<div class="modal-content"></div>');
-                            var header = $('<div class="modal-header"></div>');
-                            var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
-                            header.append(title);
-                            content.append(header);
-                            var body = $('<div class="modal-body"></div>');
-                            var imageContainer = $('<div class="modal-image-container"></div>');
-                            for (var i = 0; i < images.length; i++) {
-                                var img = $('<object>').attr('data', images[i]).attr('type', 'application/pdf').attr('height', 400).attr('width', 300).attr("margin-right", 10).css('margin-right', '15px');
-                                imageContainer.append(img);
-                            }
-                            body.append(imageContainer);
-                            content.append(body);
-                            dialog.append(content);
-                            modal.append(dialog);
-                            $('body').append(modal);
-                            modal.show();
-                            modal.on('mouseup', function (e) {
-                                if (!$(e.target).closest('.modal-content').length) {
-                                    modal.hide();
-                                }
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            console.log("خطأ: " + error);
+                        for (var i = 0; i < data.result.length; i++) {
+                            images.push("data:application/pdf;base64," + (data.result[i]));
                         }
-                    });
+                        var modal = $('<div id="myModal2" class="modal"></div>');
+                        var dialog = $('<div class="modal-dialog" role="document"></div>');
+                        var content = $('<div class="modal-content"></div>');
+                        var header = $('<div class="modal-header"></div>');
+                        var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
+                        header.append(title);
+                        content.append(header);
+                        var body = $('<div class="modal-body"></div>');
+                        var imageContainer = $('<div class="modal-image-container"></div>');
+                        for (var i = 0; i < images.length; i++) {
+                            var img = $('<object>').attr('data', images[i]).attr('type', 'application/pdf').attr('height', 400).attr('width', 300).attr("margin-right", 10).css('margin-right', '15px');
+                            imageContainer.append(img);
+                        }
+                        body.append(imageContainer);
+                        content.append(body);
+                        dialog.append(content);
+                        modal.append(dialog);
+                        $('body').append(modal);
+                        modal.show();
+                        modal.on('mouseup', function (e) {
+                            if (!$(e.target).closest('.modal-content').length) {
+                                modal.hide();
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("خطأ: " + error);
+                    }
                 });
             });
-        </script>
+        });
+    </script>
 </body>
 
 </html>
