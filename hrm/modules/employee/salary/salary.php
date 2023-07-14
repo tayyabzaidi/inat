@@ -15,31 +15,6 @@
             overflow: auto;
         }
 
-        #comment {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            resize: none;
-        }
-
-        /* Button styles */
-        button[type="submit"] {
-            background-color: #020041;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-
         .modal-image-container {
             display: flex;
             flex-wrap: wrap;
@@ -68,17 +43,6 @@
             width: 60%;
             height: 80%;
         }
-
-        form {
-            float: right;
-            margin-right: 20px;
-            margin-bottom: 10px;
-        }
-
-        .form-container {
-            float: right;
-            width: 50%;
-        }
     </style>
 </head>
 <div class="row" style="width: 80%;margin-left: 10%;">
@@ -86,67 +50,48 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-                <h3>كشوفات الرواتب</h3>
+                <h3>Salary Slips</h3>
                 <hr>
-                <div class="form-container">
-                    <form action="#" method="POST">
-                        <label for="dateFrom">التاريخ من:</label>
-                        <input type="date" id="dateFrom" name="dateFrom">
-                        <label for="dateTo">التاريخ إلى:</label>
-                        <input type="date" id="dateTo" name="dateTo">
-                        <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-filter"></i>
-                            فلترة</button>
-                    </form>
+                <div class="mb-2" align="<?php echo $_right; ?>">
+                    <a href="" class="btn btn-md btn-primary"> <i class="fas fa-filter"></i>Filter</a>
                 </div>
+
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>الرقم التعريفي</th>
-                            <th>التاريخ</th>
-                            <th>الكشوف</th>
-                            <th>عرض</th>
-                            <th>هل هناك مشكلة؟</th>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Slip</th>
+                            <th>View</th>
+                            <th>Issue with Salary</th>
 
 
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-
-                        $dateFrom = isset($_POST['dateFrom']) ? $_POST['dateFrom'] : null;
-                        $dateTo = isset($_POST['dateTo']) ? $_POST['dateTo'] : null;
-                        $sql = "SELECT * FROM salary  WHERE employee_id= :employeeId";
-                        if (!empty($dateFrom) && !empty($dateTo)) {
-                            $sql .= " AND `date` BETWEEN '$dateFrom' AND '$dateTo'";
-                        }
-                        $sql .= " ORDER BY `date` LIMIT 5";
                         $pdo->bind('employeeId', $_SESSION['empId']);
                         $recEmpData = $pdo->query(
-                            $sql
+                            'SELECT * FROM salary  WHERE employee_id= :employeeId ORDER BY `date` LIMIT 5;'
                         );
                         for ($i = 0; $i < count($recEmpData); $i++) { ?>
                             <tr>
                                 <td><?php echo $recEmpData[$i]['id'] ?></td>
-                                <td><?php echo $recEmpData[$i][
-                                    'date'
-                                ]; ?>
+                                <td><?php echo $recEmpData[$i]['date']; ?>
                                 </td>
                                 <td><?php
-                                header("Content-Type: application/pdf");
 
-                                // Convert the binary PDF data to a base64-encoded string
-                                $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
+                                    // Convert the binary PDF data to a base64-encoded string
+                                    $pdf_base64 = base64_encode($recEmpData[$i]['slip']);
 
-                                // Embed the base64-encoded PDF data into an HTML object tag
-                                echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="40%" height="200px"></object>';
+                                    // Embed the base64-encoded PDF data into an HTML object tag
+                                    echo '<object data="data:application/pdf;base64,' . $pdf_base64 . '" type="application/pdf" width="40%" height="200px"></object>';
 
-                                ?>
+                                    ?>
                                 </td>
                                 <td>
 
-                                    <button class="attachment-btn" data-pdf="<?php echo $pdf_base64 ?>"
-                                        data-slip-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;"
-                                        onclick="showPdfModal(this)">
+                                    <button class="attachment-btn" data-id="<?php echo $pdf_base64 ?>" data-slip-id="<?php echo $recEmpData[$i]['id'] ?>" style="background: none;" onclick="showPdfModal(this)">
                                         <i class="fa fa-eye <?php echo $_right; ?>"></i>
                                     </button>
                                 </td>
@@ -162,7 +107,6 @@
                         <?php } ?>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
@@ -174,96 +118,93 @@
 
 <!-- // modal for adding comment -->
 <div id="myModal1" class="modal">
-    <div class="modal-content" style=" width: 40%;
-            height: 40%;">
-        <form id="commentForm" method="post">
-            <label for="comment">سبب الاختلاف:</label>
-            <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
-            <br>
-            <input type="hidden" id="idField" name="idField">
-            <button type="submit" style="float: right;">حفظ</button>
-        </form>
-    </div>
-</div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="height: 25%;width:40%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewAttachmentsModalLabel">Discrepancy Reason</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="POST">
+                    <label for="comment">Discrepancy Reason:</label>
+                    <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+                    <br>
+                    <input type="hidden" id="idField" name="idField" readonly>
 
+                    <button type="submit">Submit</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the value of the comment field
+    $comment = $_POST['comment'];
+
+    // Get the value of the idField field
+    $idField = $_POST['idField'];
+    $pdo->bind('reason', $comment);
+    $pdo->bind('id', $idField);
+    $result = $pdo->query("UPDATE salary set discrepancy_reason=:reason where id=:id");; // Do something with the form data
+    // ...
+    echo $result;
+}
+
+?>
 <!-- script to view salary slip -->
 <script>
-
-
     function showPdfModal(button) {
-        const pdfBase64 = button.dataset.pdf;
-        if (pdfBase64 == '')
-            alert('There is no salary slip');
-        else {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            const modalContent = document.createElement('div');
-            modalContent.className = 'modal-content';
+        console.log
+        const pdfBase64 = button.dataset.id;
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+        const closeButton = document.createElement('span');
+        closeButton.className = 'close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = function() {
+            modal.style.display = 'none';
+        };
+        const embedElement = document.createElement('embed');
+        embedElement.type = 'application/pdf';
+        embedElement.width = '100%';
+        embedElement.height = '100%';
+        embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
+        const slipIdInput = document.createElement('input');
+        slipIdInput.type = 'hidden';
+        slipIdInput.name = 'slip_id';
+        slipIdInput.id = 'slip_id';
+        slipIdInput.value = button.dataset.slipId;
+        modalContent.appendChild(slipIdInput);
 
-            const embedElement = document.createElement('embed');
-            embedElement.type = 'application/pdf';
-            embedElement.width = '100%';
-            embedElement.height = '100%';
-            embedElement.src = 'data:application/pdf;base64,' + pdfBase64;
-            const slipIdInput = document.createElement('input');
-            slipIdInput.type = 'hidden';
-            slipIdInput.name = 'slip_id';
-            slipIdInput.id = 'slip_id';
-            slipIdInput.value = button.dataset.slipId;
-            modalContent.appendChild(slipIdInput);
-
-            modalContent.appendChild(embedElement);
-            modal.appendChild(modalContent);
-            document.body.appendChild(modal);
-            modal.style.display = 'block';
-            modal.addEventListener('click', function (event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            })
-        }
+        modalContent.appendChild(closeButton);
+        modalContent.appendChild(embedElement);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        modal.style.display = 'block';
     }
 
 
-    var modal = document.getElementById("myModal1");
-    var form = document.getElementById("commentForm");
-
-    // Open the modal and populate the hidden ID field with the record ID
     function openModal(id) {
-        document.getElementById("idField").value = id;
+        // Get the modal
+        var modal = document.getElementById("myModal1");
+
+        // Get the text field in the modal
+        var textField = document.getElementById("idField");
+
+        // Set the value of the text field to the clicked ID
+        textField.value = id;
+
+        // Open the modal
         modal.style.display = "block";
     }
-
-    // Close the modal and reset the form
-    function closeModal() {
-        modal.style.display = "none";
-        form.reset();
-    }
-
-    // Add an event listener to the form submit button
-    form.addEventListener("submit", function (e) {
-        // Prevent the form from submitting normally
-        e.preventDefault();
-
-        // Get the form data
-        var formData = new FormData(form);
-
-        // Send an AJAX request to the PHP script to save the comment data
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", '<?php echo __AJAX_CALL_PATH__; ?>?_path=management/salary/save_comment/save_comment', true);
-        xhr.onload = function (data) {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // If the save was successful, close the modal and reload the page
-                // alert('saved successfully');
-                closeModal();
-                setTimeout(function () {
-                    alert('تم حفظ التعليق بنجاح');
-                }, 100);
-                //   location.reload();
-            }
-        };
-        xhr.send(formData);
-    });
 
 
     // var btn = document.querySelectorAll("button.modal-button");
@@ -279,7 +220,7 @@
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < spans.length; i++) {
-        spans[i].onclick = function () {
+        spans[i].onclick = function() {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
@@ -287,14 +228,13 @@
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
+    window.onclick = function(event) {
         if (event.target.classList.contains('modal')) {
             for (var index in modals) {
                 if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";
             }
         }
     }
-
 </script>
 
 
