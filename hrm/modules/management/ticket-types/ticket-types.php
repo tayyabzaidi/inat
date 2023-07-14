@@ -22,9 +22,9 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
 <div class="container-fluid">
 
     <h5 class="mb-2 p-1 text-gray-800">
-        <a href="<?php echo __APP_URL__ . $route->q; ?>">Management</a> 
-        <i class="fa fa-chevron-<?php echo $_right; ?>"></i> 
-        Ticket Types
+        <a href="<?php echo __APP_URL__ . $route->q; ?>">إدارة</a>
+        <i class="fa fa-chevron-<?php echo $_right; ?>"></i>
+        أنواع التذاكر
     </h5>
 
     <br>
@@ -33,18 +33,14 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
     <div class="row">
 
         <div class="col-xl-4 col-lg-4">
-            <h2>Add Ticket Type</h2>
+            <h2>إضافة نوع تذكرة</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
                     <div class="col-xl-12 col-lg-12">
-                        <form name="_create_record_modal_form" 
-                              id="_create_record_modal_form" 
-                              enctype="multipart/form-data"  
-                              method="POST" 
-                              action=""
-                              onsubmit="_ajaxCall('_create_record_modal_form', 'management/ticket-types/create'); return false;"
-                              >
+                        <form name="_create_record_modal_form" id="_create_record_modal_form"
+                            enctype="multipart/form-data" method="POST" action=""
+                            onsubmit="_ajaxCall('_create_record_modal_form', 'management/ticket-types/create'); return false;">
 
                             <div class=" p-3">
 
@@ -52,14 +48,9 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
 
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <label for="name">Name</label>
-                                        <input  type="text" 
-                                                value="" 
-                                                name="name" 
-                                                id="name"  
-                                                autocomplete="off"
-                                                class="form-control form-control-md"
-                                                >
+                                        <label for="name">الاسم</label>
+                                        <input type="text" value="" name="name" id="name" autocomplete="off"
+                                            class="form-control form-control-md">
                                     </div>
                                 </div>
 
@@ -67,56 +58,40 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
 
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="days">Allowed Ticket</label>
-                                        <input  type="number" 
-                                                value="" 
-                                                name="days" 
-                                                id="days"  
-                                                autocomplete="off"
-                                                class="form-control form-control-md"
-                                                >
+                                        <label for="days">التذاكر المسموح بها</label>
+                                        <input type="number" value="" name="days" id="days" autocomplete="off"
+                                            class="form-control form-control-md">
                                     </div>
 
                                     <div class="form-group col-md-3">
-                                        <label for="resetmode">Reset Trigger</label>
-                                        <select name="resetmode" id="resetmode" class="selectpicker_picker form-control" data-live-search = "true" data-style = "btn-default" style="width:100%;">
-                                            <option  data-tokens = "yearly" value = "yearly">Yearly</option>
-                                            <option  data-tokens = "monthly" value = "monthly" >Monthly</option>
+                                        <label for="resetmode">إعادة التشغيل</label>
+                                        <select name="resetmode" id="resetmode" class="selectpicker_picker form-control"
+                                            data-live-search="true" data-style="btn-default" style="width:100%;">
+                                            <option data-tokens="yearly" value="yearly">سنوياً</option>
+                                            <option data-tokens="monthly" value="monthly">شهرياً</option>
                                         </select>
                                     </div>
-                                    
-                                    
-                                    
                                     <div class="form-group col-md-5">
-                                        <label for="carryover">Balance Carry Forward</label>
-                                        <select name="carryover" id="carryover" class="selectpicker_picker form-control" data-live-search = "true" data-style = "btn-default" style="width:100%;">
-                                            <option value = "true">True</option>
-                                            <option value = "false">False</option>
+                                        <label for="carryover">تحويل الرصيد</label>
+                                        <select name="carryover" id="carryover" class="selectpicker_picker form-control"
+                                            data-live-search="true" data-style="btn-default" style="width:100%;">
+                                            <option value="true">صحيح</option>
+                                            <option value="false">غير صحيح</option>
                                         </select>
                                     </div>
                                 </div>
-
-
                                 <hr>
                                 <div class="form-row">
                                     <div class="form-group col-md-12" align="right">
 
-                                        <button 
-                                            class="btn btn-sm  btn-primary btn-icon-split" 
-                                            name="_create_record_modal_form_btn"
-                                            id="_create_record_modal_form_btn"
-                                            type="submit" 
-                                            value ="button"
-                                            >
-                                            <span class="icon text-white-100"><i class="fa fa-save"></i> Save</span>
+                                        <button class="btn btn-sm  btn-primary btn-icon-split"
+                                            name="_create_record_modal_form_btn" id="_create_record_modal_form_btn"
+                                            type="submit" value="button">
+                                            <span class="icon text-white-100"><i class="fa fa-save"></i> حفظ</span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-
-
-
-
                         </form>
 
                     </div>
@@ -126,21 +101,23 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
         </div>
 
         <div class="col-xl-8 col-lg-8">
-            <h2>Ticket Types</h2>
+            <h2>أنواع التذاكر</h2>
             <hr>
             <div class="card o-hidden border-0 shadow">
                 <div class="row p-3">
                     <div class="col-xl-12 col-lg-12">
-                        <table id="dtc_table" class="table table-lg table-responsive-sm table-condensed table-striped table-hover " style="width:100%">
+                        <table id="dtc_table"
+                            class="table table-lg table-responsive-sm table-condensed table-striped table-hover "
+                            style="width:100%">
                             <thead>
                                 <tr>
-                                    <th> ID.</th>
-                                    <th> Name</th>
-                                    <th> Tickets</th>
-                                    <th> Reset Mode</th>
-                                    <th> Carry Forward</th>
-                                    <th> Status</th>
-                                    <th width="100px">Options</th>
+                                    <th> الرقم</th>
+                                    <th> الاسم</th>
+                                    <th> التذاكر</th>
+                                    <th> وضع الإعادة</th>
+                                    <th> إعادة الرصيد</th>
+                                    <th> الحالة</th>
+                                    <th width="100px">الخيارات</th>
                                 </tr>
                             </thead>
                         </table>
@@ -150,11 +127,12 @@ define('__SECTION_JS_PATH_', '__js/ticket-types.script.php');
             </div>
         </div>
     </div>
+
 </div>
 
 
-<div class="modal fade" id="_edit_record_modal" tabindex="-1" role="dialog"  aria-labelledby="_edit_record_modal_label">
-    <div class="modal-dialog modal-xl " role="document" >
+<div class="modal fade" id="_edit_record_modal" tabindex="-1" role="dialog" aria-labelledby="_edit_record_modal_label">
+    <div class="modal-dialog modal-xl " role="document">
         <div class="modal-content " id="_edit_record_ajax_interface"></div>
     </div>
 </div>

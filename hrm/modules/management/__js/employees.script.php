@@ -31,10 +31,14 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
                 { data: 'empCode' },
                 { data: 'info_fullname_en' },
                 { data: 'info_fathername_en' },
+                { data: 'usedLeaves' },
+                { data: 'leavesRemaining' },
+                { data: 'usedTickets' },
+                { data: 'ticketsRemaining' },
                 { data: 'options' }
             ],
             "columnDefs": [{
-                "targets": 4,
+                "targets": 8,
                 "searchable": false,
                 "data": null,
                 "orderable": false,
@@ -118,6 +122,9 @@ $__dt_buttons_group = '<div class="btn-group  btn-group-sm" role="group" aria-la
 
     function __save_excel_employees() {
         $("#myModal1").modal('show');
+    }
+    function __alott_items() {
+        $("#myModal2").modal('show');
     }
     function __manage_modal(empId) {
 

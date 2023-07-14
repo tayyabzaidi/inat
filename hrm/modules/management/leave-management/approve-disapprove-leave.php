@@ -1,8 +1,5 @@
 <?php
 
-
-echo $_SESSION['designation'];
-
 $designation = $_SESSION['designation'];
 
 $leaveStatusId = $_POST['leaveStatusId'];
@@ -14,7 +11,7 @@ if (isset($_POST['approve']) && $designation == "DEPARTMENT HEAD")
     $statusId = 1;
 else if ($designation == "DEPARTMENT HEAD")
     $statusId = 3;
-else if (isset($_POST['approve']) &&  $designation == "HR MANAGER")
+else if (isset($_POST['approve']) && $designation == "HR MANAGER")
     $statusId = 5;
 else if ($designation == "HR MANAGER")
     $statusId = 6;

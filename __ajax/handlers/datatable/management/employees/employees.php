@@ -24,6 +24,12 @@ $col[0] = 'employees.empid';
 $col[1] = 'employees.empCode';
 $col[2] = 'employees.info_fullname_en';
 $col[3] = 'employees.info_fathername_en';
+$col[4] = 'usedLeaves';
+$col[5] = 'leavesRemaining';
+$col[6] = 'usedTickets';
+$col[7] = 'ticketsRemaining';
+
+
 
 
 
@@ -86,7 +92,19 @@ $recordsTotal = $pdo->row("SELECT COUNT(employees.empid) AS recordsTotal  FROM e
 $dtQuery = "SELECT employees.* FROM employees WHERE 1=1 $searchFilter $order  $limit  ";
 $dtResult = $pdo->query($dtQuery);
 
+for ($i = 0; $i < count($dtResult); $i++) {
+    $available_leaves = $_SESSION['available_leaves'];
+    $usedLeaves = $pdo->query("SELECT count(id) as leaves_taken from employee_leaves WHERE emp_id=" . $dtResult[$i]['empId'] . " AND leave_type = 'Annual Leave'");
+    $leavesRemaining = -$usedLeaves[0]['leaves_taken'] + $available_leaves;
+    $dtResult[$i]['usedLeaves'] = $usedLeaves[0]['leaves_taken'];
+    $dtResult[$i]['leavesRemaining'] = $leavesRemaining;
 
+    $available_tickets = $_SESSION['total_tickets'];
+    $usedTickets = $pdo->query("SELECT count(eai.id) as count from employee_air_tickets eai join employee_trip_status ets on ets.tripId=eai.id where employeeId=" . $dtResult[$i]['empId'] . " and 2=(select count(s.id) from employee_trip_status join status s on employee_trip_status.statusId=s.id where employee_trip_status.tripId=eai.id and s.status_name in ('HOD_approved','HR_approved'))");
+    $ticketsRemaining = $available_tickets - $usedTickets[0]['count'];
+    $dtResult[$i]['usedTickets'] = $usedTickets[0]['count'];
+    $dtResult[$i]['ticketsRemaining'] = $ticketsRemaining;
+}
 
 
 $data = $dtResult;
