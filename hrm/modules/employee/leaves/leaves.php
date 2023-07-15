@@ -228,7 +228,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            Department Manager</div>
+                                            HOD</div>
                                         <div class="ant-tag" style="<?php if ($OM == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($OM == 'disapprove') {
@@ -236,7 +236,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            Operations Manager</div>
+                                            OM</div>
                                         <div class="ant-tag" style="<?php if ($HR == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($HR == 'disapprove') {
@@ -244,7 +244,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            HR Manager</div>
+                                            HR</div>
                                     </td> <?php
                                     $clearnace_attachment_found = false;
                                     $result = $pdo->query("SELECT true as 'ex' from attachment where foreignId=" . $recEmpData[$i]["id"]);

@@ -89,7 +89,7 @@
         <div class="card shadow mb-4">
 
             <div class="card-body">
-                <h3>Custom Items</h3>
+                <h3>Allotted Items</h3>
                 <div class="mb-2" align="<?php echo $_right; ?>">
 
                     <button type="button" class="btn btn-primary modal-button" href="#myModal1" data-toggle="modal"
@@ -104,7 +104,7 @@
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Custom Items</th>
+                            <th>Item</th>
                             <th>Status</th>
 
                         </tr>
@@ -168,7 +168,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        General Manager</div>
+                                        HOD</div>
                                     <div class="ant-tag " style="<?php
                                     if (
                                         $HR == 'approved'
@@ -179,7 +179,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        Human Resources</div>
+                                        HR</div>
                                 </td>
 
 

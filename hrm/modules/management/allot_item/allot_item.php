@@ -82,14 +82,14 @@
         <div class="col-lg-12 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <h3>Custom Items</h3>
+                    <h3>Alloted Items</h3>
                     <hr>
                     <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Employee</th>
-                                <th>Custom Items</th>
+                                <th>Items</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -130,7 +130,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            Department Manager</div>
+                                            HOD</div>
                                         <div class="ant-tag " style="<?php if ($HR == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($HR == 'disapproved') {
@@ -138,7 +138,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            Human Resources</div>
+                                            HR</div>
                                     </td>
                                     <td>
                                         <button class="modal-button approve-disapprove-btn"

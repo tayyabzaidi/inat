@@ -62,7 +62,7 @@
                             <li class="list-group-item">
                                 <a href="<?php echo __APP_URL__ . $route->q . '/items'; ?>">
                                     <i class="fa fas fa-arrow-<?php echo $_right; ?>"></i>
-                                    Custom Items
+                                    Allot Items
                                 </a>
                             </li>
                             <li class="list-group-item">

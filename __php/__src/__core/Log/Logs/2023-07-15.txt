@@ -1,0 +1,7 @@
+Time : 12:51:50
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+
+Time : 12:51:50
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+Raw SQL : INSERT INTO `employee_air_tickets`(`date`, `details`, `employeeId`) VALUES  (2023-07-15,'eerewr',)
+

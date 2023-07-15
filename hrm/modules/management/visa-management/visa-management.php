@@ -115,26 +115,26 @@
 
             <div class="card-body">
 
-                <h3>قائمة التأشيرات</h3>
+                <h3>Visa List</h3>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
-                            <th>الاسم</th>
-                            <th>الحالة</th>
-                            <th>المرفقات</th>
-                            <?php if ($_SESSION['designation'] == 'رئيس القسم') { ?>
-                                <th>الموافقة</th>
-                                <th>الرفض</th>
+                            <th>Number</th>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Attachments</th>
+                            <?php if ($_SESSION['designation'] == 'DEPARTMENT HEAD') { ?>
+                                <th>Approval</th>
+                                <th>Rejection</th>
                             <?php } ?>
-                            <?php if ($_SESSION['designation'] == 'مدير الموارد البشرية') { ?>
+                            <?php if ($_SESSION['designation'] == 'HR MANAGER') { ?>
                                 <th></th>
                             <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $sql = 'SELECT ee.*,e.info_fullname_ar as `name` FROM visa ee join employees e on e.empId=ee.employeeId';
+                        <?php $sql = 'SELECT ee.*,e.info_fullname_en as `name` FROM visa ee join employees e on e.empId=ee.employeeId';
 
 
                         $sql .= " ORDER BY ee.`date`;";
@@ -186,7 +186,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        رئيس القسم</div>
+                                        HOD</div>
 
                                 </td>
                                 <!-- <td><button data-expenseId=<?php echo $recEmpData[$i]["id"] ?> class="modal-button"
@@ -196,7 +196,7 @@
                                         style="background: none;"><i class="fa fa-folder"></i></button></td>
 
 
-                                <?php if ($_SESSION['designation'] == 'رئيس القسم') { ?>
+                                <?php if ($_SESSION['designation'] == 'DEPARTMENT HEAD') { ?>
                                     <td>
 
                                         <form action="#" method="POST" id="myForm">
@@ -241,12 +241,11 @@
 
                                     </td>
                                 <?php } ?>
-                                <?php if ($_SESSION['designation'] == 'مدير الموارد البشرية') { ?>
+                                <?php if ($_SESSION['designation'] == 'HR MANAGER') { ?>
 
                                     <td> <button type="button" class="btn btn-primary modal-button" href="#myModal1"
                                             data-toggle="modal" data-target="#myModal"
-                                            data-id="<?php echo $recEmpData[$i]['id']; ?>">تحميل
-                                            التأشيرة</button>
+                                            data-id="<?php echo $recEmpData[$i]['id']; ?>">Upload Visa</button>
 
                                     </td>
                                 <?php } ?>
@@ -310,17 +309,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="height: 30%;">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClaimModalLabel">تأشيرة
+                <h5 class="modal-title" id="addClaimModalLabel">Visa
                 </h5>
             </div>
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data" style="float: none;">
 
                     <div class="form-group">
-                        <label for="claim-pdf">ملف PDF (التأشيرة)</label>
+                        <label for="claim-pdf">PDF file (Visa)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="claim-pdf" name="claim-pdf" accept=".pdf">
-                            <label class="custom-file-label" for="claim-pdf">اختر ملف</label>
+                            <label class="custom-file-label" for="claim-pdf">Choose a file</label>
                         </div>
                     </div>
 
@@ -328,8 +327,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">إغلاق</button>
-                <button type="submit" class="btn btn-primary">حفظ</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
             </div>
             </form>
         </div>
@@ -416,7 +415,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     var images = [];
                     if (data.result === null) {
                         // Display an alert message if there are no attachments
-                        alert("لا توجد مرفقات.");
+                        alert("There are no attachments");
                         return;
                     }
                     // Loop through the binary data and convert it to base64-encoded strings
@@ -437,7 +436,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     var header = $('<div class="modal-header"></div>');
 
                     // Create a modal title
-                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">المرفقات</h5>');
+                    var title = $('<h5 class="modal-title" id="viewAttachmentsModalLabel">Attachments</h5>');
 
                     // Add the title to the header
                     header.append(title);

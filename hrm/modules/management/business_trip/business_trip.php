@@ -81,7 +81,7 @@
     <div class="col-lg-12 mb-4">
         <div class="card shadow mb-4">
             <div class="card-body">
-                <h3>Custom Elements</h3>
+                <h3>Business Trip Details</h3>
                 <hr>
                 <table class="table table-sm table-responsive-sm table-condensed table-striped" style="width:100%">
                     <thead>
@@ -132,7 +132,7 @@
                                     } else {
                                         echo 'background-color: white';
                                     } ?>">
-                                        Manager</div>
+                                        HOD</div>
                                     <div class="ant-tag " style="<?php if ($HR == 'approved') {
                                         echo 'background-color: rgb(135, 208, 104)';
                                     } elseif ($HR == 'disapproved') {

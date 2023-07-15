@@ -175,7 +175,7 @@
                                         } else {
                                             echo 'background-color: white';
                                         } ?>">
-                                            Department Manager</div>
+                                            HOD</div>
                                         <div class="ant-tag" style="<?php if ($HR == 'approved') {
                                             echo 'background-color: rgb(135, 208, 104)';
                                         } elseif ($HR == 'disapproved') {
@@ -270,7 +270,7 @@
         $date = $_POST['date'];
 
         // Insert form data into database
-        $sql = "INSERT INTO `employee_air_tickets`(`date`, `details`, `employeeId`) VALUES  (" . $date . ",'" . $details . "'," . $employee_id . ")";
+        $sql = "INSERT INTO `employee_air_tickets`(`date`, `details`, `employeeId`) VALUES  (" . $date . ",'" . $details . "'," . $employeeId . ")";
         $result = $pdo->query($sql);
         echo "<meta http-equiv='refresh' content='0'>";
     } ?>
